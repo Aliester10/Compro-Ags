@@ -75,15 +75,39 @@
     </div>
 
     <!-- Best Seller Products Section -->
-   <!-- Best Seller Products Section -->
+  <!-- Best Seller Products Section -->
 <div class="bestseller-section">
     <div class="bestseller-container">
         <h2>Best Seller Products.</h2>
         
         @php
-            // Filter products with "hospital" OR "mobile" in their name
-            $bestSellerProducts = $produks->filter(function($product) {
-                return stripos($product->nama, 'Air Bag Simulator And Trainer') !== false || stripos($product->nama, 'Programmable Logic Controller Training') !== false;
+            // For debugging - uncomment to see what products exist
+            // foreach($produks as $p) {
+            //     echo $p->nama . "<br>";
+            // }
+            
+            // Define product name keywords to search for
+            $keywords = [
+                'air bag',
+                'simulator',
+                'Controller Training',
+                'PCE Water', 
+                'Suntex Laboratory',
+                'basic electric',
+                'Shielded Ground',
+                'Automatic Kjedahl',
+                'Automatic Multichannel',                
+            ];
+            
+            // More flexible filter that looks for keywords instead of exact matches
+            $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
+                $productName = strtolower($product->nama);
+                foreach ($keywords as $keyword) {
+                    if (stripos($productName, strtolower($keyword)) !== false) {
+                        return true;
+                    }
+                }
+                return false;
             });
             
             // Check if any products match the filter
@@ -95,6 +119,16 @@
                 $productsChunks = collect([]);
             }
         @endphp
+        
+        <!-- For debugging - uncomment to see what products were filtered -->
+        <!-- 
+        <div class="debug-info" style="margin-bottom: 20px; padding: 10px; background: #f5f5f5;">
+            <p><strong>Debug: Found {{ $bestSellerProducts->count() }} matching products</strong></p>
+            @foreach($bestSellerProducts as $product)
+                <p>{{ $product->nama }}</p>
+            @endforeach
+        </div>
+        -->
         
         @if($bestSellerProducts->count() > 0)
             @foreach($productsChunks as $chunk)
@@ -125,7 +159,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="no-products text-center">
-                        <p>Tidak ada produk hospital atau mobile yang tersedia saat ini.</p>
+                        <p>No bestseller products available at this time.</p>
                     </div>
                 </div>
             </div>
