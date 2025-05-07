@@ -407,31 +407,31 @@
         @endforeach
     </div>
 </div>
-<!-- Improved "Our Distributor" Section -->
-<div class="container mx-auto my-12 px-4 text-center distributor-section">
-    <h1 class="text-4xl font-bold text-blue-700 mb-4">Our Distributor</h1>
-    <p class="text-lg text-blue-700 mb-10">Trusted Collaboration</p>
+<div class="container distributor-section collaboration-section">
+    <h1>Our Distributor</h1>
+    <p>Trusted Collaboration</p>
 
-    <!-- Swiper Container with improved styling -->
+    <!-- Swiper Container -->
     <div class="swiper-container distributor-swiper">
         <div class="swiper-wrapper">
             @foreach($distributors as $distributor)
-            <div class="swiper-slide flex justify-center items-center">
-                <img 
-                    src="{{ asset($distributor->gambar) }}" 
-                    alt="{{ $distributor->nama ?? 'Distributor Logo' }}" 
-                    class="distributor-logo"
-                    loading="lazy"
-                >
+            <div class="swiper-slide">
+                <a href="{{ $distributor->url ?? '#' }}" class="distributor-link">
+                    <img 
+                        src="{{ asset($distributor->gambar) }}" 
+                        alt="{{ $distributor->nama ?? 'Distributor Logo' }}" 
+                        class="principal-logo distributor-logo"
+                        loading="lazy"
+                    >
+                </a>
             </div>
             @endforeach
         </div>
         
-        <!-- Swiper Pagination -->
+        <!-- Pagination dots -->
         <div class="swiper-pagination distributor-pagination"></div>
     </div>
 </div>
-
 <div class="h-px w-full bg-gray-300 my-4"></div>
 
 <!-- Interactive Map Section - Starts here -->
@@ -983,6 +983,7 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
+
 <style>
     .lets-connect-container {
         background-image: linear-gradient(to right, #3498db, #73b6e6), url('{{ asset("assets/img/Banner Home Page Websie Ags.png") }}');
@@ -1069,118 +1070,111 @@
             padding: 60px 0;
         }
     }
-    /* Custom styles for the distributor section */
+    /* Collaboration With Principal Section Styling */
+/* Distributor Section Styling */
+.distributor-section {
+    margin: 48px auto;
+    padding: 0 16px;
+    text-align: center;
+    /* Add max height to prevent excessive vertical space */
+    max-height: 300px; /* Adjust this value as needed */
+}
+
+.distributor-section h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #0066b3;
+    margin-bottom: 10px;
+}
+
+.distributor-section p {
+    font-size: 18px;
+    color: #0066b3;
+    margin-bottom: 30px; /* Reduced from 40px */
+}
+
+/* Distributor Swiper Container */
+.distributor-swiper {
+    width: 100%;
+    /* Set explicit height to prevent extra space */
+    height: 100px; /* Adjust based on your logo size */
+    padding: 0; /* Removed padding that causes extra space */
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px; /* Add bottom margin for pagination */
+}
+
+.distributor-swiper .swiper-wrapper {
+    align-items: center;
+    height: 100%; /* Ensure wrapper takes full height */
+}
+
+.distributor-swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 10px;
+}
+
+.distributor-swiper .distributor-logo {
+    max-width: 150px;
+    max-height: 60px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.distributor-link:hover .distributor-logo {
+    transform: translateY(-5px);
+}
+
+/* Pagination styling - position properly */
+.distributor-swiper .swiper-pagination {
+    position: absolute;
+    bottom: -25px; /* Position closer to the slider */
+    left: 0;
+    right: 0;
+    height: 20px; /* Give it an explicit height */
+}
+
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #d8d8d8;
+    margin: 0 5px;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+    background: #0066b3;
+    opacity: 1;
+}
+
+/* Add a clear termination to the section */
+.distributor-section:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
     .distributor-section h1 {
-        font-weight: bold;
-        font-size: 2.5rem;
-        color: #0056b3;
-        margin-bottom: 10px;
+        font-size: 32px;
     }
     
     .distributor-section p {
-        color: #0056b3;
-        font-size: 1.2rem;
-        margin-bottom: 40px;
+        font-size: 16px;
     }
     
-    .distributor-swiper {
-        padding: 20px 40px;
-        max-width: 1200px;
-        margin: 0 auto;
+    .distributor-swiper .distributor-logo {
+        max-width: 120px;
+        max-height: 50px;
     }
-    
-    .distributor-logo {
-        max-height: 80px;
-        max-width: 180px;
-        object-fit: contain;
-        transition: transform 0.3s ease;
-    }
-    
-    .swiper-slide:hover .distributor-logo {
-        transform: translateY(-5px);
-    }
-    
-    /* Custom pagination styling */
-    .distributor-pagination {
-        position: relative;
-        margin-top: 30px;
-    }
-    
-    .swiper-pagination-bullet {
-        width: 10px;
-        height: 10px;
-        background: #d1d5db;
-        opacity: 1;
-        margin: 0 5px !important;
-    }
-    
-    .swiper-pagination-bullet-active {
-        background: #0056b3;
-    }
-    
-    /* Improved Mobile Responsiveness */
-    @media (max-width: 1024px) {
-        .distributor-logo {
-            max-height: 70px;
-            max-width: 150px;
-        }
-        
-        .distributor-swiper {
-            padding: 15px 35px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .distributor-section h1 {
-            font-size: 2rem;
-        }
-        
-        .distributor-section p {
-            font-size: 1rem;
-            margin-bottom: 25px;
-        }
-        
-        .distributor-logo {
-            max-height: 60px;
-            max-width: 130px;
-        }
-        
-        .distributor-swiper {
-            padding: 10px 30px;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .distributor-section h1 {
-            font-size: 1.75rem;
-        }
-        
-        .distributor-logo {
-            max-height: 50px;
-            max-width: 110px;
-        }
-        
-        .distributor-swiper {
-            padding: 5px 25px;
-        }
-        
-        .swiper-pagination-bullet {
-            width: 8px;
-            height: 8px;
-        }
-    }
-    
-    /* For very small screens */
-    @media (max-width: 375px) {
-        .distributor-logo {
-            max-height: 40px;
-            max-width: 90px;
-        }
-        
-        .distributor-swiper {
-            padding: 5px 20px;
-        }
-    }
+}
 
     /* Interactive Map Styles */
     .interactive-map-section h1 {
@@ -1293,66 +1287,46 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Initialize Swiper with improved configuration
-        const distributorSwiper = new Swiper('.distributor-swiper', {
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-            },
-            // Improved responsive breakpoints
-            slidesPerView: 2, // Default for very small mobile
-            spaceBetween: 15,
-            centeredSlides: true,
-            pagination: {
-                el: '.distributor-pagination',
-                clickable: true,
-            },
-            // More granular breakpoints for better mobile experience
-            breakpoints: {
-                375: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                    centeredSlides: true,
-                },
-                480: {
-                    slidesPerView: 3,
-                    spaceBetween: 20,
-                    centeredSlides: false,
-                },
-                640: {
-                    slidesPerView: 3,
-                    spaceBetween: 30,
-                    centeredSlides: false,
-                },
-                768: {
-                    slidesPerView: 4,
-                    spaceBetween: 30,
-                },
-                1024: {
-                    slidesPerView: 5,
-                    spaceBetween: 40,
-                },
-                1280: {
-                    slidesPerView: 6,
-                    spaceBetween: 40,
-                }
-            },
-            // Improve touch interaction and performance
-            touchEventsTarget: 'container',
-            preloadImages: false,
-            lazy: {
-                loadPrevNext: true,
-                loadPrevNextAmount: 2,
-            },
-            watchSlidesProgress: true,
-            watchSlidesVisibility: true,
-            observer: true,
-            observeParents: true
+   document.addEventListener('DOMContentLoaded', function() {
+    const distributorSwiper = new Swiper('.distributor-swiper', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 3500,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.distributor-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      // when window width is >= 480px
+      480: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      // when window width is >= 640px
+      640: {
+        slidesPerView: 3,
+        spaceBetween: 30
+      },
+      // when window width is >= 992px
+      992: {
+        slidesPerView: 6,
+        spaceBetween: 20
+      }
+    },
+    // This helps resize the swiper when contents are loaded
+    on: {
+      init: function() {
+        // Update swiper size after all images are loaded
+        window.addEventListener('load', function() {
+          distributorSwiper.update();
         });
-        
+      }
+    }
+  });
         // Tooltip functionality for university logos
         const logos = document.querySelectorAll('.logo');
         const tooltip = document.getElementById('tooltip');
