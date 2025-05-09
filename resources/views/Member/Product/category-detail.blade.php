@@ -82,7 +82,7 @@
 /* Banner styling with background image and black blur overlay */
 .category-banner {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                url('/assets/img/breadcrumb.jpg');
+                url('/assets/img/Category-Detail.png');
     background-size: cover;
     background-position: center;
     color: #A9D1F8;
