@@ -23,23 +23,26 @@
         </div>
         
         <div class="col-md-9">
-            <!-- Sort dropdown -->
-            <div class="sort-container text-right mb-4">
-                <span>Sort By:</span>
-                <select class="sort-select">
-                    <option selected>Newest</option>
-                    <option>Oldest</option>
-                    <option>Name A-Z</option>
-                    <option>Name Z-A</option>
-                </select>
+            <!-- Header and sort container combined in a flex container -->
+            <div class="header-sort-container mb-4">
+                <!-- Header for active bidang if selected -->
+                @if(isset($activeBidang))
+                <div class="subcategory-header">
+                    <h2>{{ $activeBidang->name }}</h2>
+                </div>
+                @endif
+                
+                <!-- Sort dropdown -->
+                <div class="sort-container">
+                    <span>Sort By:</span>
+                    <select class="sort-select">
+                        <option value="newest" selected>Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="name-asc">Name A-Z</option>
+                        <option value="name-desc">Name Z-A</option>
+                    </select>
+                </div>
             </div>
-            
-            <!-- Header for active bidang if selected -->
-            @if(isset($activeBidang))
-            <div class="subcategory-header mb-4">
-                <h2>{{ $activeBidang->name }}</h2>
-            </div>
-            @endif
             
             <!-- Products grid -->
             <div class="products-grid">
@@ -79,7 +82,7 @@
 /* Banner styling with background image and black blur overlay */
 .category-banner {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                url('/assets/img/header/kategori.png');
+                url('/assets/img/breadcrumb.jpg');
     background-size: cover;
     background-position: center;
     color: #A9D1F8;
@@ -145,8 +148,8 @@
     left: 10px;
     border-radius: 40px;
     background:rgb(255, 255, 255);
-    margin-top: 50px;
     padding: 20px;
+    margin-top: 20px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     overflow-y: auto;
     z-index: 10;
@@ -189,12 +192,20 @@
     width: 75%;
 }
 
+/* New header and sort container for alignment */
+.header-sort-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
 /* Subcategory header */
 .subcategory-header h2 {
     font-size: 20px;
     color: #333;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    margin: 0;
+    padding-bottom: 0;
 }
 
 /* Sort dropdown */
@@ -202,7 +213,6 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 15px;
 }
 
 .sort-container span {
@@ -421,9 +431,16 @@
         height: auto;
     }
     
+    /* Adjust header-sort-container for mobile */
+    .header-sort-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
     .sort-container {
         justify-content: flex-start;
         margin-top: 15px;
+        width: 100%;
     }
     
     .category-content {
