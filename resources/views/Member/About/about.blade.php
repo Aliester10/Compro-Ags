@@ -706,7 +706,7 @@
     <!-- Header Start -->
     <div class="container-fluid bg-breadcrumb p-0" style="position: relative; overflow: hidden; height: 740px; width: 100%;">
         <!-- Background Image -->
-        <div style="background: url('{{ asset('assets/img/header.png') }}') no-repeat center center; background-size: cover; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+        <div style="background: url('{{ asset('assets/img/About Us header.png') }}') no-repeat center center; background-size: cover; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
         
         <!-- Overlay Hitam Transparan -->
         <div style="background-image: linear-gradient(to top, #ffffff,rgba(217, 217, 217, 0)); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;"></div>        <!-- Konten Utama -->
