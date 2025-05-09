@@ -148,13 +148,13 @@
     <div class="nav-tabs-container">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Profile User</a>
+                <a class="nav-link active" href="{{ route('profile.user') }}">Profile User</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Product</a>
+                <a class="nav-link" href="{{ route('product.index') }}">Product</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Talk to our Product Specialist</a>
+                <a class="nav-link" href="{{ route('product.specialist') }}">Talk to our Product Specialist</a>
             </li>
         </ul>
     </div>
@@ -232,4 +232,24 @@
            class="btn btn-edit">Edit Profile</a>
     @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add active class based on current URL
+    const currentUrl = window.location.pathname;
+    
+    const navLinks = document.querySelectorAll('.nav-tabs .nav-link');
+    navLinks.forEach(link => {
+        // Remove active class from all links
+        link.classList.remove('active');
+        
+        // Check if link href matches current URL
+        if (link.getAttribute('href') === currentUrl || 
+            (currentUrl.includes('/product') && link.textContent.includes('Product') && !link.textContent.includes('Specialist')) ||
+            (currentUrl.includes('/profile-user') && link.textContent.includes('Profile User'))) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
 @endsection
