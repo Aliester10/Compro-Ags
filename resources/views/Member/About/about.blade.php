@@ -762,7 +762,7 @@
         <!-- Innovation Section -->
         <div class="value-block">
             <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon Aboutus/lamp-icon.png') }}" alt="Innovation">
+                <img src="{{ asset('assets/icons/Icon About/lamp-icon.png') }}" alt="Innovation">
                 <h3>Innovation</h3>
             </div>
             <ul class="value-list">
@@ -776,7 +776,7 @@
         <!-- Move Quickly Section -->
         <div class="value-block">
             <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon Aboutus/forward-all-arrow-icon.png') }}" alt="Move Quickly">
+                <img src="{{ asset('assets/icons/Icon About/forward-all-arrow-icon.png') }}" alt="Move Quickly">
                 <h3>Move Quickly</h3>
             </div>
             <ul class="value-list">
@@ -788,7 +788,7 @@
         <!-- Quality Section -->
         <div class="value-block">
             <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon Aboutus/thumbs-up-line-icon.png') }}" alt="Quality">
+                <img src="{{ asset('assets/icons/Icon About/thumbs-up-line-icon.png') }}" alt="Quality">
                 <h3>Quality</h3>
             </div>
             <ul class="value-list">
@@ -800,7 +800,7 @@
         <!-- Customer Satisfaction Section -->
         <div class="value-block">
             <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon Aboutus/employees-icon.png') }}" alt="Customer Satisfaction">
+                <img src="{{ asset('assets/icons/Icon About/employees-icon.png') }}" alt="Customer Satisfaction">
                 <h3>Customer Satisfaction</h3>
             </div>
             <ul class="value-list">
