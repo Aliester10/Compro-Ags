@@ -75,13 +75,13 @@
         font-weight: 600;
         margin-bottom: 20px;
         font-family: 'Work Sans', sans-serif;
-        color: #000;
+        color: #000; 
         text-align: right;
     }
     
     /* About Values Section Styling - FIXED VERSION */
     .about-values-container {
-        background: url('{{ asset('assets/img/AboutUs_2.png') }}') no-repeat center center;
+        background: url('{{ asset('assets/img/About Us_2.png') }}') no-repeat center center;
         background-size: cover;
         position: relative;
         height: 780px; /* Increased height to accommodate the lower positioning */
@@ -734,7 +734,7 @@
         <div class="row">
             <!-- Vision Section (Left) -->
             <div class="col-md-5">
-                <h1 class="vision-title"> {{ __('messages.our') }} <br> {{ __('messages.misi') }}. </h1>
+                <h1 class="vision-title"> Our <br> Mission. </h1>
                 <p class="vision-text" > {{ $company->misi ?? 'By providing the best service through innovation so that you get the right solution in meeting every need in detail orientation and also a reliable guarantee.' }} </p>
             </div>
 
@@ -744,7 +744,7 @@
 
             <!-- Mission Section (Right) -->
             <div class="col-md-5">
-                <h1 class="mission-title"> {{ __('messages.our') }} <br>{{ __('messages.visi') }}.</h1>
+                <h1 class="mission-title"> Our <br> Vision.</h1>
                 <p class="mission-text"  >{{ $company->visi ?? 'The technology start-up that provide any innovative solutions for growing up and give the value added your industry.' }}</p>
             </div>
         </div>

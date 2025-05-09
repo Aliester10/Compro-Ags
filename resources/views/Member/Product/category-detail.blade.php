@@ -145,6 +145,7 @@
     left: 10px;
     border-radius: 40px;
     background:rgb(255, 255, 255);
+    margin-top: 50px;
     padding: 20px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     overflow-y: auto;

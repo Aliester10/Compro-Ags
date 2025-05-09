@@ -401,7 +401,7 @@
 
     <div class="partners-grid">
         @foreach($principals as $principal)
-        <a href="{{ $principal->url ?? '#' }}" class="partner-item">
+        <a href="{{ route('member.product.category', $category->id) }}" class="partner-item">
             <img src="{{ asset($principal->gambar) }}" alt="{{ $principal->nama ?? 'Principal Partner' }} Logo">
         </a>
         @endforeach

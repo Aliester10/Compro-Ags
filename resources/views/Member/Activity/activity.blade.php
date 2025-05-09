@@ -800,20 +800,6 @@
                         </div>
                     </div>
                 @endforeach
-                
-                @if($hasMoreEvents)
-                    <!-- View More Card -->
-                    <div class="highlight-card view-more-card">
-                        <div class="highlight-overlay view-more-overlay"></div>
-                        <div class="highlight-content view-more-content">
-                            <div class="view-more-text">+{{ $totalEvents - $maxEventsPerYear }} More Events</div>
-                            <a href="{{ route('activities.year', ['year' => $year]) }}" class="highlight-btn">View All</a>
-                        </div>
-                    </div>
-                @elseif(count($events) % 2 == 1)
-                    <!-- Empty card to maintain grid balance only if we don't have a View More card -->
-                    <div class="highlight-card empty-card"></div>
-                @endif
             @else
                 <div class="highlight-card empty-card">
                     <p>No events available for {{ $year }} yet</p>
