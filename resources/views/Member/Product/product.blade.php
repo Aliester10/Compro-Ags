@@ -41,7 +41,7 @@
                         <div class="category-image">
                             <img src="{{ asset($category->icon_hover) }}" class="category-icon" alt="{{ $category->nama }}">
                         </div>
-                        <div class="category-name">
+                        <div class="category-name font-black">
                             {{ $category->nama }}
                         </div>
                     </a>
@@ -64,7 +64,7 @@
                         <div class="category-image">
                             <img src="{{ asset($category->icon_hover) }}" class="category-icon" alt="{{ $category->nama }}">
                         </div>
-                        <div class="category-name">
+                        <div class="category-name font-black">
                             {{ $category->nama }}
                         </div>
                     </a>
@@ -75,101 +75,111 @@
     </div>
 
     <!-- Best Seller Products Section -->
-  <!-- Best Seller Products Section -->
-<div class="bestseller-section">
-    <div class="bestseller-container">
-        <h2>Best Seller Products.</h2>
-        
-        @php
-            // For debugging - uncomment to see what products exist
-            // foreach($produks as $p) {
-            //     echo $p->nama . "<br>";
-            // }
+    <div class="bestseller-section">
+        <div class="bestseller-container">
+            <h2>Best Seller Products.</h2>
             
-            // Define product name keywords to search for
-            $keywords = [
-                'air bag',
-                'simulator',
-                'Controller Training',
-                'PCE Water', 
-                'Suntex Laboratory',
-                'basic electric',
-                'Shielded Ground',
-                'Automatic Kjedahl',
-                'Automatic Multichannel',                
-            ];
-            
-            // More flexible filter that looks for keywords instead of exact matches
-            $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
-                $productName = strtolower($product->nama);
-                foreach ($keywords as $keyword) {
-                    if (stripos($productName, strtolower($keyword)) !== false) {
-                        return true;
+            @php
+                // For debugging - uncomment to see what products exist
+                // foreach($produks as $p) {
+                //     echo $p->nama . "<br>";
+                // }
+                
+                // Define product name keywords to search for
+                $keywords = [
+                    'air bag',
+                    'simulator',
+                    'Controller Training',
+                    'PCE Water', 
+                    'Suntex Laboratory',
+                    'basic electric',
+                    'Shielded Ground',
+                    'Automatic Kjedahl',
+                    'Automatic Multichannel',                
+                ];
+                
+                // More flexible filter that looks for keywords instead of exact matches
+                $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
+                    $productName = strtolower($product->nama);
+                    foreach ($keywords as $keyword) {
+                        if (stripos($productName, strtolower($keyword)) !== false) {
+                            return true;
+                        }
                     }
+                    return false;
+                });
+                
+                // Check if any products match the filter
+                if ($bestSellerProducts->count() > 0) {
+                    // If products exist, chunk them
+                    $productsChunks = $bestSellerProducts->chunk(3);
+                } else {
+                    // If no products match, create an empty collection to handle in the loop
+                    $productsChunks = collect([]);
                 }
-                return false;
-            });
+            @endphp
             
-            // Check if any products match the filter
-            if ($bestSellerProducts->count() > 0) {
-                // If products exist, chunk them
-                $productsChunks = $bestSellerProducts->chunk(3);
-            } else {
-                // If no products match, create an empty collection to handle in the loop
-                $productsChunks = collect([]);
-            }
-        @endphp
-        
-        <!-- For debugging - uncomment to see what products were filtered -->
-        <!-- 
-        <div class="debug-info" style="margin-bottom: 20px; padding: 10px; background: #f5f5f5;">
-            <p><strong>Debug: Found {{ $bestSellerProducts->count() }} matching products</strong></p>
-            @foreach($bestSellerProducts as $product)
-                <p>{{ $product->nama }}</p>
-            @endforeach
-        </div>
-        -->
-        
-        @if($bestSellerProducts->count() > 0)
-            @foreach($productsChunks as $chunk)
-                <!-- Products grid -->
-                <div class="products-grid">
-                    <div class="row">
-                        @foreach($chunk as $product)
-                            <div class="col-md-4 mb-4">
-                                <div class="product-card">
-                                    <div class="product-image">
-                                    @if($product->images->count() > 0)
-                                        <img src="{{ asset($product->images->first()->gambar) }}" alt="{{ $product->nama }}">
-                                    @else
-                                        <img src="{{ asset('assets/img/default.jpg') }}" alt="{{ $product->nama }}" class="default-image">
-                                    @endif
-                                    </div>
-                                    <div class="product-details">
-                                        <h3 class="product-title">{{ $product->nama }}</h3>
-                                        <a href="{{ route('product.show', $product->id) }}" class="read-more">Read More..</a>
+            @if($bestSellerProducts->count() > 0)
+                @foreach($productsChunks as $chunk)
+                    <!-- Products grid -->
+                    <div class="products-grid">
+                        <div class="row">
+                            @foreach($chunk as $product)
+                                <div class="col-md-4 mb-4">
+                                    <div class="product-card">
+                                        <div class="product-image">
+                                        @if($product->images->count() > 0)
+                                            <img src="{{ asset($product->images->first()->gambar) }}" alt="{{ $product->nama }}">
+                                        @else
+                                            <img src="{{ asset('assets/img/default.jpg') }}" alt="{{ $product->nama }}" class="default-image">
+                                        @endif
+                                        </div>
+                                        <div class="product-details">
+                                            <h3 class="product-title">{{ $product->nama }}</h3>
+                                            <a href="{{ route('product.show', $product->id) }}" class="read-more">Read More..</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="row">
+                    <div class="col-12">
+                        <div class="no-products text-center">
+                            <p>No bestseller products available at this time.</p>
+                        </div>
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="row">
-                <div class="col-12">
-                    <div class="no-products text-center">
-                        <p>No bestseller products available at this time.</p>
-                    </div>
-                </div>
-            </div>
-        @endif
+            @endif
+        </div>
     </div>
-</div>
     <style>
+        /* Font import */
+        @import url('/assets/css/fonts.css');
+        /* Import AOS CSS for scroll animations */
+        @import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
+        
+        /* Font family base */
+        * {
+            font-family: 'Poppins', sans-serif; /* Assuming your local font is Poppins, adjust if needed */
+        }
+        
+        /* Font weight classes */
+        .font-thin { font-weight: 100; }
+        .font-extralight { font-weight: 200; }
+        .font-light { font-weight: 300; }
+        .font-regular { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .font-black { font-weight: 900; }
+        
         /* Header Styles */
         .products-header {
-            background-image: url('{{ asset('assets/img/header.png') }}');
+            background-image: url('{{ asset('assets/img/header/our-product.png') }}');
             background-size: cover;
             background-position: center;
             height: 498px;
@@ -187,7 +197,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0);
         }
         
         .header-content {
@@ -242,12 +252,12 @@
         
         .category-container h2 {
             font-size: 40px;
-            font-weight: bold;
+            font-weight: 900;
             text-align: center;
             margin-bottom: 30px;
         }
         
-        /* Search Bar Styles */
+        /* Search Bar Styles - Updated with exact dimensions */
         .search-bar {
             display: flex;
             justify-content: center;
@@ -256,25 +266,35 @@
         
         .search-input-group {
             position: relative;
-            width: 100%;
-            max-width: 500px;
+            width: 549px; /* Exact width as requested */
+            max-width: 100%; /* For responsiveness */
         }
         
         .search-input-group input {
             width: 100%;
-            padding: 10px 15px 10px 40px;
+            height: 38px; /* Exact height as requested */
+            padding: 0 15px 0 45px;
             border: 1px solid #ddd;
             border-radius: 30px;
             font-size: 16px;
             outline: none;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .search-input-group input::placeholder {
+            color: #aaa;
+            vertical-align: middle; /* Center placeholder vertically */
+            line-height: 38px; /* Match the height */
         }
         
         .search-icon {
             position: absolute;
-            left: 15px;
+            left: 20px;
             top: 50%;
             transform: translateY(-50%);
             color: #666;
+            font-size: 16px;
         }
         
         /* Category Grid Styles */
@@ -284,6 +304,7 @@
             gap: 20px;
             justify-content: center;
             margin-bottom: 30px;
+            margin-top: 40px;
         }
         
         /* Bottom Row Styling */
@@ -298,14 +319,15 @@
         .category-card {
             width: 236px;
             height: 333px;
-            border-radius: 30px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
             transition: transform 0.3s;
             position: relative;
             display: flex;
             flex-direction: column;
             text-decoration: none;
+            background-color: #000;
         }
         
         .category-card:hover {
@@ -343,29 +365,37 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.65);
         }
         
+        /* Updated icon styling with exact dimensions */
         .category-image img {
-            width: 80px;
-            height: 80px;
+            width: 126px; /* Exact width as requested */
+            height: 126px; /* Exact height as requested */
             object-fit: contain;
             position: relative;
             z-index: 2;
-            margin-bottom: 30px;
+            /* Position icon to leave exactly 10px gap with category name */
+            margin-bottom: 60px; /* This positions the icon appropriately */
         }
         
+        /* Updated category name styling with exact spacing */
         .category-name {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            padding: 15px 10px;
+            height: 160px; /* Fixed height for the name area */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
             text-align: center;
             color: white;
-            font-weight: 500;
-            font-size: 16px;
+            font-weight: 900;
+            font-size: 18px;
             z-index: 2;
+            line-height: 1.2;
         }
         
         /* Best Seller Products Section */
@@ -407,7 +437,7 @@
         
         .bestseller-container h2 {
             font-size: 40px;
-            font-weight: bold;
+            font-weight: 900;
             text-align: center;
             margin-bottom: 50px;
         }
@@ -472,10 +502,9 @@
             text-align: center;
         }
         
-                
         .product-title {
             font-size: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 3px;
             height: 44px;
             overflow: hidden;
             display: -webkit-box;
@@ -530,6 +559,10 @@
             .product-card {
                 width: 100%;
                 max-width: 350px;
+            }
+            
+            .search-input-group {
+                width: 100%; /* Full width on mobile */
             }
         }
         

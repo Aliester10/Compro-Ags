@@ -176,7 +176,7 @@
                             <!-- WhatsApp -->
                             <div class="d-flex align-items-center mb-2" style="margin-left: 50px;">
                                 <img src="{{ asset('assets/icons/Icon Contact Information/1.png') }}" alt="WhatsApp" style="width: 32px; height: 32px; margin-right: 10px;">
-                                <a href="https://wa.me/6285217911213" style="color: #000; text-decoration: none; font-size: 16px;">+62 852-1791-1213</a>
+                                <a href="https://wa.me/6285217911213" style="color: #000; text-decoration: none; font-size: 16px;">+62 852-1947-8205</a>
                             </div>
                             
                             <!-- Phone -->
@@ -193,10 +193,12 @@
                             
                             <!-- Social Media Icons -->
                             <div class="d-flex" style="margin-left: 50px;">
-                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/Blue/2.png') }}" alt="LinkedIn" style="width: 32px; height: 32px;"></a>
-                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/Blue/3.png') }}" alt="Instagram" style="width: 32px; height: 32px;"></a>
-                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/Blue/4.png') }}" alt="TikTok" style="width: 32px; height: 32px;"></a>
-                                <a href="#"><img src="{{ asset('assets/icons/Asset Icon Social Media/Blue/5.png') }}" alt="YouTube" style="width: 32px; height: 32px;"></a>
+                                <!-- Added Facebook Icon -->
+                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/linkedin.png') }}" alt="LinkedIn" style="width: 32px; height: 32px;"></a>
+                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/facebook.png') }}" alt="Facebook" style="width: 32px; height: 32px;"></a>
+                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/instagram.png') }}" alt="Instagram" style="width: 32px; height: 32px;"></a>
+                                <a href="#" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/tiktok.png') }}" alt="TikTok" style="width: 32px; height: 32px;"></a>
+                                <a href="#"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/youtube.png') }}" alt="YouTube" style="width: 32px; height: 32px;"></a>
                             </div>
                         </div>
                     </div>

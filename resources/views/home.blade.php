@@ -107,74 +107,73 @@
         }
     }
   /* Modified partners section styles */
-  .partners-section {
-        text-align: center;
-        margin-top: 50px;
-        margin-bottom: 50px;
-        padding: 0 15px;
-    }
-    .partners-section h1 {
-        font-weight: bold;
-        font-size: 2.5rem;
-        color: #0056b3;
-        margin-bottom: 10px;
-    }
-    .partners-section p {
-        color: #0056b3;
-        font-size: 1.2rem;
-        margin-bottom: 40px;
-    }
+  /* Brand Partners Section Styles */
+.partners-section {
+    padding: 20px 0;
+    background-color: #ffffff;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.partners-section h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 40px;
+    font-weight: 700;
+    color: #0F69AF; /* Blue color matching your heading */
+}
+
+/* Grid layout with reduced horizontal spacing */
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px 30px; /* 60px vertical spacing, 30px horizontal spacing (reduced) */
+    margin: 0 auto;
+    max-width: 800px; /* Reduced width to bring logos closer */
+}
+
+.partner-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.partner-item img {
+    max-width: 100%;
+    max-height: 100px;
+    object-fit: contain;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
     .partners-grid {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        grid-template-columns: 1fr;
         gap: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 15px;
     }
+    
+    .partners-section h1 {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
     .partner-item {
-        display: inline-block;
-        transition: transform 0.3s ease;
+        height: auto;
     }
-    .partner-item:hover {
-        transform: translateY(-5px);
-    }
+    
     .partner-item img {
         max-height: 80px;
-        max-width: 180px;
-        object-fit: contain;
     }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .partners-grid {
-            gap: 25px;
-        }
-        .partner-item img {
-            max-height: 60px;
-            max-width: 140px;
-        }
-    }
-    
-    @media (max-width: 576px) {
-        .partners-section h1 {
-            font-size: 2rem;
-        }
-        .partners-grid {
-            gap: 20px;
-        }
-        .partner-item img {
-            max-height: 50px;
-            max-width: 120px;
-        }
-    }
-    
+}
 </style>
 <!-- Hero/Banner Slider Section -->
 <div class="relative">
     <!-- Slider component -->
-    <div class="slider-container h-screen relative overflow-hidden rounded-b-[50px]">
+    <div class="slider-container relative overflow-hidden rounded-b-[50px]" style="height: calc(150vh - 120px);">
         <div class="slides-wrapper" id="slidesWrapper">
             @if(isset($sliders) && count($sliders) > 0)
                 @foreach($sliders as $index => $slider)
@@ -183,7 +182,7 @@
                                 background-size: cover; 
                                 background-position: center right;">
                         <div class="container mx-auto px-6 md:px-12 h-full flex items-center">
-                            <div class="w-full md:w-1/2 text-white mt-32">
+                            <div class="w-full md:w-1/2 text-white mt-12">
                                 <!-- Title -->
                                 <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: {{ $slider->title_color ?? '#FFFFFF' }}">
                                     {{ $slider->title }}
@@ -279,7 +278,7 @@
     <div class="container mx-auto">
         <div class="flex flex-wrap items-center justify-center">
             <!-- Horizontal layout with all elements and separators -->
-            <div class="flex flex-wrap items-center justify-center gap-1">
+            <div class="flex items-center justify-center gap-1 flex-nowrap">
                 <!-- LABTEK (first brand) -->
                 @php
                     $brand1 = DB::table('brand_partner')->where('type', 'brand')->where('nama', 'Labtek')->first();
@@ -396,19 +395,21 @@
 <div class="h-px w-full bg-gray-300 my-4"></div>
 
 <div class="container partners-section">
-    <h1>Our Trusted Principal Partners</h1>
-    <p>Exclusive Principal Partners of PT. Arkamaya Guna Saharsa</p>
-
+    <h1>Our Brand</h1>
     <div class="partners-grid">
-        @foreach($principals as $principal)
-        <a href="{{ route('member.product.category', $category->id) }}" class="partner-item">
-            <img src="{{ asset($principal->gambar) }}" alt="{{ $principal->nama ?? 'Principal Partner' }} Logo">
+        @php
+        $brands = DB::table('brand_partner')->where('type', 'brand')->get();
+        @endphp
+        
+        @foreach($brands as $brand)
+        <a href="{{ $brand->url ?? '#' }}" class="partner-item">
+            <img src="{{ asset($brand->gambar) }}" alt="{{ $brand->nama }}">
         </a>
         @endforeach
     </div>
 </div>
 <div class="container distributor-section collaboration-section">
-    <h1>Our Distributor</h1>
+    <h1>Collaboration With Our Principal</h1>
     <p>Trusted Collaboration</p>
 
     <!-- Swiper Container -->
@@ -435,538 +436,246 @@
 <div class="h-px w-full bg-gray-300 my-4"></div>
 
 <!-- Interactive Map Section - Starts here -->
-<div class="container mx-auto my-12 px-4 text-center interactive-map-section">
-    <h1 class="text-4xl font-bold text-blue-700 mb-4">Our Distribution</h1>
-    <p class="text-lg text-blue-700 mb-10">Indonesia Distribution Map</p>
+    <div class="container mx-auto my-12 px-4 text-center interactive-map-section">
+        <h1 class="text-4xl font-bold text-blue-700 mb-4">Our Distribution</h1>
+        <p class="text-lg text-blue-700 mb-10">Indonesia Distribution Map</p>
 
-    <div class="map-container">
-        <!-- Peta SVG Indonesia - Updated path -->
-        <object
-            id="svg-map"
-            type="image/svg+xml"
-            data="{{ asset('assets/img/maps/country (1).svg') }}"
-            width="1000"
-            height="500"
-        ></object>
+        <div class="map-container">
+            <!-- Peta SVG Indonesia - Updated path -->
+            <object
+                id="svg-map"
+                type="image/svg+xml"
+                data="{{ asset('assets/img/maps/country (1).svg') }}"
+                width="100%"
+                height="auto"
+            ></object>
 
-        <!-- Logo universities with correct paths -->
-         <!--Jawa -->
-        <img
-            src="{{ asset('assets/img/maps/jawa/ITS.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 275px;
-            left: 400px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Institut Teknologi Sepuluh Nopember"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Universitas Jember.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 290px;
-            left: 385px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Jember"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/UPN Veteran Jawa Timur.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 265px;
-            left: 380px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="UPN Veteran Jawa Timur"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/UNM.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 280px;
-            left: 365px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Negeri Malang"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/BLK Wonogiri 1.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 260px;
-            left: 354px;
-            width: 18px;
-            height: 18px;
-            "
-            data-name="BLK Wonogiri 1"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Politeknik Negeri Madiun.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 280px;
-            left: 340px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Negeri Madiun"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Politeknik Kesehatan Semarang.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 260px;
-            left: 325px;
-            width: 23px;
-            height: 23px;
-            "
-            data-name="Politeknik Kesehatan Semarang"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Politeknik Negeri Cilacap.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 275px;
-            left: 305px;
-            width: 25px;
-            height: 25px;
-            "
-            data-name="Politeknik Negeri Cilacap"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Badan Nasional Penanggulangan Terorisme.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 250px;
-            left: 300px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Badan Nasional Penanggulangan Terorisme"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Kementerian Ketenagakerjaan RI.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 260px;
-            left: 285px;
-            width: 15px;
-            height: 20px;
-            "
-            data-name="Kementerian Ketenagakerjaan RI"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Universitas Singaperbangsa Karawang.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 265px;
-            left: 265px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Singaperbangsa Karawang"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/BKKBN.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 250px;
-            left: 240px;
-            width: 30px;
-            height: 20px;
-            "
-            data-name="Badan Kependudukan dan Keluarga Berencana Nasional"
-        />
-        <img
-            src="{{ asset('assets/img/maps/jawa/Politeknik Kesehatan Banten 1.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 240px;
-            left: 270px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Kesehatan Banten"
-        />
-        <!-- Bali -->
-        <img
-            src="{{ asset('assets/img/maps/bali/Politeknik Negeri Bali.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 285px;
-            left: 430px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Negeri Bali"
-        />
-        <!-- NTT -->
-        <img 
-            src="{{ asset('assets/img/maps/Nusa Tenggara Timur/Universitas Nusa Cendana.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 325px;
-            left: 610px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Nusa Cendana"
-        />
-        <!-- Maluku -->
-        <img 
-            src="{{ asset('assets/img/maps/Maluku/Universitas Pattimura.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 190px;
-            left: 700px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Pattimura"
-        />
-        <!-- Papua -->
-        <img 
-            src="{{ asset('assets/img/maps/Papua/Universitas Cendrawasih.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 160px;
-            left: 880px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Cendrawasih"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Papua/Universitas Negeri Papua.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 140px;
-            left: 770px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Negeri Papua"
-        />
-       <!-- Sulawesi -->
-        <img 
-            src="{{ asset('assets/img/maps/Sulawesi/RSUD Bumi Panua.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 110px;
-            left: 600px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="RSUD Bumi Panua"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sulawesi/Universitas Hasanuddin.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 210px;
-            left: 530px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Hasanuddin"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sulawesi/Universitas Negeri Makassar.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 230px;
-            left: 540px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Negeri Makassar"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sulawesi/Universitas Tadulako.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 150px;
-            left: 530px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Tadulako"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sulawesi/ITH.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 230px;
-            left: 520px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Institut Teknologi Halu Oleo"
-        />
-        <!-- Kalimantan -->
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Politeknik Tanah Laut.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 160px;
-            left: 440px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Tanah Laut" 
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Universitas Lambung Mangkurat.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 180px;
-            left: 440px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Lambung Mangkurat"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Universitas Tanjungpura.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 140px;
-            left: 340px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Tanjungpura"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Universitas Mulawarman.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 140px;
-            left: 440px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Mulawarman"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Universitas Borneo Tarakan.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 80px;
-            left: 460px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Borneo Tarakan"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Politeknik Negeri Samarinda.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 100px;
-            left: 470px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Negeri Samarinda"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/politeknik negeri balikpapan png.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 150px;
-            left: 460px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Negeri Balikpapan"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Institut Teknologi Kalimantan.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 120px;
-            left: 460px;
-            width: 30px;
-            height: 20px;
-            "
-            data-name="Institut Teknologi Kalimantan"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Kalimantan/Dinas Kesehatan Ketapang.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 170px;
-            left: 340px;
-            width: 20px;
-            height: 30px;
-            "
-            data-name="Dinas Kesehatan Ketapang"
-        />
-        <!--Bangka Belitung -->
-        <img 
-            src="{{ asset('assets/img/maps/Bangka Belitung/UBB 1.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 170px;
-            left: 250px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Bangka Belitung"
-        />
-        <!-- Sumatera -->
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Dinas Pendidikan Kepulauan Riau.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 100px;
-            left: 220px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Dinas Pendidikan Kepulauan Riau"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Institut Teknologi Sumatera Logo.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 220px;
-            left: 230px;
-            width: 30px;
-            height: 30px;
-            "
-            data-name="Institut Teknologi Sumatera"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Universitas Negeri Sriwijaya.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 190px;
-            left: 230px;
-            width: 25px;
-            height: 20px;
-            "
-            data-name="Universitas Negeri Sriwijaya"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Politeknik Negeri Sriwijaya.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 170px;
-            left: 220px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Politeknik Negeri Sriwijaya"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Universitas Riau.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 100px;
-            left: 180px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Riau"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/RSUD Batu Bara.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 100px;
-            left: 160px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="RSUD Batu Bara"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/BBPPMPV Bidang Bangunan dan Listrik Medan.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 80px;
-            left: 140px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="BBPPMPV Bidang Bangunan dan Listrik Medan"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/UIN Aceh.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 60px;
-            left: 110px;
-            width: 30px;
-            height: 20px;
-            "
-            data-name="UIN Aceh"
-        />
-        <img 
-            src="{{ asset('assets/img/maps/Sumatera/Universitas Syah Kuala.png') }}"
-            class="logo"
-            style="
-            position: absolute;
-            top: 40px;
-            left: 90px;
-            width: 20px;
-            height: 20px;
-            "
-            data-name="Universitas Syah Kuala"
-        />
-        <!-- Add tooltip container -->
-        <div id="tooltip" class="tooltip-box" style="display: none;"></div>
+            <!-- Logo universities with correct paths -->
+             <!--Jawa -->
+            <img
+                src="{{ asset('assets/img/maps/jawa/ITS.png') }}"
+                class="logo"
+                data-name="Institut Teknologi Sepuluh Nopember"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Universitas Jember.png') }}"
+                class="logo"
+                data-name="Universitas Jember"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/UPN Veteran Jawa Timur.png') }}"
+                class="logo"
+                data-name="UPN Veteran Jawa Timur"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/UNM.png') }}"
+                class="logo"
+                data-name="Universitas Negeri Malang"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/BLK Wonogiri 1.png') }}"
+                class="logo"
+                data-name="BLK Wonogiri 1"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Politeknik Negeri Madiun.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Madiun"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Politeknik Kesehatan Semarang.png') }}"
+                class="logo"
+                data-name="Politeknik Kesehatan Semarang"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Politeknik Negeri Cilacap.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Cilacap"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Badan Nasional Penanggulangan Terorisme.png') }}"
+                class="logo"
+                data-name="Badan Nasional Penanggulangan Terorisme"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Kementerian Ketenagakerjaan RI.png') }}"
+                class="logo"
+                data-name="Kementerian Ketenagakerjaan RI"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Universitas Singaperbangsa Karawang.png') }}"
+                class="logo"
+                data-name="Universitas Singaperbangsa Karawang"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/BKKBN.png') }}"
+                class="logo"
+                data-name="Badan Kependudukan dan Keluarga Berencana Nasional"
+            />
+            <img
+                src="{{ asset('assets/img/maps/jawa/Politeknik Kesehatan Banten 1.png') }}"
+                class="logo"
+                data-name="Politeknik Kesehatan Banten"
+            />
+            <!-- Bali -->
+            <img
+                src="{{ asset('assets/img/maps/bali/Politeknik Negeri Bali.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Bali"
+            />
+            <!-- NTT -->
+            <img 
+                src="{{ asset('assets/img/maps/Nusa Tenggara Timur/Universitas Nusa Cendana.png') }}"
+                class="logo"
+                data-name="Universitas Nusa Cendana"
+            />
+            <!-- Maluku -->
+            <img 
+                src="{{ asset('assets/img/maps/Maluku/Universitas Pattimura.png') }}"
+                class="logo"
+                data-name="Universitas Pattimura"
+            />
+            <!-- Papua -->
+            <img 
+                src="{{ asset('assets/img/maps/Papua/Universitas Cendrawasih.png') }}"
+                class="logo"
+                data-name="Universitas Cendrawasih"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Papua/Universitas Negeri Papua.png') }}"
+                class="logo"
+
+                data-name="Universitas Negeri Papua"
+            />
+           <!-- Sulawesi -->
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/RSUD Bumi Panua.png') }}"
+                class="logo"
+                data-name="RSUD Bumi Panua"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/Universitas Hasanuddin.png') }}"
+                class="logo"
+                data-name="Universitas Hasanuddin"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/Universitas Negeri Makassar.png') }}"
+                class="logo"
+                data-name="Universitas Negeri Makassar"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/Universitas Tadulako.png') }}"
+                class="logo"
+                data-name="Universitas Tadulako"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/ITH.png') }}"
+                class="logo"
+                data-name="Institut Teknologi Halu Oleo"
+            />
+            <!-- Kalimantan -->
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Politeknik Tanah Laut.png') }}"
+                class="logo"
+                data-name="Politeknik Tanah Laut" 
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Universitas Lambung Mangkurat.png') }}"
+                class="logo"
+                data-name="Universitas Lambung Mangkurat"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Universitas Tanjungpura.png') }}"
+                class="logo"
+                data-name="Universitas Tanjungpura"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Universitas Mulawarman.png') }}"
+                class="logo"
+                data-name="Universitas Mulawarman"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Universitas Borneo Tarakan.png') }}"
+                class="logo"
+                data-name="Universitas Borneo Tarakan"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Politeknik Negeri Samarinda.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Samarinda"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/politeknik negeri balikpapan png.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Balikpapan"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Institut Teknologi Kalimantan.png') }}"
+                class="logo"
+                data-name="Institut Teknologi Kalimantan"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Kalimantan/Dinas Kesehatan Ketapang.png') }}"
+                class="logo"
+                data-name="Dinas Kesehatan Ketapang"
+            />
+            <!--Bangka Belitung -->
+            <img 
+                src="{{ asset('assets/img/maps/Bangka Belitung/UBB 1.png') }}"
+                class="logo"
+                data-name="Universitas Bangka Belitung"
+            />
+            <!-- Sumatera -->
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Dinas Pendidikan Kepulauan Riau.png') }}"
+                class="logo"
+                data-name="Dinas Pendidikan Kepulauan Riau"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Institut Teknologi Sumatera Logo.png') }}"
+                class="logo"
+                data-name="Institut Teknologi Sumatera"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Universitas Negeri Sriwijaya.png') }}"
+                class="logo"
+                data-name="Universitas Negeri Sriwijaya"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Politeknik Negeri Sriwijaya.png') }}"
+                class="logo"
+                data-name="Politeknik Negeri Sriwijaya"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Universitas Riau.png') }}"
+                class="logo"
+                data-name="Universitas Riau"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/RSUD Batu Bara.png') }}"
+                class="logo"
+                data-name="RSUD Batu Bara"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/BBPPMPV Bidang Bangunan dan Listrik Medan.png') }}"
+                class="logo"
+                data-name="BBPPMPV Bidang Bangunan dan Listrik Medan"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/UIN Aceh.png') }}"
+                class="logo"
+                data-name="UIN Aceh"
+            />
+            <img 
+                src="{{ asset('assets/img/maps/Sumatera/Universitas Syah Kuala.png') }}"
+                class="logo"
+                data-name="Universitas Syah Kuala"
+            />
+            <!-- Add tooltip container -->
+            <div id="tooltip" class="tooltip-box" style="display: none;"></div>
+        </div>
     </div>
-</div>
+
 
 <div class="h-px w-full bg-gray-300 my-4"></div>
 <!-- Interactive Map Section - Ends here -->
@@ -1176,114 +885,430 @@
     }
 }
 
-    /* Interactive Map Styles */
+/* Interactive Map Styles - Full Responsive Solution */
+/* Base Map Section Styles */
+.interactive-map-section {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: visible;
+    padding: 20px 10px;
+}
+
+.interactive-map-section h1 {
+    font-weight: bold;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: #0056b3;
+    margin-bottom: 10px;
+    text-align: center;
+}
+    
+.interactive-map-section p {
+    color: #0056b3;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    margin-bottom: clamp(15px, 4vw, 40px);
+    text-align: center;
+}
+
+/* Container Styles */
+.container {
+    width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Map Container with Aspect Ratio */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Keep your 16:9 aspect ratio */
+    margin: 0 auto;
+    overflow: visible;
+    /* Add this line to create positioning context */
+    transform-style: preserve-3d;
+}
+
+#svg-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Logo Styling */
+.logo {
+    position: absolute;
+    width: clamp(18px, 3vw, 35px) !important;
+    height: clamp(18px, 3vw, 35px) !important;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10;
+    transform-origin: center;
+    /* Add these two properties for consistent positioning */
+    transform: translate(-50%, -50%);
+    margin: 0;
+}
+
+.logo:hover {
+    transform: scale(1.2);
+    z-index: 11;
+}
+.logo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through to SVG */
+}
+
+/* Tooltip Styling */
+.tooltip-box {
+    position: absolute;
+    background-color: white;
+    color: #000;
+    padding: clamp(8px, 2vw, 15px) clamp(12px, 3vw, 25px);
+    border-radius: 50px;
+    font-size: clamp(12px, 1.5vw, 16px);
+    font-weight: 500;
+    z-index: 100;
+    min-width: clamp(100px, 20vw, 200px);
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    transition: opacity 0.3s;
+    border: 2px solid #0056b3;
+    transform: translateX(-50%); /* Center horizontally */
+}
+
+.tooltip-box::after {
+    content: "";
+    position: absolute;
+    bottom: clamp(-20px, -3vw, -30px);
+    left: 50%;
+    margin-left: clamp(-10px, -1.5vw, -15px);
+    border-width: clamp(10px, 1.5vw, 15px);
+    border-style: solid;
+    border-color: #0056b3 transparent transparent transparent;
+}
+
+.tooltip-box::before {
+    content: "";
+    position: absolute;
+    bottom: clamp(-16px, -2.6vw, -26px);
+    left: 50%;
+    margin-left: clamp(-8px, -1.3vw, -13px);
+    border-width: clamp(8px, 1.3vw, 13px);
+    border-style: solid;
+    border-color: white transparent transparent transparent;
+    z-index: 1;
+}
+
+
+/* UPDATED Logo Positioning - Java and Sumatra logos adjusted lower and slightly right */
+
+/* Java Region - ADJUSTED LOWER AND SLIGHTLY RIGHT */
+[data-name="Institut Teknologi Sepuluh Nopember"] {
+    top: 50%;
+    left: 41%;
+}
+
+[data-name="Universitas Jember"] {
+    top: 52%;
+    left: 39.5%;
+}
+
+[data-name="UPN Veteran Jawa Timur"] {
+    top: 47%;
+    left: 39%;
+}
+
+[data-name="Universitas Negeri Malang"] {
+    top: 50%;
+    left: 37.5%;
+}
+
+[data-name="BLK Wonogiri 1"] {
+    top: 47%;
+    left: 36%;
+}
+
+[data-name="Politeknik Negeri Madiun"] {
+    top: 50%;
+    left: 34.5%;
+}
+
+[data-name="Politeknik Kesehatan Semarang"] {
+    top: 47%;
+    left: 33%;
+}
+
+[data-name="Politeknik Negeri Cilacap"] {
+    top: 49.5%;
+    left: 30.5%;
+}
+
+[data-name="Badan Nasional Penanggulangan Terorisme"] {
+    top: 46%;
+    left: 30%;
+}
+
+[data-name="Kementerian Ketenagakerjaan RI"] {
+    top: 47%;
+    left: 28.5%;
+}
+
+[data-name="Universitas Singaperbangsa Karawang"] {
+    top: 47.5%;
+    left: 26.5%;
+}
+
+[data-name="Badan Kependudukan dan Keluarga Berencana Nasional"] {
+    top: 45.5%;
+    left: 25%;
+}
+
+[data-name="Politeknik Kesehatan Banten"] {
+    top: 45%;
+    left: 27%;
+}
+
+/* Sumatera Region - ADJUSTED LOWER AND SLIGHTLY RIGHT */
+[data-name="Dinas Pendidikan Kepulauan Riau"] {
+    top: 20%;
+    left: 21.5%;
+}
+
+[data-name="Institut Teknologi Sumatera"] {
+    top: 36.5%;
+    left: 22.5%;
+}
+
+[data-name="Universitas Negeri Sriwijaya"] {
+    top: 32.5%;
+    left: 22.5%;
+}
+
+[data-name="Politeknik Negeri Sriwijaya"] {
+    top: 29.5%;
+    left: 21.5%;
+}
+
+[data-name="Universitas Riau"] {
+    top: 20%;
+    left: 17%;
+}
+
+[data-name="RSUD Batu Bara"] {
+    top: 20%;
+    left: 14.5%;
+}
+
+[data-name="BBPPMPV Bidang Bangunan dan Listrik Medan"] {
+    top: 17%;
+    left: 12.5%;
+}
+
+[data-name="UIN Aceh"] {
+    top: 8%;
+    left: 9%;
+}
+
+[data-name="Universitas Syah Kuala"] {
+    top: 9%;
+    left: 7%;
+}
+
+/* Bali Region */
+[data-name="Politeknik Negeri Bali"] {
+    top: 52%;
+    left: 45%;
+}
+
+/* NTT Region */
+[data-name="Universitas Nusa Cendana"] {
+    top: 49%;
+    left: 63.5%;
+}
+
+/* Maluku Region */
+[data-name="Universitas Pattimura"] {
+    top: 30.5%;
+    left: 73.5%;
+}
+
+/* Papua Region */
+[data-name="Universitas Cendrawasih"] {
+    top: 30%;
+    left: 93.5%;
+}
+
+[data-name="Universitas Negeri Papua"] {
+    top: 25%;
+    left: 81%;
+}
+
+/* Sulawesi Region */
+[data-name="RSUD Bumi Panua"] {
+    top: 19.5%;
+    left: 62.5%;
+}
+
+[data-name="Universitas Hasanuddin"] {
+    top: 33%;
+    left: 54.5%;
+}
+
+[data-name="Universitas Negeri Makassar"] {
+    top: 36%;
+    left: 56%;
+}
+
+[data-name="Universitas Tadulako"] {
+    top: 25%;
+    left: 54.5%;
+}
+
+[data-name="Institut Teknologi Halu Oleo"] {
+    top: 36%;
+    left: 53.5%;
+}
+
+/* Kalimantan Region */
+[data-name="Politeknik Tanah Laut"] {
+    top: 26%;
+    left: 44.5%;
+}
+
+[data-name="Universitas Lambung Mangkurat"] {
+    top: 29%;
+    left: 44.5%;
+}
+
+[data-name="Universitas Tanjungpura"] {
+    top: 23.5%;
+    left: 33.5%;
+}
+
+[data-name="Universitas Mulawarman"] {
+    top: 23.5%;
+    left: 44.5%;
+}
+
+[data-name="Universitas Borneo Tarakan"] {
+    top: 15%;
+    left: 47%;
+}
+
+[data-name="Politeknik Negeri Samarinda"] {
+    top: 18%;
+    left: 48%;
+}
+
+[data-name="Politeknik Negeri Balikpapan"] {
+    top: 25%;
+    left: 47%;
+}
+
+[data-name="Institut Teknologi Kalimantan"] {
+    top: 20.5%;
+    left: 47%;
+}
+
+[data-name="Dinas Kesehatan Ketapang"] {
+    top: 27.5%;
+    left: 33.5%;
+}
+
+/* Bangka Belitung */
+[data-name="Universitas Bangka Belitung"] {
+    top: 27.5%;
+    left: 23.5%;
+}
+
+/* Enhanced Responsive Media Queries */
+@media (max-width: 1200px) {
+    .interactive-map-section {
+        padding: 15px 5px;
+    }
+    
+    .logo:hover {
+        transform: scale(1.5);
+    }
+}
+
+@media (max-width: 992px) {
     .interactive-map-section h1 {
-        font-weight: bold;
-        font-size: 2.5rem;
-        color: #0056b3;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
     
     .interactive-map-section p {
-        color: #0056b3;
-        font-size: 1.2rem;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
-
-    .map-container {
-        position: relative;
-        width: 100%;
-        max-width: 1000px;
-        margin: auto;
-    }
-
-    svg {
-        width: 100%;
-        height: auto;
-    }
-
+    
     .logo {
-        cursor: pointer;
-        z-index: 10;
-        transition: transform 0.2s ease;
+        transform-origin: center;
     }
+}
 
-    .logo:hover {
-        transform: scale(1.1);
-    }
-    
-    /* Updated Tooltip style based on the image */
+@media (max-width: 768px) {
     .tooltip-box {
-        position: absolute;
-        background-color: white;
-        color: #000;
-        padding: 15px 25px;
-        border-radius: 50px;
-        font-size: 16px;
-        font-weight: 500;
-        z-index: 100;
-        min-width: 200px;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        pointer-events: none;
-        transition: opacity 0.3s;
-        border: 2px solid #0056b3;
-        transform: translateX(-50%); /* Center horizontally */
-    }
-
-    .tooltip-box::after {
-        content: "";
-        position: absolute;
-        bottom: -30px;
-        left: 50%;
-        margin-left: -15px;
-        border-width: 15px;
-        border-style: solid;
-        border-color: #0056b3 transparent transparent transparent;
-    }
-
-    /* Additional styling to make the tooltip look more like the image */
-    .tooltip-box::before {
-        content: "";
-        position: absolute;
-        bottom: -26px;
-        left: 50%;
-        margin-left: -13px;
-        border-width: 13px;
-        border-style: solid;
-        border-color: white transparent transparent transparent;
-        z-index: 1;
-    }
-
-    /* Media queries for interactive map */
-    @media (max-width: 768px) {
-        .interactive-map-section h1 {
-            font-size: 2rem;
-        }
-        
-        .interactive-map-section p {
-            font-size: 1rem;
-            margin-bottom: 25px;
-        }
-        
-        .tooltip-box {
-            font-size: 14px;
-            padding: 10px 15px;
-            min-width: 150px;
-        }
+        padding: 10px 15px;
+        border-radius: 30px;
     }
     
-    @media (max-width: 576px) {
-        .interactive-map-section h1 {
-            font-size: 1.75rem;
-        }
-        
-        .tooltip-box {
-            font-size: 12px;
-            padding: 8px 12px;
-            min-width: 120px;
-        }
+    .tooltip-box::after {
+        bottom: -20px;
+        border-width: 10px;
+        margin-left: -10px;
     }
+    
+    .tooltip-box::before {
+        bottom: -16px;
+        border-width: 8px;
+        margin-left: -8px;
+    }
+    
+    /* Increase tap target for mobile */
+  .logo {
+    }
+}
+
+@media (max-width: 576px) {
+    .interactive-map-section {
+        padding: 10px 5px;
+    }
+    
+    .tooltip-box {
+        min-width: 110px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        border-width: 1px;
+    }
+    
+    .tooltip-box::after {
+        bottom: -15px;
+        border-width: 8px;
+        margin-left: -8px;
+    }
+    
+    .tooltip-box::before {
+        bottom: -11px;
+        border-width: 6px;
+        margin-left: -6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-container {
+        padding-bottom: 60%; /* Slightly taller for mobile */
+    }
+    
+}
 </style>
 
 <script>
@@ -1327,75 +1352,46 @@
       }
     }
   });
-        // Tooltip functionality for university logos
         const logos = document.querySelectorAll('.logo');
         const tooltip = document.getElementById('tooltip');
         
         logos.forEach(logo => {
-            // Show tooltip on hover
-            logo.addEventListener('mouseenter', function(e) {
+            logo.addEventListener('mouseenter', function() {
                 const name = this.getAttribute('data-name');
                 tooltip.textContent = name;
+                tooltip.style.display = 'block';
                 
-                // Position the tooltip above the logo
-                const rect = this.getBoundingClientRect();
+                // Position tooltip above the logo
+                const logoRect = this.getBoundingClientRect();
                 const mapContainer = document.querySelector('.map-container');
                 const mapRect = mapContainer.getBoundingClientRect();
                 
-                // Calculate position directly above the logo
-                const logoTop = rect.top - mapRect.top;
-                const logoLeft = rect.left - mapRect.left + (rect.width / 2);
-                
-                // Position tooltip centered above the logo
-                tooltip.style.left = logoLeft + 'px';
-                tooltip.style.top = (logoTop - 20) + 'px'; // 20px is for spacing between tooltip and logo
-                tooltip.style.bottom = 'auto'; // Remove any bottom positioning
-                tooltip.style.transform = 'translate(-50%, -100%)'; // Center horizontally and position above
-                
-                // Show the tooltip
-                tooltip.style.display = 'block';
+                tooltip.style.left = (logoRect.left + logoRect.width/2 - mapRect.left) + 'px';
+                tooltip.style.top = (logoRect.top - 50 - mapRect.top) + 'px';
             });
             
-            // Hide tooltip when mouse leaves
             logo.addEventListener('mouseleave', function() {
                 tooltip.style.display = 'none';
             });
             
-            // Also show tooltip on click for mobile users
-            logo.addEventListener('click', function(e) {
+            // For touch devices
+            logo.addEventListener('touchstart', function(e) {
+                e.preventDefault();
                 const name = this.getAttribute('data-name');
                 tooltip.textContent = name;
+                tooltip.style.display = 'block';
                 
-                // Position the tooltip above the logo
-                const rect = this.getBoundingClientRect();
+                const logoRect = this.getBoundingClientRect();
                 const mapContainer = document.querySelector('.map-container');
                 const mapRect = mapContainer.getBoundingClientRect();
                 
-                // Calculate position directly above the logo
-                const logoTop = rect.top - mapRect.top;
-                const logoLeft = rect.left - mapRect.left + (rect.width / 2);
+                tooltip.style.left = (logoRect.left + logoRect.width/2 - mapRect.left) + 'px';
+                tooltip.style.top = (logoRect.top - 50 - mapRect.top) + 'px';
                 
-                // Position tooltip centered above the logo
-                tooltip.style.left = logoLeft + 'px';
-                tooltip.style.top = (logoTop - 20) + 'px'; // 20px is for spacing between tooltip and logo
-                tooltip.style.bottom = 'auto'; // Remove any bottom positioning
-                tooltip.style.transform = 'translate(-50%, -100%)'; // Center horizontally and position above
-                
-                // Show the tooltip
-                tooltip.style.display = 'block';
-                
-                // Add a click event to the document to hide the tooltip when clicking elsewhere
-                const hideTooltip = function() {
-                    tooltip.style.display = 'none';
-                    document.removeEventListener('click', hideTooltip);
-                };
-                
-                // Set a timeout to add the event listener to prevent immediate firing
+                // Hide other tooltips after a short delay
                 setTimeout(() => {
-                    document.addEventListener('click', hideTooltip);
-                }, 100);
-                
-                e.stopPropagation();
+                    tooltip.style.display = 'none';
+                }, 2000);
             });
         });
     });
