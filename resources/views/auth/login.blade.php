@@ -7,7 +7,7 @@
     
     <!-- Header -->
     <div class="header">
-        <h1>PT. Arkamaya Guna Saharsa</h1>
+        <h1>PT Arkamaya Guna Saharsa</h1>
     </div>
     
     <!-- Main Content -->
@@ -158,11 +158,13 @@
     }
     
     .header h1 {
-        font-size: 12px;
-        font-weight: 500;
+        font-size: 17px;
+        font-weight: 600;
         color: #000000;
         margin: 0;
         font-family: 'work sans', sans-serif;
+        letter-spacing: -0.02em; /* 8% letter spacing */
+
     }
     
     /* Main Content Layout */

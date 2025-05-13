@@ -44,6 +44,7 @@ use App\Http\Controllers\Distribution\Portal\ProformaInvoiceDistributorControlle
 use App\Http\Controllers\Distribution\Portal\PurchaseOrderController;
 use App\Http\Controllers\Distribution\Profile\ProfileDistributorController;
 use App\Http\Controllers\Member\ProductController;
+use App\Http\Controllers\Member\Specialist\SpecialistController;
 use App\Http\Controllers\EndUserController; 
 use Illuminate\Http\Request;
 
@@ -103,16 +104,16 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     })->name('distributors.waiting');
 
 
-     // Enduser Registration Routes
-         Route::get('/enduser-register', [EndUserController::class, 'showRegistrationForm'])
-            ->name('enduser.register');
+        // Enduser Registration Routes
+        Route::get('/enduser-register', [EndUserController::class, 'showRegistrationForm'])->name('enduser.register');
+        // Add these routes for the EndUser registration
+Route::post('/enduser/register', [App\Http\Controllers\EndUserController::class, 'register'])
+    ->name('enduser.register.submit');
 
-          Route::post('/enduser-register', [EndUserController::class, 'register'])
-              ->name('enduser.register.submit');
-
-  // Route untuk halaman waiting setelah registrasi
-            Route::get('/enduser-waiting/{id?}', [EndUserController::class, 'showWaitingPage'])
-->name('enduser.waiting');  
+// If you don't already have it, also add this route for showing the registration form
+Route::get('/enduser/register', [App\Http\Controllers\EndUserController::class, 'showRegistrationForm'])
+    ->name('enduser.register');
+                
 
     // Admin Qna Guest
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -152,8 +153,13 @@ Route::middleware(['auth', 'user-access:member'])->group(function () {
         Route::get('/profile/edit', [ProfileMemberController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/update', [ProfileMemberController::class, 'update'])->name('profile.update');
         
+        
         // Profile User route
         Route::get('/profile-user', [ProfileMemberController::class, 'userProfile'])->name('profile.user');
+        
+        // Talk to Product Specialist route
+        Route::get('/talk-specialist', [SpecialistController::class, 'index'])->name('specialist.talk');
+        Route::post('/talk-specialist/contact', [SpecialistController::class, 'contact'])->name('specialist.contact');
     });
 });
 // Distributor Routes (Authenticated Users with "distributor" role)

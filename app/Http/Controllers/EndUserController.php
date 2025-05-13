@@ -3,39 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User; // Use the User model instead of EndUser
+use Illuminate\Support\Facades\Hash;
 
 class EndUserController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.enduser_register'); // Sesuaikan dengan nama file blade kamu
+        return view('auth.enduser_register');
     }
 
     public function register(Request $request)
     {
         // Validasi data
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'institution_name' => 'required|string|max:255',
+            'major' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|max:255', // Check 'users' table
+            'mobile_number' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
-            // tambahkan field lain jika perlu
+            'terms' => 'required',
         ]);
 
-        // Buat user baru (disarankan menggunakan model User atau EndUser sesuai strukturmu)
-        $user = \App\Models\User::create([
-            'name' => $validated['name'],
+        // Buat user baru
+        $user = User::create([
+            'name' => $validated['institution_name'], // Map to name field
             'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-            'role' => 'enduser', // atau sesuaikan dengan struktur rolenya
+            'password' => Hash::make($validated['password']),
+            'no_telp' => $validated['mobile_number'], // Map to no_telp
+            'alamat' => $validated['address'], // Map to alamat
+            'nama_perusahaan' => $validated['institution_name'], // Map to nama_perusahaan
+            'type' => 0, // Default user type
         ]);
 
-        // Redirect ke halaman tunggu atau dashboard
-        return redirect()->route('enduser.waiting', ['id' => $user->id]);
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Registration successful! Your account has been created.');
     }
 
     public function showWaitingPage($id = null)
     {
-        // Jika kamu ingin menampilkan informasi berdasarkan ID
         return view('auth.enduser_waiting', compact('id'));
     }
 }

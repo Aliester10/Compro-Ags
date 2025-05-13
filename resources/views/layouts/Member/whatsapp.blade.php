@@ -82,7 +82,8 @@
 
     document.getElementById('send-message').addEventListener('click', function() {
         const message = document.getElementById('chat-message').value;
-        const phone = "{{ preg_replace('/\D/', '', $compro->no_wa ?? '') }}";
+        // Using the hardcoded number directly instead of company parameter
+        const phone = "6285219478205"; 
         
         if (message.trim() === '') {
             alert('Pesan tidak boleh kosong!');

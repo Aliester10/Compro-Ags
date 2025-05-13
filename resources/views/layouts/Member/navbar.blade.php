@@ -9,55 +9,53 @@
 <!-- Font loading and default font setup -->
 <link rel="stylesheet" href="{{ asset('asset/css/fonts.css') }}">
 <style>
-    /* Apply Work Sans font as default for the entire site */
     body, h1, h2, h3, h4, h5, h6, p, a, span, div, li, button, input {
         font-family: 'Work Sans', sans-serif;
     }
-    
-    /* Dropdown styling */
+
     .ecommerce-dropdown {
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.3s ease;
     }
-    
     .ecommerce-dropdown.active {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
-
-    /* Navbar transition classes */
-    .navbar-dark {
-        color: white;
-    }
-    
-    .navbar-light {
-        color: black;
-    }
-
-    .navbar-dark .nav-link {
-        color: white;
-    }
-    
-    .navbar-light .nav-link {
-        color: black;
-    }
-
-    .navbar-dark svg {
-        stroke: white;
-    }
-    
-    .navbar-light svg {
-        stroke: black;
-    }
-
-    /* Transition all color changes */
     .navbar-content, .navbar-content a, .navbar-content svg {
         transition: color 0.3s ease, stroke 0.3s ease;
     }
+
+    /* Light navbar text style - for dark backgrounds */
+    nav.navbar-light .navbar-content a,
+    nav.navbar-light .navbar-content span,
+    nav.navbar-light ion-icon,
+    nav.navbar-light #ecommerce-toggle {
+        color: #ffffff !important;
+        text-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+    nav.navbar-light .navbar-content svg {
+        stroke: #ffffff !important;
+    }
+
+    /* Dark navbar text style - for light backgrounds */
+    nav.navbar-dark .navbar-content a,
+    nav.navbar-dark .navbar-content span,
+    nav.navbar-dark ion-icon,
+    nav.navbar-dark #ecommerce-toggle {
+        color: #000000 !important;
+        text-shadow: 0 0 4px rgba(255,255,255,0.7);
+    }
+    nav.navbar-dark .navbar-content svg {
+        stroke: #000000 !important;
+    }
     
+    /* Fixed ecommerce partner image sizes */
+    .ecommerce-partner-img {
+        object-fit: contain;
+    }
     /* Profile dropdown styling */
     .profile-dropdown {
         display: none;
@@ -114,85 +112,75 @@
     }
 </style>
     
-    
-    <!-- Main container for navbar positioning -->
-    <div class="absolute top-0 left-0 right-0 z-50 w-full">
-        <!-- Top bar -->
-        <div class="w-full bg-gray-800 bg-opacity-80 backdrop-blur-md py-2 px-4 text-center">
-            <h1 class="text-white font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
-        </div>
-        
-        <!-- Transparent navbar -->
-        <nav class="p-4 bg-transparent transition-all duration-300" id="mainNav">
-            <div class="flex items-center justify-between relative navbar-content navbar-dark" id="navbarContent">
-                <div class="flex items-center">
-                    <img class="h-20 cursor-pointer" src="{{ asset('assets/img/AGS-logo.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
+<div class="absolute top-0 left-0 right-0 z-50 w-full">
+    <div class="w-full bg-gray-800 bg-opacity-80 backdrop-blur-md py-2 px-4 text-center">
+        <h1 class="text-white font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
+    </div>
+    <!-- Default navbar with LIGHT text (for dark bg) -->
+    <nav class="p-4 bg-transparent transition-all duration-300" id="mainNav">
+        <div class="flex items-center justify-between relative navbar-content" id="navbarContent">
+            <div class="flex items-center">
+                <img class="h-20 cursor-pointer" src="{{ asset('assets/img/AGS Logo-01.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
+            </div>
+            <div class="flex items-center">
+                <div class="md:hidden mr-4">
+                    <form action="" class="relative mx-auto w-max">
+                        <input type="search" 
+                              class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </form>
                 </div>
-                <div class="flex items-center">
-                    <!-- Search button for mobile -->
-                    <div class="md:hidden mr-4">
-                        <form action="" class="relative mx-auto w-max">
-                            <input type="search" 
-                                  class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
-                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </form>
+                <span class="text-3xl cursor-pointer md:hidden block z-20">
+                    <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
+                </span>
+            </div>
+            <ul class="md:flex md:items-center z-10 md:z-auto md:static absolute bg-gray-800 md:bg-transparent w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500">
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('home') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Home</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('about') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">About</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('activity') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Our Activities</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Product</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
+                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold flex items-center gap-1" id="ecommerce-toggle">
+                        E-Commerce
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-4 h-4 transition-transform duration-300" id="ecommerce-arrow">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </a>
+                   <div id="desktop-ecommerce-dropdown" class="hidden absolute left-0 mt-2 w-[131px] h-[100px] bg-transparent rounded-md shadow-lg p-3 z-50">
+                        <div class="flex flex-col gap-4">
+                            @foreach($ecommercePartners as $partner)
+                            <div class="flex justify-center">
+                                <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
+                                    <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="ecommerce-partner-img">
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
-                    <span class="text-3xl cursor-pointer md:hidden block z-20">
-                        <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
-                    </span>
-                </div>
-                <!-- Main navbar menu -->
-                <ul class="md:flex md:items-center z-10 md:z-auto md:static absolute bg-gray-800 md:bg-transparent w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500">
-                    <li class="mx-4 my-6 md:my-0">
-                        <a href="{{ route('home') }}" class="nav-link text-x1 hover:text-cyan-500 duration-500 drop-shadow-md font-semibold">Home</a>
-                    </li>
-                    <li class="mx-4 my-6 md:my-0">
-                        <a href="{{ route('about') }}" class="nav-link text-x1 hover:text-cyan-500 duration-500 drop-shadow-md font-semibold">About</a>
-                    </li>
-                    <li class="mx-4 my-6 md:my-0">
-                        <a href="{{ route('activity') }}" class="nav-link text-x1 hover:text-cyan-500 duration-500 drop-shadow-md font-semibold">Our Activities</a>
-                    </li>
-                    <li class="mx-4 my-6 md:my-0">
-                        <a href="{{ route('product.index') }}"  class="nav-link text-x1 hover:text-cyan-500 duration-500 drop-shadow-md font-semibold">Product</a>
-                    </li>
-                    <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
-                        <a href="#" class="nav-link text-x1 hover:text-cyan-500 duration-500 drop-shadow-md font-semibold flex items-center gap-1" id="ecommerce-toggle">
-                            E-Commerce
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform duration-300" id="ecommerce-arrow">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
-                        </a>
-                        
-                        <!-- Desktop dropdown -->
-                        <div id="desktop-ecommerce-dropdown" class="hidden absolute left-0 mt-2 w-60 bg-white rounded-md shadow-lg p-3 z-50">
-                            <div class="flex flex-col gap-4">
-                                @foreach($ecommercePartners as $partner)
-                                <div class="flex justify-center">
-                                    <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
-                                        <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="h-12 object-contain">
-                                    </a>
-                                </div>
-                                @endforeach
+                    <div id="mobile-ecommerce-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
+                        <div class="flex flex-col gap-3">
+                            @foreach($ecommercePartners as $partner)
+                            <div class="flex justify-center">
+                                <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
+                                    <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="ecommerce-partner-img">
+                                </a>
                             </div>
+                            @endforeach
                         </div>
-
-                        <!-- Mobile dropdown -->
-                        <div id="mobile-ecommerce-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
-                            <div class="flex flex-col gap-3">
-                                @foreach($ecommercePartners as $partner)
-                                <div class="flex justify-center">
-                                    <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
-                                        <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="h-10 object-contain">
-                                    </a>
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </li>
-                        
-                    <!-- Profile icon with dropdown menu -->
+                    </div>
+                </li>
+                    
+                                    <!-- Profile icon with dropdown menu -->
                     <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
                         @auth
                             <!-- User is logged in - show profile icon with dropdown -->
@@ -231,46 +219,42 @@
                         @endauth
                     </li>
                     
-                    <!-- Search form only for desktop view -->
-                    <li class="mx-2 my-6 md:my-0 hidden md:block">
-                        <form action="" class="relative mx-auto w-max">
-                            <input type="search" 
-                                  class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-current focus:pl-16 focus:pr-4" />
-                            <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </form>
-                    </li>
-                </ul>
-            </div>  
-        </nav>
-    </div>
+                <li class="mx-2 my-6 md:my-0 hidden md:block">
+                    <form action="" class="relative mx-auto w-max">
+                        <input type="search" 
+                              class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-white" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </form>
+                </li>
+            </ul>
+        </div>  
+    </nav>
+</div>
 
-    <script>
-        function Menu(e) {
-            let list = document.querySelector('ul');
-
-            if (e.name === 'menu') {
-                e.name = "close";
-                list.classList.add('top-[80px]');
-                list.classList.add('opacity-100');
-            } else {
-                e.name = "menu";
-                list.classList.remove('top-[80px]');
-                list.classList.remove('opacity-100');
-            }
+<script>
+    function Menu(e) {
+        let list = document.querySelector('ul');
+        if (e.name === 'menu') {
+            e.name = "close";
+            list.classList.add('top-[80px]');
+            list.classList.add('opacity-100');
+        } else {
+            e.name = "menu";
+            list.classList.remove('top-[80px]');
+            list.classList.remove('opacity-100');
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Navbar dropdown functionality
-            const ecommerceContainer = document.getElementById('ecommerce-container');
-            const ecommerceToggle = document.getElementById('ecommerce-toggle');
-            const desktopEcommerceDropdown = document.getElementById('desktop-ecommerce-dropdown');
-            const mobileEcommerceDropdown = document.getElementById('mobile-ecommerce-dropdown');
-            const ecommerceArrow = document.getElementById('ecommerce-arrow');
-            const navbarContent = document.getElementById('navbarContent');
-            
-            // Profile dropdown functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const ecommerceContainer = document.getElementById('ecommerce-container');
+        const ecommerceToggle = document.getElementById('ecommerce-toggle');
+        const desktopEcommerceDropdown = document.getElementById('desktop-ecommerce-dropdown');
+        const mobileEcommerceDropdown = document.getElementById('mobile-ecommerce-dropdown');
+        const ecommerceArrow = document.getElementById('ecommerce-arrow');
+        const mainNav = document.getElementById('mainNav');
+        // Profile dropdown functionality
             const profileToggle = document.getElementById('profile-toggle');
             const profileDropdown = document.getElementById('profile-dropdown');
             
@@ -300,150 +284,146 @@
                     }
                 });
             }
-            
-            // Skip if elements don't exist
-            if (ecommerceContainer && ecommerceToggle) {
-                // Track dropdown state
-                let isDropdownOpen = false;
-                
-                // Toggle dropdown on click
-                ecommerceToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    if (window.innerWidth >= 768) { // Desktop view
-                        if (isDropdownOpen) {
-                            desktopEcommerceDropdown.classList.add('hidden');
-                            ecommerceArrow.classList.remove('rotate-180');
-                        } else {
-                            desktopEcommerceDropdown.classList.remove('hidden');
-                            ecommerceArrow.classList.add('rotate-180');
-                        }
-                    } else { // Mobile view
-                        if (isDropdownOpen) {
-                            mobileEcommerceDropdown.classList.add('hidden');
-                            ecommerceArrow.classList.remove('rotate-180');
-                        } else {
-                            mobileEcommerceDropdown.classList.remove('hidden');
-                            ecommerceArrow.classList.add('rotate-180');
-                        }
-                    }
-                    
-                    isDropdownOpen = !isDropdownOpen;
-                });
-                
-                // Keep dropdown open when interacting with items inside
-                if (desktopEcommerceDropdown) {
-                    desktopEcommerceDropdown.addEventListener('click', function(e) {
-                        // Only if clicking on a link, allow it to propagate
-                        if (!e.target.closest('a')) {
-                            e.stopPropagation();
-                        }
-                    });
-                }
-                
-                if (mobileEcommerceDropdown) {
-                    mobileEcommerceDropdown.addEventListener('click', function(e) {
-                        // Only if clicking on a link, allow it to propagate
-                        if (!e.target.closest('a')) {
-                            e.stopPropagation();
-                        }
-                    });
-                }
-                
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(e) {
+        if (ecommerceContainer && ecommerceToggle) {
+            let isDropdownOpen = false;
+            ecommerceToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
                     if (isDropdownOpen) {
-                        if (!ecommerceContainer.contains(e.target)) {
-                            if (window.innerWidth >= 768) {
-                                desktopEcommerceDropdown.classList.add('hidden');
-                            } else {
-                                mobileEcommerceDropdown.classList.add('hidden');
-                            }
-                            ecommerceArrow.classList.remove('rotate-180');
-                            isDropdownOpen = false;
-                        }
+                        desktopEcommerceDropdown.classList.add('hidden');
+                        ecommerceArrow.classList.remove('rotate-180');
+                    } else {
+                        desktopEcommerceDropdown.classList.remove('hidden');
+                        ecommerceArrow.classList.add('rotate-180');
+                    }
+                } else {
+                    if (isDropdownOpen) {
+                        mobileEcommerceDropdown.classList.add('hidden');
+                        ecommerceArrow.classList.remove('rotate-180');
+                    } else {
+                        mobileEcommerceDropdown.classList.remove('hidden');
+                        ecommerceArrow.classList.add('rotate-180');
+                    }
+                }
+                isDropdownOpen = !isDropdownOpen;
+            });
+
+            if (desktopEcommerceDropdown) {
+                desktopEcommerceDropdown.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        e.stopPropagation();
                     }
                 });
-                
-                // Handle window resize
-                window.addEventListener('resize', function() {
-                    // Close any open dropdowns when resizing
-                    if (isDropdownOpen) {
+            }
+            if (mobileEcommerceDropdown) {
+                mobileEcommerceDropdown.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        e.stopPropagation();
+                    }
+                });
+            }
+            document.addEventListener('click', function(e) {
+                if (isDropdownOpen) {
+                    if (!ecommerceContainer.contains(e.target)) {
                         if (window.innerWidth >= 768) {
-                            mobileEcommerceDropdown.classList.add('hidden');
-                            desktopEcommerceDropdown.classList.remove('hidden');
-                        } else {
                             desktopEcommerceDropdown.classList.add('hidden');
-                            mobileEcommerceDropdown.classList.remove('hidden');
+                        } else {
+                            mobileEcommerceDropdown.classList.add('hidden');
                         }
+                        ecommerceArrow.classList.remove('rotate-180');
+                        isDropdownOpen = false;
                     }
-                });
-            }
+                }
+            });
+            window.addEventListener('resize', function() {
+                if (isDropdownOpen) {
+                    if (window.innerWidth >= 768) {
+                        mobileEcommerceDropdown.classList.add('hidden');
+                        desktopEcommerceDropdown.classList.remove('hidden');
+                    } else {
+                        desktopEcommerceDropdown.classList.add('hidden');
+                        mobileEcommerceDropdown.classList.remove('hidden');
+                    }
+                }
+            });
+        }
 
-            // Dynamic navbar color detection
-            function updateNavbarColor() {
-                const contentSection = document.querySelector('section#content');
-                const navbarContent = document.getElementById('navbarContent');
-                
-                if (contentSection && navbarContent) {
-                    // Set up the IntersectionObserver
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                // Get the background color of the content section
-                                const backgroundColor = window.getComputedStyle(contentSection).backgroundColor;
-                                const rgb = backgroundColor.match(/\d+/g);
-                                
-                                if (rgb) {
-                                    // Calculate luminance (perceived brightness)
-                                    // Formula: 0.299*R + 0.587*G + 0.114*B
-                                    const brightness = (0.299 * parseInt(rgb[0]) + 
-                                                        0.587 * parseInt(rgb[1]) + 
-                                                        0.114 * parseInt(rgb[2])) / 255;
-                                    
-                                    // If brightness is higher than 0.5, background is considered light
-                                    if (brightness > 0.5) {
-                                        navbarContent.classList.remove('navbar-dark');
-                                        navbarContent.classList.add('navbar-light');
-                                    } else {
-                                        navbarContent.classList.remove('navbar-light');
-                                        navbarContent.classList.add('navbar-dark');
-                                    }
-                                }
-                            }
-                        });
-                    }, { threshold: 0.1 });
+        // --- AUTO TEXT COLOR SWITCHING BASED ON BG BRIGHTNESS ---
+        function checkBackgroundBrightness() {
+            const navRect = mainNav.getBoundingClientRect();
+            const sampleX = (navRect.left + navRect.right) / 2;
+            const sampleY = navRect.bottom + 5;
 
-                    // Start observing
-                    observer.observe(contentSection);
+            const elementsUnder = document.elementsFromPoint(sampleX, sampleY);
+
+            let foundColor = null;
+
+            for (let el of elementsUnder) {
+                if (!el.closest('#mainNav') && !el.closest('.navbar-content')) {
+                    const bg = getComputedStyle(el).backgroundColor;
+                    if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                        foundColor = bg;
+                        break;
+                    }
                 }
             }
 
-            // Initial call
-            updateNavbarColor();
-            
-            // Update on scroll
-            window.addEventListener('scroll', function() {
-                updateNavbarColor();
-            });
-            
-            // Update on window resize
-            window.addEventListener('resize', function() {
-                updateNavbarColor();
-            });
-            
-            // Also check when DOM content might change (helps with dynamic content)
-            const observer = new MutationObserver(function() {
-                updateNavbarColor();
-            });
-            
-            // Observe changes in the entire document body
-            observer.observe(document.body, { 
-                childList: true,
-                subtree: true,
-                attributeFilter: ['style', 'class']
-            });
+            if (foundColor) {
+                const isLight = isBrightColor(foundColor);
+                if (isLight) {
+                    mainNav.classList.remove('navbar-light');
+                    mainNav.classList.add('navbar-dark');
+                } else {
+                    mainNav.classList.remove('navbar-dark');
+                    mainNav.classList.add('navbar-light');
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        function isBrightColor(color) {
+            if (color === 'rgba(0, 0, 0, 0)' || color === 'transparent') {
+                return true;
+            }
+            const rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+            if (rgbMatch) {
+                const r = parseInt(rgbMatch[1], 10);
+                const g = parseInt(rgbMatch[2], 10);
+                const b = parseInt(rgbMatch[3], 10);
+                // YIQ formula
+                const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+                return brightness > 160;
+            }
+            return false;
+        }
+        function checkHeroSection() {
+            // If there is a .hero-section or known light bg class, force dark text
+            const heroSections = document.querySelectorAll('.hero-section, .bg-blue-100, .bg-blue-200, .bg-gray-100, .bg-white');
+            if (heroSections.length > 0) {
+                mainNav.classList.remove('navbar-light');
+                mainNav.classList.add('navbar-dark');
+                return true;
+            }
+            return false;
+        }
+        // Initial state
+       if (!checkHeroSection()) {
+            let tries = 0;
+            const interval = setInterval(() => {
+                const success = checkBackgroundBrightness();
+                tries++;
+                if (success || tries >= 10) { // stop kalau berhasil deteksi atau sudah 10x
+                    clearInterval(interval);
+                }
+            }, 100); // Cek setiap 100ms
+        }
+        window.addEventListener('scroll', checkBackgroundBrightness);
+        window.addEventListener('resize', function() {
+            if (!checkHeroSection()) checkBackgroundBrightness();
         });
-    </script>
+    });
+</script>
 </body>

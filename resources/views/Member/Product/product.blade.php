@@ -392,7 +392,7 @@
             padding: 0 10px;
             text-align: center;
             color: white;
-            font-weight: 900;
+            font-weight: 800;
             font-size: 18px;
             z-index: 2;
             line-height: 1.2;
@@ -504,7 +504,7 @@
         
         .product-title {
             font-size: 15px;
-            margin-bottom: 3px;
+            margin-bottom: 1px;
             height: 44px;
             overflow: hidden;
             display: -webkit-box;
@@ -535,7 +535,7 @@
             text-decoration: none;
         }
 
-        /* Responsive adjustments */
+        /* Responsive adjustments */category-name
         @media (max-width: 992px) {
             .product-card {
                 width: calc(50% - 20px);

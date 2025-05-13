@@ -419,6 +419,7 @@
         height: 100%;
         object-fit: cover;
         border-radius: 12px;
+        opacity: 1; /* Full opacity for featured article */
     }
     
     /* Side articles - Smaller articles on the sides */
@@ -444,6 +445,7 @@
         height: 100%;
         object-fit: cover;
         border-radius: 12px;
+        opacity: 0.8; /* 50% opacity for side articles */
     }
     
     /* Positioning the side articles */
@@ -477,6 +479,39 @@
     .article-dot.active {
         background-color: #64aeff;
         width: 50px;
+    }
+
+    /* Add the blur effect background for article section */
+    .article-section {
+        position: relative;
+    }
+
+    .article-bg-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+    }
+
+    .article-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        filter: blur(30px);
+        opacity: 0.2;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .article-content-wrapper {
+        position: relative;
+        z-index: 1;
     }
     
     /* Responsive styles */
@@ -808,47 +843,58 @@
         </div>
     @endforeach
 </div>
+
 <!-- Article Section -->
 <div class="article-section">
-    <div class="section-title-container">
-        <div class="section-line"></div>
-        <h2>Our Article.</h2>
-        <div class="section-line"></div>
-    </div>
-    
-    <div class="article-container">
-        @php
-            // Get meta content from database - limit to 3 items
-            $metaItems = DB::table('meta')
-                ->orderBy('created_at', 'desc')
-                ->limit(3)
-                ->get();
-        @endphp
-        
-        @foreach($metaItems as $index => $item)
-            @php
-                // Determine the appropriate class based on the index
-                $classes = "";
-                if($index == 0) {
-                    $classes = "side-article left";
-                } elseif($index == 1) {
-                    $classes = "featured-article";
-                } else {
-                    $classes = "side-article right";
-                }
-            @endphp
+    @php
+        // Get meta content from database - limit to 3 items
+        $metaItems = DB::table('meta')
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
             
-            <div class="{{ $classes }}" data-index="{{ $index }}">
-                <img src="{{ asset('assets/img/konten/' . $item->image) }}" alt="{{ $item->title }}">
-            </div>
-        @endforeach
+        // Get the featured article for the background blur effect
+        $featuredArticleImage = isset($metaItems[1]) ? asset('assets/img/konten/' . $metaItems[1]->image) : '';
+    @endphp
+    
+    <!-- Background blur effect container -->
+    <div class="article-bg-container">
+        <div class="article-bg" style="background-image: url('{{ $featuredArticleImage }}')"></div>
     </div>
     
-    <!-- Navigation dots -->
-    <div class="article-dots">
-        @foreach($metaItems as $index => $item)
-            <div class="article-dot {{ $index == 1 ? 'active' : '' }}" data-index="{{ $index }}"></div>
-        @endforeach
+    <div class="article-content-wrapper">
+        <div class="section-title-container">
+            <div class="section-line"></div>
+            <h2>Our Article.</h2>
+            <div class="section-line"></div>
+        </div>
+        
+        <div class="article-container">
+            @foreach($metaItems as $index => $item)
+                @php
+                    // Determine the appropriate class based on the index
+                    $classes = "";
+                    if($index == 0) {
+                        $classes = "side-article left";
+                    } elseif($index == 1) {
+                        $classes = "featured-article";
+                    } else {
+                        $classes = "side-article right";
+                    }
+                @endphp
+                
+                <div class="{{ $classes }}" data-index="{{ $index }}">
+                    <img src="{{ asset('assets/img/konten/' . $item->image) }}" alt="{{ $item->title }}">
+                </div>
+            @endforeach
+        </div>
+        
+        <!-- Navigation dots -->
+        <div class="article-dots">
+            @foreach($metaItems as $index => $item)
+                <div class="article-dot {{ $index == 1 ? 'active' : '' }}" data-index="{{ $index }}"></div>
+            @endforeach
+        </div>
     </div>
 </div>
 
@@ -921,16 +967,24 @@
             // Set new positions
             articles.forEach(article => {
                 const index = parseInt(article.getAttribute('data-index'));
+                const img = article.querySelector('img');
                 
                 if (index === newCenterIndex) {
                     article.classList.remove('side-article');
                     article.classList.add('featured-article');
+                    img.style.opacity = '1'; // Set full opacity for featured article
+                    
+                    // Update the background blur effect with the new featured image
+                    const imgSrc = img.src;
+                    document.querySelector('.article-bg').style.backgroundImage = `url('${imgSrc}')`;
                 } else if ((index === leftIndex && newCenterIndex === rightIndex) || 
                           (index === centerIndex && newCenterIndex === leftIndex) ||
                           (index === rightIndex && newCenterIndex === centerIndex)) {
                     article.classList.add('left');
+                    img.style.opacity = '0.5'; // Set 50% opacity for side article
                 } else {
                     article.classList.add('right');
+                    img.style.opacity = '0.5'; // Set 50% opacity for side article
                 }
             });
             
@@ -943,6 +997,16 @@
                 }
             });
         }
+        
+        // Initialize opacity for images on page load
+        articles.forEach(article => {
+            const img = article.querySelector('img');
+            if (article.classList.contains('featured-article')) {
+                img.style.opacity = '1'; // Featured article is fully visible
+            } else {
+                img.style.opacity = '0.5'; // Side articles are semi-transparent
+            }
+        });
         
         // Auto-rotate articles every 5 seconds
         let autoRotateInterval = setInterval(() => {
@@ -978,4 +1042,4 @@
         });
     });
 </script>
-@endsection
+@endsection 

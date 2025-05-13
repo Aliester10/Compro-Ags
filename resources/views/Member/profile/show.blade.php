@@ -1,4 +1,4 @@
-@extends('layouts.Member.master5')
+@extends('layouts.Member.master')
 
 @section('content')
 <style>
@@ -148,13 +148,13 @@
     <div class="nav-tabs-container">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="{{ route('profile.user') }}">Profile User</a>
+                <a class="nav-link active" href="#">Profile User</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('product.index') }}">Product</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('product.specialist') }}">Talk to our Product Specialist</a>
+                <a class="nav-link" href="#">Talk to our Product Specialist</a>
             </li>
         </ul>
     </div>
