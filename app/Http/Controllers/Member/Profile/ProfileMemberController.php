@@ -61,4 +61,26 @@ class ProfileMemberController extends Controller
         // Redirect back with a success message
         return redirect()->route('profile.show')->with('success', 'Profile updated successfully.');
     }
+    public function talk()
+    {
+         return view('Member.profile.talk');
+    }
+
+    public function submitTalk(Request $request)
+{
+    // Validate the form data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255',
+        'subject' => 'required|string|max:255',
+        'message' => 'required|string',
+    ]);
+
+    // Process the form submission
+    // For example, you might want to save to database, send email, etc.
+    // This is just a placeholder
+    
+    // Redirect back with a success message
+    return redirect()->route('profile.talk')->with('success', 'Your message has been sent. We will get back to you soon!');
+}
 }

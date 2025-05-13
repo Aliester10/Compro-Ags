@@ -153,8 +153,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('product.index') }}">Product</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Talk to our Product Specialist</a>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ route('profile.talk') }}">Talk to our Product Specialist</a>
+
             </li>
         </ul>
     </div>

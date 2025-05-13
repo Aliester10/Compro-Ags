@@ -20,49 +20,15 @@
         cursor: pointer;
         color: #6c757d;
     }
-    
-    /* Success popup styling */
-    .success-popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        z-index: 1000;
-        text-align: center;
-        display: none;
-        max-width: 400px;
-        width: 90%;
-    }
-    
-    .success-popup .icon {
-        font-size: 50px;
-        color: #28a745;
-        margin-bottom: 20px;
-    }
-    
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0,0,0,0.5);
-        z-index: 999;
-        display: none;
-    }
 </style>
 
-<!-- Header -->
-<div class="header">
-    <h1>PT. Arkamaya Guna Saharsa</h1>
-</div>
-
-<style>
-    /* Header Styling */
+    <!-- Header -->
+    <div class="header">
+        <h1>PT. Arkamaya Guna Saharsa</h1>
+    </div>
+    
+    <style>
+            /* Header Styling */
     .header {
         position: absolute;
         top: 0;
@@ -81,18 +47,8 @@
         color: #000000;
         margin: 0;
     }
-</style>
-
-<!-- Success Popup -->
-<div class="popup-overlay" id="popupOverlay"></div>
-<div class="success-popup" id="successPopup">
-    <div class="icon">
-        <i class="fas fa-check-circle"></i>
-    </div>
-    <h4>Registration Successful!</h4>
-    <p>Your account has been created successfully.</p>
-    <button class="btn btn-primary w-100" onclick="closePopup()">OK</button>
-</div>
+    </style>
+    
     
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -109,13 +65,13 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="/enduser/register" id="registrationForm">
+                    <form action="{{ route('enduser.register.submit') }}" method="POST">
                         @csrf
 
                         <!-- Institution Name Field -->
                         <div class="form-group mb-3">
                             <label for="institution_name" class="form-label">Institution Name</label>
-                            <input type="text" id="institution_name" name="institution_name" class="form-control" value="{{ old('institution_name') }}" required>
+                            <input type="text" id="institution_name" name="institution_name" class="form-control" required>
                             @error('institution_name')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -126,15 +82,15 @@
                             <label for="major" class="form-label">Major</label>
                             <select id="major" name="major" class="form-control" required>
                                 <option value="" selected disabled>Select major</option>
-                                <option value="Computer Science" {{ old('major') == 'Computer Science' ? 'selected' : '' }}>Computer Science</option>
-                                <option value="Information Technology" {{ old('major') == 'Information Technology' ? 'selected' : '' }}>Information Technology</option>
-                                <option value="Information Systems" {{ old('major') == 'Information Systems' ? 'selected' : '' }}>Information Systems</option>
-                                <option value="Software Engineering" {{ old('major') == 'Software Engineering' ? 'selected' : '' }}>Software Engineering</option>
-                                <option value="Data Science" {{ old('major') == 'Data Science' ? 'selected' : '' }}>Data Science</option>
-                                <option value="Mechanical Engineering" {{ old('major') == 'Mechanical Engineering' ? 'selected' : '' }}>Mechanical Engineering</option>
-                                <option value="Electrical Engineering" {{ old('major') == 'Electrical Engineering' ? 'selected' : '' }}>Electrical Engineering</option>
-                                <option value="Civil Engineering" {{ old('major') == 'Civil Engineering' ? 'selected' : '' }}>Civil Engineering</option>
-                                <option value="Other" {{ old('major') == 'Other' ? 'selected' : '' }}>Other</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Information Systems">Information Systems</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Civil Engineering">Civil Engineering</option>
+                                <option value="Other">Other</option>
                             </select>
                             @error('major')
                                 <small class="text-danger">{{ $message }}</small>
@@ -144,7 +100,7 @@
                         <!-- Email Field -->
                         <div class="form-group mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                            <input type="email" id="email" name="email" class="form-control" required>
                             @error('email')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -153,7 +109,7 @@
                         <!-- Mobile Number Institution Field -->
                         <div class="form-group mb-3">
                             <label for="mobile_number" class="form-label">Mobile Number Institution</label>
-                            <input type="text" id="mobile_number" name="mobile_number" class="form-control" value="{{ old('mobile_number') }}" required>
+                            <input type="text" id="mobile_number" name="mobile_number" class="form-control" required>
                             @error('mobile_number')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -162,7 +118,7 @@
                         <!-- Address Field -->
                         <div class="form-group mb-3">
                             <label for="address" class="form-label">Address</label>
-                            <input type="text" id="address" name="address" class="form-control" value="{{ old('address') }}" required>
+                            <input type="text" id="address" name="address" class="form-control" required>
                             @error('address')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -218,7 +174,6 @@
 </div>
 
 <script>
-    // Password visibility toggle
     function togglePasswordVisibility(fieldId) {
         const passwordField = document.getElementById(fieldId);
         const passwordIcon = document.getElementById(fieldId + '-icon');
@@ -233,24 +188,5 @@
             passwordIcon.classList.add('fa-eye');
         }
     }
-    
-    // Success popup handling
-    function showSuccessPopup() {
-        document.getElementById('popupOverlay').style.display = 'block';
-        document.getElementById('successPopup').style.display = 'block';
-    }
-    
-    function closePopup() {
-        document.getElementById('popupOverlay').style.display = 'none';
-        document.getElementById('successPopup').style.display = 'none';
-        window.location.href = "{{ route('enduser.register') }}";
-    }
-    
-    // Show popup if there's a success message
-    document.addEventListener('DOMContentLoaded', function() {
-        @if(session('success'))
-            showSuccessPopup();
-        @endif
-    });
 </script>
 @endsection

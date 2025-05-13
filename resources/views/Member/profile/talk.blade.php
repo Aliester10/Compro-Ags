@@ -2,30 +2,11 @@
 
 @section('content')
 <style>
-    .custom-form-control {
-        width: 100%;
-        height: 73px;
-        border-radius: 10px;
-        padding: 0 15px;
-        border: 1px solid #ddd;
-    }
-    
-    .section-heading {
-        font-size: clamp(20px, 5vw, 24px);
-        font-weight: 600;
+    .page-title {
+        text-align: center;
+        font-size: clamp(24px, 6vw, 32px);
+        font-weight: 700;
         margin-bottom: 20px;
-    }
-    
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-    }
-    
-    .required-field {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 15px;
     }
     
     .nav-tabs-container {
@@ -56,329 +37,206 @@
         border-bottom: 2px solid #0d6efd;
     }
     
-    .main-heading {
+    .specialist-header {
         text-align: center;
-        font-size: clamp(24px, 6vw, 32px);
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-    
-    .breadcrumb-nav {
-        display: flex;
-        justify-content: center;
         margin-bottom: 30px;
     }
     
-    .breadcrumb-nav a {
-        color: #666;
-        text-decoration: none;
-        margin: 0 5px;
-    }
-    
-    .breadcrumb-nav span {
-        color: #666;
-        margin: 0 5px;
-    }
-    
-    .specialist-info {
-        text-align: center;
-        max-width: 800px;
-        margin: 0 auto 40px;
-    }
-    
-    .specialist-title {
-        color: #0d6efd;
-        font-size: 24px;
+    .specialist-header h2 {
         font-weight: 600;
-        margin-bottom: 10px;
-    }
-    
-    .specialist-description {
-        color: #666;
-        font-size: 16px;
-    }
-    
-    .contact-form-container {
-        background-color: #4a90e2;
-        border-radius: 15px;
-        padding: 30px;
-        max-width: 600px;
-        margin: 0 auto 60px;
-    }
-    
-    .contact-form-heading {
-        color: white;
-        font-size: 28px;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 25px;
-    }
-    
-    .form-group {
         margin-bottom: 15px;
     }
     
+    .blue-text {
+        color: #2786F0;
+    }
+    
+    .red-text {
+        color: #ED184B;
+    }
+    
+    .specialist-header p {
+        max-width: 800px;
+        margin: 0 auto;
+        color: #555;
+    }
+    
+    .contact-form {
+        background-color: #4a90e2;
+        border-radius: 15px;
+        padding: 25px;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-title {
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
     .form-control {
-        border-radius: 5px;
+        border-radius: 8px;
         padding: 12px 15px;
+        margin-bottom: 15px;
         border: none;
-        width: 100%;
     }
     
-    .message-textarea {
-        height: 120px;
-        resize: none;
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
     }
     
-    .send-message-btn {
+    .btn-send {
         background-color: white;
-        color: #333;
-        border: none;
+        color: #4a90e2;
+        font-weight: 600;
         border-radius: 25px;
         padding: 10px 30px;
-        font-weight: 500;
-        font-size: 16px;
-        cursor: pointer;
+        border: none;
         display: block;
-        margin: 20px auto 0;
+        margin: 0 auto;
+        transition: all 0.3s;
     }
     
-    .quick-call-btn {
-        background-color: #25d366;
-        color: white;
-        border: none;
-        border-radius: 25px;
-        padding: 10px 20px;
-        font-weight: 500;
-        font-size: 16px;
-        cursor: pointer;
+    .btn-send:hover {
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    
+    .quick-call {
         display: flex;
         align-items: center;
         justify-content: center;
         margin: 15px auto 0;
-        width: fit-content;
+        background-color: #25D366;
+        border-radius: 20px;
+        width: 201px;
+        height: 59px;
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s;
     }
     
-    .quick-call-btn img {
+    .quick-call:hover {
+        background-color: #128C7E;
+        transform: translateY(-2px);
+    }
+    
+    .quick-call img {
+        width: 24px;
+        height: 24px;
         margin-right: 8px;
     }
     
-    .footer-container {
+    .tab-links {
         display: flex;
-        justify-content: space-between;
-        margin-top: 30px;
-        padding: 20px 0;
-        border-top: 1px solid #eee;
-    }
-    
-    .company-info {
-        flex: 1;
-    }
-    
-    .company-logo {
-        margin-bottom: 15px;
-        max-width: 120px;
-    }
-    
-    .company-address {
-        font-size: 14px;
-        color: #666;
-        margin-top: 10px;
-    }
-    
-    .explore-section, .contact-section {
-        flex: 1;
-        padding: 0 20px;
-    }
-    
-    .section-title {
-        font-size: 20px;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-    }
-    
-    .section-title i {
-        margin-right: 10px;
-        color: #0d6efd;
-    }
-    
-    .explore-links, .contact-links {
-        list-style: none;
-        padding: 0;
-    }
-    
-    .explore-links li, .contact-links li {
-        margin-bottom: 10px;
-    }
-    
-    .explore-links a, .contact-links a {
-        color: #666;
-        text-decoration: none;
-    }
-    
-    .social-icons {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
-    }
-    
-    .social-icons a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .float-whatsapp {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #25d366;
-        color: white;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
         justify-content: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .tab-links a {
+        margin: 0 15px;
+        padding: 5px 0;
         text-decoration: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        color: #666;
+    }
+    
+    .tab-links a.active {
+        color: #000;
+        border-bottom: 2px solid #000;
+        font-weight: 500;
     }
     
     @media (max-width: 767.98px) {
-        .footer-container {
-            flex-direction: column;
+        .container {
+            margin-top: 8rem !important;
+            padding: 0 15px;
         }
         
-        .explore-section, .contact-section {
-            margin-top: 30px;
-            padding: 0;
+        .contact-form {
+            padding: 20px 15px;
         }
         
-        .contact-form-container {
-            padding: 20px;
+        .nav-tabs {
+            overflow-x: auto;
+            justify-content: flex-start;
+            padding-bottom: 5px;
+        }
+        
+        .nav-tabs-container {
+            overflow-x: auto;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .container {
+            margin-top: 5rem !important;
+        }
+        
+        .nav-tabs .nav-link {
+            padding: 10px 8px;
+            font-size: 14px;
         }
     }
 </style>
 
 <div class="container" style="margin-top: 15rem;">
-    <h1 class="main-heading">Talk to our Product Specialist</h1>
+    <h1 class="page-title">Talk to our Product Specialist</h1>
     
-    <div class="nav-tabs-container">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('profile.user') }}">Profile User</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('product.index') }}">Product</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Talk to our Product Specialist</a>
-            </li>
-        </ul>
+    <div class="tab-links">
+        <a href="{{ route('profile.show') }}">Profile User</a>
+        <a href="#">Products</a>
+        <a href="{{ route('profile.talk') }}" class="active">Talk to our Product Specialist</a>
     </div>
     
-    <div class="breadcrumb-nav">
-        <a href="{{ route('profile.user') }}">Profile User</a>
-        <span>></span>
-        <a href="{{ route('product.index') }}">Product History</a>
-        <span>></span>
-        <span>Talk to our Product Specialist</span>
+    <div class="specialist-header">
+        <h2><span class="blue-text">Need Expert Advice?</span> <span class="red-text">Talk to Our Product Specialist!</span></h2>
+        <p>Get personalized recommendations and detailed product explanations tailored to your needs.</p>
     </div>
     
-    <div class="specialist-info">
-        <h2 class="specialist-title">Need Expert Advice? Talk to Our Product Specialist!</h2>
-        <p class="specialist-description">Get personalized recommendations and detailed product explanations tailored to your needs.</p>
-    </div>
-    
-    <div class="contact-form-container">
-        <h3 class="contact-form-heading">Leave Message</h3>
-        <form action="{{ route('specialist.contact') }}" method="POST">
+    <div class="contact-form">
+        <h2 class="form-title">Leave Message</h2>
+        <form action="{{ route('specialist.message') }}" method="POST">
             @csrf
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="full_name" placeholder="Full Name *" required>
-                    </div>
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Full Name*" required>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <input type="email" class="form-control" name="email" placeholder="Email *" required>
-                    </div>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email*" required>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="company" placeholder="Company">
-                    </div>
+                    <input type="text" class="form-control" id="company" name="company" placeholder="Company">
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <input type="tel" class="form-control" name="phone" placeholder="Phone *" required>
-                    </div>
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone*" required>
                 </div>
             </div>
             
-            <div class="form-group">
-                <textarea class="form-control message-textarea" name="message" placeholder="Your Message *" required></textarea>
+            <div class="row">
+                <div class="col-12">
+                    <textarea class="form-control" id="message" name="message" placeholder="Your Message*" required></textarea>
+                </div>
             </div>
             
-            <button type="submit" class="send-message-btn">Send Message</button>
-        </form>
-        
-        <a href="https://wa.me/+6281855840913" class="quick-call-btn">
-            <img src="{{ asset('images/whatsapp-icon.png') }}" alt="WhatsApp" width="24" height="24">
-            Quick Call
-        </a>
-    </div>
-    
-    <div class="footer-container">
-        <div class="company-info">
-            <img src="{{ asset('images/ags-logo.png') }}" alt="AGS Logo" class="company-logo">
-            <h4>PT. Arkamaya Guna Saharsa</h4>
-            <p class="company-address">
-                Perumahan Mira Mataram<br>
-                Jl. Mataram Raya-HB Blok A2 No. 3, Kb. Manggis,<br>
-                Kec. Matraman, Daerah Khusus Ibukota Jakarta 13150
-            </p>
-        </div>
-        
-        <div class="explore-section">
-            <h4 class="section-title">
-                <i class="fas fa-compass"></i> Explore
-            </h4>
-            <ul class="explore-links">
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Our Activities</a></li>
-                <li><a href="#">Product</a></li>
-                <li><a href="#">E-Commerce</a></li>
-            </ul>
-        </div>
-        
-        <div class="contact-section">
-            <h4 class="section-title">
-                <i class="fas fa-phone-alt"></i> Contact Information
-            </h4>
-            <ul class="contact-links">
-                <li><i class="fas fa-phone"></i> +62 855-5716-5039</li>
-                <li><i class="fas fa-phone"></i> (021) 85840913</li>
-                <li><i class="fas fa-envelope"></i> info@arkamaya-tata.com</li>
-            </ul>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-linkedin"></i></a>
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
+            <button type="submit" class="btn btn-send">Send Message</button>
+            
+            <div class="quick-call">
+                <img src="{{ asset('assets/img/whatsapp-icon.png') }}" alt="WhatsApp">
+                <span>Quick Call</span>
             </div>
-        </div>
+        </form>
     </div>
-    
-    <a href="https://wa.me/+6281855840913" class="float-whatsapp">
-        <i class="fab fa-whatsapp fa-2x"></i>
-    </a>
 </div>
 
 <script>
@@ -391,10 +249,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove active class from all links
         link.classList.remove('active');
         
-        // Check if link href matches current URL or contains "specialist"
+        // Check if link href matches current URL
         if (link.getAttribute('href') === currentUrl || 
-            (currentUrl.includes('/specialist') && link.textContent.includes('Specialist')) ||
             (currentUrl.includes('/product') && link.textContent.includes('Product') && !link.textContent.includes('Specialist')) ||
+            (currentUrl.includes('/profile-user') && link.textContent.includes('Profile User')) ||
+            (currentUrl.includes('/talk') && link.textContent.includes('Talk to our Product Specialist'))) {
+            link.classList.add('active');
+        }
+    });
+    
+    // Also handle tab links
+    const tabLinks = document.querySelectorAll('.tab-links a');
+    tabLinks.forEach(link => {
+        link.classList.remove('active');
+        
+        if (link.getAttribute('href') === currentUrl || 
+            (currentUrl.includes('/talk') && link.textContent.includes('Talk to our Product Specialist')) ||
             (currentUrl.includes('/profile-user') && link.textContent.includes('Profile User'))) {
             link.classList.add('active');
         }
