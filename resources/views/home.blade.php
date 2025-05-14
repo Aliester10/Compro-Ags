@@ -492,11 +492,7 @@
                 class="logo"
                 data-name="Politeknik Negeri Cilacap"
             />
-            <img
-                src="{{ asset('assets/img/maps/jawa/Badan Nasional Penanggulangan Terorisme.png') }}"
-                class="logo"
-                data-name="Badan Nasional Penanggulangan Terorisme"
-            />
+
             <img
                 src="{{ asset('assets/img/maps/jawa/Kementerian Ketenagakerjaan RI.png') }}"
                 class="logo"
@@ -568,11 +564,7 @@
                 class="logo"
                 data-name="Universitas Tadulako"
             />
-            <img 
-                src="{{ asset('assets/img/maps/Sulawesi/ITH.png') }}"
-                class="logo"
-                data-name="Institut Teknologi Halu Oleo"
-            />
+
             <!-- Kalimantan -->
             <img 
                 src="{{ asset('assets/img/maps/Kalimantan/Politeknik Tanah Laut.png') }}"
@@ -1052,11 +1044,6 @@
     left: 30.5%;
 }
 
-[data-name="Badan Nasional Penanggulangan Terorisme"] {
-    top: 46%;
-    left: 30%;
-}
-
 [data-name="Kementerian Ketenagakerjaan RI"] {
     top: 47%;
     left: 28.5%;
@@ -1171,11 +1158,6 @@
 [data-name="Universitas Tadulako"] {
     top: 25%;
     left: 54.5%;
-}
-
-[data-name="Institut Teknologi Halu Oleo"] {
-    top: 36%;
-    left: 53.5%;
 }
 
 /* Kalimantan Region */
