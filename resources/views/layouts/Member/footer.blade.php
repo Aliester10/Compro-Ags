@@ -139,10 +139,10 @@
             <div class="col-md-4">
                 <div class="footer-item">
                     <img src="{{ asset('assets/img/AGS-logo.png') }}" alt="AGS Logo" style="height: 110px; margin-bottom: 3px;">
-                    <h5 class="mb-3" style="color: #196CA6; font-weight: bold; font-family: 'Work Sans', sans-serif;">PT. Arkamaya Guna Saharsa</h5>
-                    <p class="mb-1" style="color: #000; font-size: 14px;">Perkantoran Mitra Matraman</p>
-                    <p class="mb-1" style="color: #000; font-size: 14px;">Jl. Matraman Raya.148 Blok A2 No. 3, Kb. Manggis,</p>
-                    <p class="mb-4" style="color: #000; font-size: 14px;">Kec. Matraman, Daerah Khusus Ibukota Jakarta 13150.</p>
+                    <h5 class="mb-3" style="color: #196CA6; font-weight: bold; font-family: 'Work Sans', sans-serif; font-size: 25;">PT. Arkamaya Guna Saharsa</h5>
+                    <p class="mb-1" style="color: #000; font-size: 16px;">Perkantoran Mitra Matraman</p>
+                    <p class="mb-1" style="color: #000; font-size: 16px;">Jl. Matraman Raya.148 Blok A2 No. 3, Kb. Manggis,</p>
+                    <p class="mb-4" style="color: #000; font-size: 16px;">Kec. Matraman, Daerah Khusus Ibukota Jakarta 13150.</p>
                 </div>
             </div>
             
@@ -152,7 +152,7 @@
                     <div class="mb-3">
                         <div class="d-flex align-items-center mb-2">
                             <img src="{{ asset('assets/icons/Icon Contact Information/5.png') }}" alt="Explore" style="width: 40px; height: 40px; margin-right: 10px;">
-                            <h4 style="color: #196CA6; font-weight: bold; font-size: 24px; margin-bottom: 0; font-family: 'Work Sans', sans-serif;">Explore</h4>
+                            <h4 style="color: #196CA6; font-weight: bold; font-size: 32px; margin-bottom: 0; font-family: 'Work Sans', sans-serif;">Explore</h4>
                         </div>
                         <div class="ms-0 ps-0"> <!-- Removed padding/margin to align with heading -->
                             <a href="{{ route('about') }}" class="d-block mb-2" style="color: #000; text-decoration: none; font-size: 16px; margin-left: 50px;">About Us</a>
@@ -170,7 +170,7 @@
                     <div class="mb-3">
                         <div class="d-flex align-items-center mb-2">
                             <img src="{{ asset('assets/icons/Icon Contact Information/4.png') }}" alt="Contact Information" style="width: 40px; height: 40px; margin-right: 10px;">
-                            <h4 style="color: #196CA6; font-weight: bold; font-size: 24px; margin-bottom: 0; font-family: 'Work Sans', sans-serif;">Contact Information</h4>
+                            <h4 style="color: #196CA6; font-weight: bold; font-size: 32px; margin-bottom: 0; font-family: 'Work Sans', sans-serif;">Contact Information</h4>
                         </div>
                         <div class="ms-0 ps-0"> <!-- Removed padding/margin to align with heading -->
                             <!-- WhatsApp -->
