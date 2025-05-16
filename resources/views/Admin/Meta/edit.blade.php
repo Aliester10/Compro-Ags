@@ -9,6 +9,10 @@
                     <h4 class="mb-0">Edit Meta</h4>
                 </div>
                 <div class="card-body">
+                    @if(session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
+                    
                     <form action="{{ route('admin.meta.update', $meta->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT') {{-- Metode PUT untuk meng-update data --}}
@@ -22,14 +26,16 @@
                             <label for="image" class="font-weight-bold">Gambar</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="image" name="image" accept="image/*">
-                                <label class="custom-file-label" for="image">Pilih gambar...</label>
+                                <label class="custom-file-label" for="image">
+                                    {{ $meta->image ? basename($meta->image) : 'Pilih gambar...' }}
+                                </label>
                             </div>
                             <small class="form-text text-muted">Format gambar: JPG, JPEG, PNG, GIF. Maks 5MB.</small>
                             
                             @if($meta->image)
                             <div class="mt-3">
                                 <p>Gambar Saat Ini:</p>
-                                <img src="{{ asset('assets/img/konten/' . $meta->image) }}" class="img-thumbnail" style="max-height: 200px;">
+                                <img src="{{ asset($meta->image) }}" class="img-thumbnail" style="max-height: 200px;">
                             </div>
                             @endif
                         </div>

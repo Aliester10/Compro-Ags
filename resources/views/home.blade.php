@@ -1,6 +1,287 @@
 @extends('layouts.Member.master')
 
 @section('content')
+
+    @php
+        $compro = \App\Models\CompanyParameter::first();
+        // This query is already being passed from the controller as $ecommerces
+        // We're keeping this line for the navbar only as a fallback
+        $ecommercePartners = $ecommerces ?? \App\Models\BrandPartner::where('type', 'ecommerce')->get();
+    @endphp
+        
+<!-- Font loading and default font setup -->
+<link rel="stylesheet" href="{{ asset('asset/css/fonts.css') }}">
+<style>
+    body, h1, h2, h3, h4, h5, h6, p, a, span, div, li, button, input {
+        font-family: 'Work Sans', sans-serif;
+    }
+    /* E-commerce dropdown text in black */
+    #desktop-ecommerce-dropdown a,
+    #desktop-ecommerce-dropdown span,
+    #desktop-ecommerce-dropdown div {
+        color: #000000 !important;
+    }
+
+    .ecommerce-dropdown {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+    .ecommerce-dropdown.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    .navbar-content, .navbar-content a, .navbar-content svg {
+        transition: color 0.3s ease, stroke 0.3s ease;
+    }
+
+    /* Fixed ecommerce partner image sizes */
+    .ecommerce-partner-img {
+        object-fit: contain;
+        max-height: 40px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    
+    /* E-commerce dropdown styling based on image */
+    #desktop-ecommerce-dropdown {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        width: 131px;
+        height: 100px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    #desktop-ecommerce-dropdown:before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid white;
+    }
+    
+    .ecommerce-partner-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 5px;
+    }
+    
+    .ecommerce-partner-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .ecommerce-partner-divider {
+        height: 1px;
+        background-color: #e5e7eb;
+        margin: 5px 0;
+        width: 100%;
+    }
+    
+    /* Profile dropdown styling */
+    .profile-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: white;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        min-width: 10rem;
+        z-index: 50;
+    }
+    
+    .profile-dropdown.active {
+        display: block;
+        animation: fadeIn 0.2s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .profile-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        font-size: 0.875rem;
+        transition: background-color 0.2s;
+    }
+    
+    .profile-menu-item:hover {
+        background-color: #f3f4f6;
+    }
+    
+    .profile-menu-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.5rem;
+        stroke: #4b5563;
+    }
+    
+    .profile-menu-divider {
+        height: 1px;
+        background-color: #e5e7eb;
+        margin: 0.25rem 0;
+    }
+    
+    /* Search input text color - updated to black */
+    nav input::placeholder {
+        color: rgba(0, 0, 0, 0.7);
+    }
+    
+    nav input {
+        color: #000000;
+    }
+    
+    nav input:focus {
+        border-color: #000000;
+    }
+</style>
+    
+<div class="absolute top-0 left-0 right-0 z-50 w-full">
+    <div class="w-full bg-gray-800 bg-opacity-80 backdrop-blur-md py-2 px-4 text-center">
+        <h1 class="text-black font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
+    </div>
+    
+</div>
+
+<script>
+    function Menu(e) {
+        let list = document.querySelector('ul');
+        if (e.name === 'menu') {
+            e.name = "close";
+            list.classList.add('top-[80px]');
+            list.classList.add('opacity-100');
+        } else {
+            e.name = "menu";
+            list.classList.remove('top-[80px]');
+            list.classList.remove('opacity-100');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const ecommerceContainer = document.getElementById('ecommerce-container');
+        const ecommerceToggle = document.getElementById('ecommerce-toggle');
+        const desktopEcommerceDropdown = document.getElementById('desktop-ecommerce-dropdown');
+        const mobileEcommerceDropdown = document.getElementById('mobile-ecommerce-dropdown');
+        const mainNav = document.getElementById('mainNav');
+        
+        // Profile dropdown functionality
+        const profileToggle = document.getElementById('profile-toggle');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        // Only initialize dropdown functionality if user is logged in (elements exist)
+        if (profileToggle && profileDropdown) {
+            let isProfileDropdownOpen = false;
+            
+            // Profile dropdown toggle
+            profileToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (isProfileDropdownOpen) {
+                    profileDropdown.classList.remove('active');
+                } else {
+                    profileDropdown.classList.add('active');
+                }
+                
+                isProfileDropdownOpen = !isProfileDropdownOpen;
+            });
+            
+            // Close profile dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isProfileDropdownOpen && !profileDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
+                    profileDropdown.classList.remove('active');
+                    isProfileDropdownOpen = false;
+                }
+            });
+        }
+
+        if (ecommerceContainer && ecommerceToggle) {
+            let isDropdownOpen = false;
+            ecommerceToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.innerWidth >= 768) {
+                    if (isDropdownOpen) {
+                        desktopEcommerceDropdown.classList.add('hidden');
+                    } else {
+                        desktopEcommerceDropdown.classList.remove('hidden');
+                    }
+                } else {
+                    if (isDropdownOpen) {
+                        mobileEcommerceDropdown.classList.add('hidden');
+                    } else {
+                        mobileEcommerceDropdown.classList.remove('hidden');
+                    }
+                }
+                isDropdownOpen = !isDropdownOpen;
+            });
+
+            if (desktopEcommerceDropdown) {
+                desktopEcommerceDropdown.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        e.stopPropagation();
+                    }
+                });
+            }
+            if (mobileEcommerceDropdown) {
+                mobileEcommerceDropdown.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        e.stopPropagation();
+                    }
+                });
+            }
+            document.addEventListener('click', function(e) {
+                if (isDropdownOpen) {
+                    if (!ecommerceContainer.contains(e.target)) {
+                        if (window.innerWidth >= 768) {
+                            desktopEcommerceDropdown.classList.add('hidden');
+                        } else {
+                            mobileEcommerceDropdown.classList.add('hidden');
+                        }
+                        isDropdownOpen = false;
+                    }
+                }
+            });
+            window.addEventListener('resize', function() {
+                if (isDropdownOpen) {
+                    if (window.innerWidth >= 768) {
+                        mobileEcommerceDropdown.classList.add('hidden');
+                        desktopEcommerceDropdown.classList.remove('hidden');
+                    } else {
+                        desktopEcommerceDropdown.classList.add('hidden');
+                        mobileEcommerceDropdown.classList.remove('hidden');
+                    }
+                }
+            });
+        }
+    });
+</script>
 <style>
     .category-section {
         text-align: center;
@@ -9,11 +290,11 @@
         padding: 0 15px;
     }
     .category-section h1 {
-        margin-top: 70px;
         font-weight: bold;
         font-size: 2.5rem;
         color: #0056b3;
         margin-bottom: 10px;
+        margin-top : 70px;
     }
     .category-section p {
         color: #0056b3;
@@ -171,19 +452,139 @@
     }
 }
 </style>
-<!-- Hero/Banner Slider Section -->
+<!-- Hero/Banner Slider Section with Navbar overlay -->
 <div class="relative">
+    <!-- Navbar overlaying the slider -->
+    <nav class="absolute top-0 left-0 right-0 z-10 p-10 bg-transparent transition-all duration-300" id="mainNav">
+        <div class="flex items-center justify-between relative navbar-content" id="navbarContent">
+            <div class="flex items-center">
+                <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/AGS-logo.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
+            </div>
+            <div class="flex items-center">
+                <div class="md:hidden mr-4">
+                    <form action="" class="relative mx-auto w-max">
+                        <input type="search" 
+                            class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </form>
+                </div>
+                <span class="text-3xl cursor-pointer md:hidden block z-20">
+                    <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
+                </span>
+            </div>
+            <ul class="md:flex md:items-center z-10 md:z-auto md:static absolute bg-gray-800 md:bg-transparent w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500">
+                <li class="mx-4 my-6 md:my-0" id="nav-home-link">
+                    <a href="{{ route('home') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Home</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0" id="nav-about-link">
+                    <a href="{{ route('about') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">About</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0" id="nav-activity-link">
+                    <a href="{{ route('activity') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Our Activities</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0" id="nav-product-link">
+                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Product</a>
+                </li>
+                <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
+                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">
+                        E-Commerce
+                    </a>
+                    <!-- Updated desktop ecommerce dropdown with fixed width and height and BLACK text -->
+                    <div id="desktop-ecommerce-dropdown" class="hidden mt-2 z-50">
+                        <div class="ecommerce-partner-container text-black">
+                            @foreach($ecommercePartners as $partner)
+                                <div class="ecommerce-partner-item">
+                                    <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity text-black">
+                                        <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="ecommerce-partner-img">
+                                    </a>
+                                </div>
+                                @if(!$loop->last)
+                                    <div class="ecommerce-partner-divider"></div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                    <div id="mobile-ecommerce-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
+                        <div class="flex flex-col gap-3">
+                            @foreach($ecommercePartners as $partner)
+                            <div class="flex justify-center">
+                                <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
+                                    <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="ecommerce-partner-img">
+                                </a>
+                            </div>
+                            @if(!$loop->last)
+                                <div class="ecommerce-partner-divider"></div>
+                            @endif
+                            @endforeach
+                        </div>
+                    </div>
+                </li>
+                    
+                <!-- Profile icon with dropdown menu -->
+                <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
+                    @auth
+                        <!-- User is logged in - show profile icon with dropdown -->
+                        <div class="cursor-pointer nav-link text-xl hover:text-cyan-500 duration-500 flex items-center drop-shadow-md" id="profile-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        
+                        <!-- Profile dropdown menu -->
+                        <div id="profile-dropdown" class="profile-dropdown">
+                            <a href="{{ route('profile.show') }}" class="profile-menu-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                Profile
+                            </a>
+                            <div class="profile-menu-divider"></div>
+                            <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                @csrf
+                                <button type="submit" class="profile-menu-item w-full text-left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                    </svg>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <!-- User is not logged in - link directly to login page -->
+                        <a href="{{ route('login') }}" class="nav-link text-xl hover:text-cyan-500 duration-500 flex items-center drop-shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </a>
+                    @endauth
+                </li>
+                    
+                <li class="mx-2 my-6 md:my-0 hidden md:block">
+                    <form action="" class="relative mx-auto w-max">
+                        <input type="search" 
+                            class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-white" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </form>
+                </li>
+            </ul>
+        </div>  
+    </nav>
+
     <!-- Slider component -->
-    <div class="slider-container relative overflow-hidden rounded-b-[50px]" style="height: calc(150vh - 120px);">
+        <div class="slider-container relative overflow-hidden rounded-b-[50px]" style="height: calc(150vh - 120px);">
         <div class="slides-wrapper" id="slidesWrapper">
             @if(isset($sliders) && count($sliders) > 0)
                 @foreach($sliders as $index => $slider)
                     <div class="slide absolute inset-0 w-full h-full transition-opacity duration-500 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}"
-                         style="background-image:  url('{{ asset($slider->image_url) }}'); 
+                        style="background-image: url('{{ asset($slider->image_url) }}'); 
                                 background-size: cover; 
                                 background-position: center right;">
                         <div class="container mx-auto px-6 md:px-12 h-full flex items-center">
-                            <div class="w-full md:w-1/2 text-white mt-12">
+                            <div class="w-full md:w-1/2 text-white mt-32"> <!-- Increased top margin to avoid navbar overlap -->
                                 <!-- Title -->
                                 <h1 class="text-4xl md:text-5xl font-bold mb-4" style="color: {{ $slider->title_color ?? '#FFFFFF' }}">
                                     {{ $slider->title }}
@@ -224,11 +625,11 @@
             @else
                 <!-- Default slide if no sliders are available -->
                 <div class="slide absolute inset-0 w-full h-full opacity-100"
-                     style="background-image: linear-gradient(to right, rgba(0, 124, 255, 0.8), rgba(125, 185, 232, 0.4)), url('{{ asset('assets/img/banner-bg.jpg') }}'); 
+                    style="background-image: linear-gradient(to right, rgba(0, 124, 255, 0.8), rgba(125, 185, 232, 0.4)), url('{{ asset('assets/img/banner-bg.jpg') }}'); 
                             background-size: cover; 
                             background-position: center right;">
                     <div class="container mx-auto px-6 md:px-12 h-full flex items-center">
-                        <div class="w-full md:w-1/2 text-white mt-32"> <!-- Added bigger margin-top to push content below navbar -->
+                        <div class="w-full md:w-1/2 text-white mt-32"> <!-- Increased top margin to avoid navbar overlap -->
                             <h1 class="text-4xl md:text-5xl font-bold mb-4">
                                 Technology start-up that empowered by innovation.
                             </h1>
@@ -252,25 +653,11 @@
                 @else
                     <!-- Default navigation dots -->
                     <button type="button" class="slider-dot h-3 w-3 rounded-full bg-white" data-index="0"></button>
-                    <button type="button" class="slider-dot h-3 w-3 rounded-full bg-white/40" data-index="1"></button>
-                    <button type="button" class="slider-dot h-3 w-3 rounded-full bg-white/40" data-index="2"></button>
-                    <button type="button" class="slider-dot h-3 w-3 rounded-full bg-white/40" data-index="3"></button>
-                    <button type="button" class="slider-dot h-3 w-3 rounded-full bg-white/40" data-index="4"></button>
                 @endif
             </div>
         </div>
-        
-        <!-- Left/Right navigation arrows (optional) -->
-        <button type="button" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-2 focus:outline-none" id="prevSlide">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
-        <button type="button" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/30 hover:bg-white/50 rounded-full p-2 focus:outline-none" id="nextSlide">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </button>
+    </div>
+</div>
     </div>
 </div>
 
@@ -493,7 +880,11 @@
                 class="logo"
                 data-name="Politeknik Negeri Cilacap"
             />
-
+            <img
+                src="{{ asset('assets/img/maps/jawa/Badan Nasional Penanggulangan Terorisme.png') }}"
+                class="logo"
+                data-name="Badan Nasional Penanggulangan Terorisme"
+            />
             <img
                 src="{{ asset('assets/img/maps/jawa/Kementerian Ketenagakerjaan RI.png') }}"
                 class="logo"
@@ -565,7 +956,11 @@
                 class="logo"
                 data-name="Universitas Tadulako"
             />
-
+            <img 
+                src="{{ asset('assets/img/maps/Sulawesi/ITH.png') }}"
+                class="logo"
+                data-name="Institut Teknologi Halu Oleo"
+            />
             <!-- Kalimantan -->
             <img 
                 src="{{ asset('assets/img/maps/Kalimantan/Politeknik Tanah Laut.png') }}"
@@ -1045,6 +1440,11 @@
     left: 30.5%;
 }
 
+[data-name="Badan Nasional Penanggulangan Terorisme"] {
+    top: 46%;
+    left: 30%;
+}
+
 [data-name="Kementerian Ketenagakerjaan RI"] {
     top: 47%;
     left: 28.5%;
@@ -1161,6 +1561,11 @@
     left: 54.5%;
 }
 
+[data-name="Institut Teknologi Halu Oleo"] {
+    top: 36%;
+    left: 53.5%;
+}
+
 /* Kalimantan Region */
 [data-name="Politeknik Tanah Laut"] {
     top: 26%;
@@ -1255,10 +1660,6 @@
         border-width: 8px;
         margin-left: -8px;
     }
-    
-    /* Increase tap target for mobile */
-  .logo {
-    }
 }
 
 @media (max-width: 576px) {
@@ -1290,7 +1691,6 @@
     .map-container {
         padding-bottom: 60%; /* Slightly taller for mobile */
     }
-    
 }
 </style>
 
@@ -1381,77 +1781,134 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Slider functionality
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.slider-dot');
-        const prevButton = document.getElementById('prevSlide');
-        const nextButton = document.getElementById('nextSlide');
-        
-        let currentSlideIndex = 0;
-        const totalSlides = slides.length;
-        let slideInterval;
-        
-        // Initialize the slider
-        function initSlider() {
-            if (totalSlides <= 1) return;
-            
-            // Start automatic slideshow
-            startSlideInterval();
-            
-            // Handle dot navigation clicks
-            dots.forEach(dot => {
-                dot.addEventListener('click', () => {
-                    const slideIndex = parseInt(dot.getAttribute('data-index'));
-                    goToSlide(slideIndex);
-                });
-            });
-            
-            // Handle prev/next button clicks
-            prevButton.addEventListener('click', () => {
-                goToSlide((currentSlideIndex - 1 + totalSlides) % totalSlides);
-            });
-            
-            nextButton.addEventListener('click', () => {
-                goToSlide((currentSlideIndex + 1) % totalSlides);
-            });
+    // Get slider elements (only define once)
+    const slidesWrapper = document.getElementById('slidesWrapper');
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    const navbarLinks = document.querySelectorAll('#mainNav ul li');
+    const navbarAnchors = document.querySelectorAll('#mainNav ul li a'); 
+    const navIcons = document.querySelectorAll('#mainNav svg');
+    
+    // Return early if slider elements don't exist
+    if (!slides.length || !dots.length) return;
+    
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    let slideInterval;
+    
+   // Modify the updateNavbarColor function in your script
+function updateNavbarColor(index) {
+    const currentSlide = slides[index];
+    const h1Element = currentSlide.querySelector('h1');
+    const navbarLogo = document.querySelector('#navbarContent img'); // Get the logo element
+    
+    if (h1Element) {
+        // Try to get color from inline style first
+        let titleColor;
+        if (h1Element.style.color) {
+            titleColor = h1Element.style.color;
+        } else {
+            // Fall back to computed style
+            titleColor = window.getComputedStyle(h1Element).color;
         }
         
-        function goToSlide(index) {
-            // Reset the interval when manually changing slides
-            resetSlideInterval();
-            
-            // Hide current slide
-            slides[currentSlideIndex].classList.remove('opacity-100');
-            slides[currentSlideIndex].classList.add('opacity-0');
-            dots[currentSlideIndex].classList.remove('bg-white');
-            dots[currentSlideIndex].classList.add('bg-white/40');
-            
-            // Show the selected slide
-            currentSlideIndex = index;
-            slides[currentSlideIndex].classList.remove('opacity-0');
-            slides[currentSlideIndex].classList.add('opacity-100');
-            dots[currentSlideIndex].classList.remove('bg-white/40');
-            dots[currentSlideIndex].classList.add('bg-white');
+        // Check if titleColor is #ffffff (white) and change logo if needed
+        if (titleColor === '#ffffff' || titleColor === 'rgb(255, 255, 255)') {
+            navbarLogo.src = "{{ asset('assets/img/AGS Logo-01.png') }}";
+        } else {
+            navbarLogo.src = "{{ asset('assets/img/ags-icon-black.png') }}";
         }
         
-        function nextSlide() {
-            goToSlide((currentSlideIndex + 1) % totalSlides);
-        }
+        // Update navbar text colors
+        navbarLinks.forEach(link => {
+            link.style.color = titleColor;
+        });
         
-        function startSlideInterval() {
-            slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-        }
+        navbarAnchors.forEach(anchor => {
+            anchor.style.color = titleColor;
+        });
         
-        function resetSlideInterval() {
-            clearInterval(slideInterval);
-            startSlideInterval();
-        }
+        // Update SVG icons
+        navIcons.forEach(icon => {
+            icon.style.stroke = titleColor;
+        });
+    }
+}
+
+    // Function to show a specific slide
+    function goToSlide(index) {
+        // Reset auto slide interval
+        resetSlideInterval();
         
-        // Initialize the slider
-        initSlider();
+        // Hide all slides
+        slides.forEach((slide) => {
+            slide.classList.remove('opacity-100');
+            slide.classList.add('opacity-0');
+        });
         
-        // Stop auto sliding when user hovers over the slider
-        const sliderContainer = document.querySelector('.slider-container');
+        // Update dots
+        dots.forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.remove('bg-white/40');
+                dot.classList.add('bg-white');
+            } else {
+                dot.classList.remove('bg-white');
+                dot.classList.add('bg-white/40');
+            }
+        });
+        
+        // Show the selected slide
+        currentIndex = index;
+        slides[currentIndex].classList.remove('opacity-0');
+        slides[currentIndex].classList.add('opacity-100');
+        
+        // Update navbar color based on current slide
+        updateNavbarColor(currentIndex);
+    }
+    
+    // Auto slide functionality
+    function nextSlide() {
+        goToSlide((currentIndex + 1) % totalSlides);
+    }
+    
+    function startSlideInterval() {
+        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    }
+    
+    function resetSlideInterval() {
+        clearInterval(slideInterval);
+        startSlideInterval();
+    }
+    
+    // Set up click events for dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+        });
+    });
+    
+    // Set up click events for navigation buttons
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            goToSlide((currentIndex + 1) % totalSlides);
+        });
+    }
+    
+    // Initialize slider
+    goToSlide(0);
+    startSlideInterval();
+    
+    // Stop auto sliding when user hovers over the slider
+    const sliderContainer = document.querySelector('.slider-container');
+    if (sliderContainer) {
         sliderContainer.addEventListener('mouseenter', () => {
             clearInterval(slideInterval);
         });
@@ -1459,6 +1916,7 @@
         sliderContainer.addEventListener('mouseleave', () => {
             startSlideInterval();
         });
-    });
+    }
+});
 </script>
 @endsection

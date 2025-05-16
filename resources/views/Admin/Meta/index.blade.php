@@ -31,7 +31,7 @@
                                     <td>{{ $meta->title }}</td>
                                     <td>
                                         @if($meta->image)
-                                            <img src="{{ asset('assets/img/konten/' . $meta->image) }}" alt="{{ $meta->title }}" class="img-thumbnail" style="max-height: 50px;">
+                                            <img src="{{ asset($meta->image) }}" alt="{{ $meta->title }}" class="img-thumbnail" style="max-height: 50px;">
                                         @else
                                             <span class="badge badge-secondary">Tidak ada gambar</span>
                                         @endif

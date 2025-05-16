@@ -38,8 +38,9 @@ class MetaController extends Controller
         $meta = Meta::findOrFail($id);
         
         // Delete the associated image if it exists
-        if ($meta->image && File::exists(public_path('assets/img/konten/' . $meta->image))) {
-            File::delete(public_path('assets/img/konten/' . $meta->image));
+        // Changed this part to handle the full path
+        if ($meta->image && File::exists(public_path($meta->image))) {
+            File::delete(public_path($meta->image));
         }
         
         $meta->delete();
@@ -67,25 +68,34 @@ class MetaController extends Controller
         }
 
         // Handle image upload
-        $imageName = null;
+        $imagePath = null;
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
-            
-            // Create directory if it doesn't exist
-            $targetDir = public_path('assets/img/konten');
-            if (!File::isDirectory($targetDir)) {
-                File::makeDirectory($targetDir, 0755, true);
+            try {
+                $image = $request->file('image');
+                $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
+                
+                // Create directory if it doesn't exist
+                $targetDir = public_path('assets/img/konten');
+                if (!File::isDirectory($targetDir)) {
+                    File::makeDirectory($targetDir, 0755, true);
+                }
+                
+                // Move the uploaded file to the target directory
+                $image->move($targetDir, $imageName);
+                
+                // Store the full path instead of just the filename
+                $imagePath = 'assets/img/konten/' . $imageName;
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Error uploading image: ' . $e->getMessage());
             }
-            
-            // Move the uploaded file to the target directory
-            $image->move($targetDir, $imageName);
         }
     
         Meta::create([
             'title' => $request->title,
             'slug' => $slug,
-            'image' => $imageName,
+            'image' => $imagePath,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]);
@@ -111,7 +121,7 @@ class MetaController extends Controller
             // Check if the new slug already exists and append a number to make it unique
             $originalSlug = $slug;
             $count = 1;
-            while (Meta::where('slug', $slug)->exists() && $meta->slug !== $slug) {
+            while (Meta::where('slug', $slug)->where('id', '!=', $id)->exists()) {
                 $slug = $originalSlug . '-' . $count;
                 $count++;
             }
@@ -121,32 +131,42 @@ class MetaController extends Controller
         }
 
         // Handle image upload
-        $imageName = $meta->image; // Keep old image by default
+        $imagePath = $meta->image; // Keep old image path by default
         if ($request->hasFile('image')) {
-            // Delete old image if it exists
-            if ($meta->image && File::exists(public_path('assets/img/konten/' . $meta->image))) {
-                File::delete(public_path('assets/img/konten/' . $meta->image));
+            try {
+                // Delete old image if it exists
+                // Changed to handle full paths
+                if ($meta->image && File::exists(public_path($meta->image))) {
+                    File::delete(public_path($meta->image));
+                }
+                
+                // Upload new image
+                $image = $request->file('image');
+                $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
+                
+                // Create directory if it doesn't exist
+                $targetDir = public_path('assets/img/konten');
+                if (!File::isDirectory($targetDir)) {
+                    File::makeDirectory($targetDir, 0755, true);
+                }
+                
+                // Move the uploaded file to the target directory
+                $image->move($targetDir, $imageName);
+                
+                // Store the full path
+                $imagePath = 'assets/img/konten/' . $imageName;
+            } catch (\Exception $e) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Error uploading image: ' . $e->getMessage());
             }
-            
-            // Upload new image
-            $image = $request->file('image');
-            $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
-            
-            // Create directory if it doesn't exist
-            $targetDir = public_path('assets/img/konten');
-            if (!File::isDirectory($targetDir)) {
-                File::makeDirectory($targetDir, 0755, true);
-            }
-            
-            // Move the uploaded file to the target directory
-            $image->move($targetDir, $imageName);
         }
     
         // Update the meta with the new data
         $meta->update([
             'title' => $request->title,
             'slug' => $slug,
-            'image' => $imageName,
+            'image' => $imagePath,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
         ]);
@@ -162,27 +182,33 @@ class MetaController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            // Get the file from the request
-            $image = $request->file('file');
-            
-            // Create a unique filename
-            $filename = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
-            
-            // Specify the target directory path (using absolute path from your configuration)
-            $targetDir = public_path('assets/img/konten');
-            
-            // Create directory if it doesn't exist
-            if (!File::isDirectory($targetDir)) {
-                File::makeDirectory($targetDir, 0755, true);
+            try {
+                // Get the file from the request
+                $image = $request->file('file');
+                
+                // Create a unique filename
+                $filename = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
+                
+                // Specify the target directory path (using absolute path from your configuration)
+                $targetDir = public_path('assets/img/konten');
+                
+                // Create directory if it doesn't exist
+                if (!File::isDirectory($targetDir)) {
+                    File::makeDirectory($targetDir, 0755, true);
+                }
+                
+                // Move the uploaded file to the target directory
+                $image->move($targetDir, $filename);
+                
+                // Return the full path for the image URL
+                return response()->json([
+                    'link' => asset('assets/img/konten/' . $filename)
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => 'Error uploading image: ' . $e->getMessage()
+                ], 500);
             }
-            
-            // Move the uploaded file to the target directory
-            $image->move($targetDir, $filename);
-            
-            // Return the image URL needed by editor (if using one like Froala, CKEditor, etc.)
-            return response()->json([
-                'link' => asset('assets/img/konten/' . $filename)
-            ]);
         }
         
         return response()->json([

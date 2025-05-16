@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label for="image" class="font-weight-bold">Gambar</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="image" name="image" accept="image/*">
+                                    <input type="file" class="custom-file-input" id="image" name="image">
                                     <label class="custom-file-label" for="image">Pilih gambar...</label>
                                 </div>
                                 <small class="form-text text-muted">Format yang diizinkan: JPG, JPEG, PNG. Maksimal 2MB.</small>
