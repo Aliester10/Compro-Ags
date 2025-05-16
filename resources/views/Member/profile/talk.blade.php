@@ -231,10 +231,10 @@
             
             <button type="submit" class="btn btn-send">Send Message</button>
             
-            <div class="quick-call">
+            <a href="https://wa.me/6282272018609" class="quick-call" target="_blank">
                 <img src="{{ asset('assets/img/whatsapp-icon.png') }}" alt="WhatsApp">
                 <span>Quick Call</span>
-            </div>
+            </a>
         </form>
     </div>
 </div>

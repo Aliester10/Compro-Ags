@@ -9,6 +9,7 @@
         padding: 0 15px;
     }
     .category-section h1 {
+        margin-top: 70px;
         font-weight: bold;
         font-size: 2.5rem;
         color: #0056b3;

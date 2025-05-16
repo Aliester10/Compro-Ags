@@ -1,4 +1,3 @@
-
 @extends('layouts.Member.master4')
 
 @section('content')
@@ -401,7 +400,7 @@
         animation: rotate 15s linear infinite;
     }
     
-    /* Our Brand Section Styling */
+    /* Our Brand Section Styling - UPDATED */
     .our-brand-container {
         padding: 60px 0;
         margin: 50px 0;
@@ -455,6 +454,7 @@
         margin-top: 30px;
     }
     
+    /* UPDATED - Removed box-shadow and border on hover */
     .brand-logo {
         padding: 1px;
         max-width: 320px;
@@ -463,6 +463,7 @@
         position: relative;
         overflow: hidden;
         transition: all 0.5s ease;
+        background-color: transparent;
     }
     
     .brand-logo img {
@@ -471,9 +472,10 @@
         transition: transform 0.5s ease, filter 0.5s ease;
     }
     
+    /* UPDATED - Removed box-shadow, kept only translateY animation */
     .brand-logo:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        background-color: transparent;
     }
     
     .brand-logo:hover img {
@@ -481,6 +483,7 @@
         filter: brightness(1.1);
     }
     
+    /* UPDATED - Modified the after pseudo-element for a cleaner effect */
     .brand-logo::after {
         content: '';
         position: absolute;
@@ -488,7 +491,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+        background: transparent;
         transform: translateX(-100%);
         transition: transform 0.6s ease;
     }
@@ -1112,6 +1115,7 @@
             <div class="brand-logo" data-aos="fade-up" data-aos-duration="800" data-aos-delay="700">
                 <img src="{{ asset('assets/img/Logo Brand AGS/Vulcan Logo.png') }}" alt="VULCAN Logo">
             </div>
+
         </div>
     </div>
 </div>

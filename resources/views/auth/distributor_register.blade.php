@@ -37,19 +37,29 @@
                             @enderror
                         </div>
 
-                        <!-- Password Field -->
+                        <!-- Password Field with Toggle -->
                         <div class="form-group mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password" class="form-control" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password">
+                                    <i class="fas fa-eye eye-icon"></i>
+                                </button>
+                            </div>
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
-                        <!-- Password Confirmation Field -->
+                        <!-- Password Confirmation Field with Toggle -->
                         <div class="form-group mb-3">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+                            <div class="input-group">
+                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password_confirmation">
+                                    <i class="fas fa-eye eye-icon"></i>
+                                </button>
+                            </div>
                             @error('password_confirmation')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
@@ -125,4 +135,44 @@
         </div>
     </div>
 </div>
+
+<!-- Style untuk ikon mata berwarna hitam -->
+<style>
+    .eye-icon {
+        color: #000 !important;
+    }
+    .toggle-password {
+        background-color: #fff;
+        border-color: #ced4da;
+    }
+    .toggle-password:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<!-- JavaScript untuk toggle password -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+            
+            // Toggle type antara password dan text
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+});
+</script>
 @endsection
