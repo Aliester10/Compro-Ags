@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Admin\Member\MemberController;
 use App\Http\Controllers\Admin\FAQ\FAQController;
 use App\Http\Controllers\Admin\Parameter\CompanyParameterController;
@@ -97,7 +98,13 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/qnaguest1', [QnaGuest1Controller::class, 'index'])->name('qnaguest1');
     // Distributor Registration
     Route::get('/distributors/register', [RegisterController::class, 'showDistributorRegistrationForm'])->name('distributors.register');
-    Route::post('/distributors/register', [RegisterController::class, 'registerDistributor']);
+    Route::post('/distributors/register', [RegisterController::class, 'registerDistributor'])->name('distributors.register.store');
+
+    // Rute verifikasi distributor
+    Route::get('/verify-distributor/{id}/{token}', [VerificationController::class, 'verifyDistributor'])->name('verify.distributor');
+    Route::get('/reject-distributor/{id}/{token}', [VerificationController::class, 'rejectDistributor'])->name('reject.distributor');
+
+    // Rute menunggu verifikasi
     Route::get('/distributors/waiting', function () {
         return view('auth.distributor_waiting');
     })->name('distributors.waiting');
@@ -149,6 +156,8 @@ Route::middleware(['auth', 'user-access:member'])->group(function () {
         Route::post('/specialist/message', [App\Http\Controllers\SpecialistController::class, 'message'])->name('specialist.message');
         Route::get('/profile/talk', [App\Http\Controllers\Member\Profile\ProfileMemberController::class, 'talk'])->name('profile.talk');
         Route::post('/profile/talk/submit', [App\Http\Controllers\Member\Profile\ProfileMemberController::class, 'submitTalk'])->name('member.talk.submit');
+        // Pastikan route ini sudah terdaftar di web.php
+        Route::post('/specialist/message', [App\Http\Controllers\SpecialistController::class, 'message'])->name('specialist.message');
         Route::get('/profile/edit', [ProfileMemberController::class, 'edit'])->name('profile.edit');
         Route::put('/profile/update', [ProfileMemberController::class, 'update'])->name('profile.update');
 

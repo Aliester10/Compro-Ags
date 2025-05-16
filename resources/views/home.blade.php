@@ -164,7 +164,7 @@
     
 <div class="absolute top-0 left-0 right-0 z-50 w-full">
     <div class="w-full bg-gray-800 bg-opacity-80 backdrop-blur-md py-2 px-4 text-center">
-        <h1 class="text-black font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
+        <h1 class="text-white font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
     </div>
     
 </div>
@@ -389,29 +389,111 @@
         }
     }
   /* Modified partners section styles */
-  /* Brand Partners Section Styles */
+/* Brand Partners Section Styles */
 .partners-section {
-    padding: 20px 0;
     background-color: #ffffff;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 30px 0;
+    text-align: center;
 }
 
 .partners-section h1 {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     font-size: 40px;
     font-weight: 700;
-    color: #0F69AF; /* Blue color matching your heading */
+    color: #0F69AF;
 }
 
-/* Grid layout with reduced horizontal spacing */
-.partners-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 60px 30px; /* 60px vertical spacing, 30px horizontal spacing (reduced) */
+.brand-title {
+    color: #1779ba;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.partners-container {
+    max-width: 1000px;
     margin: 0 auto;
-    max-width: 800px; /* Reduced width to bring logos closer */
+    padding: 0 20px;
+    /* Tetap menggunakan display flex dengan gap vertical yang lebih kecil */
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Gap vertikal antara baris */
+}
+
+.partners-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Tetap menjaga gap horizontal yang kecil */
+.partners-row-3 {
+    gap: 20px;
+}
+
+.partners-row-2 {
+    gap: 40px;
+}
+
+.partners-row-odd {
+    gap: 10px;
+}
+
+.partner-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Menghapus width calculation agar logo bisa tampil dengan ukuran natural */
+}
+
+/* Logo sizing - kembali ke ukuran semula */
+.partner-item img {
+    max-height: 100px; /* Kembali ke ukuran 100px */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .partners-row {
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+    
+    .partners-row-2, .partners-row-3 {
+        gap: 30px;
+    }
+    
+    .partner-item img {
+        max-height: 60px;
+    }
+    
+    .brand-title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .partners-row {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .partner-item img {
+        max-height: 50px;
+    }
+    
+    .brand-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
 }
 
 .partner-item {
@@ -782,20 +864,57 @@
 
 <div class="h-px w-full bg-gray-300 my-4"></div>
 
+<!-- our brand section start -->
 <div class="container partners-section">
-    <h1>Our Brand</h1>
-    <div class="partners-grid">
-        @php
-        $brands = DB::table('brand_partner')->where('type', 'brand')->get();
-        @endphp
+    <h1 class="brand-title">Our Brand</h1>
+    @php
+    $brands = DB::table('brand_partner')->where('type', 'brand')->get();
+    $totalBrands = count($brands);
+    $brandRows = [];
+    
+    // Divide brands into rows with alternating pattern of 3-2-3-2...
+    $currentRow = 0;
+    $currentIndex = 0;
+    
+    while ($currentIndex < $totalBrands) {
+        // Determine number of items in this row (3 or 2)
+        $itemsInCurrentRow = ($currentRow % 2 == 0) ? 3 : 2;
         
-        @foreach($brands as $brand)
-        <a href="{{ $brand->url ?? '#' }}" class="partner-item">
-            <img src="{{ asset($brand->gambar) }}" alt="{{ $brand->nama }}">
-        </a>
+        // If remaining brands are fewer than expected, use the remaining count
+        $itemsInCurrentRow = min($itemsInCurrentRow, $totalBrands - $currentIndex);
+        
+        // Get brands for this row
+        $brandRows[$currentRow] = [];
+        for ($i = 0; $i < $itemsInCurrentRow; $i++) {
+            if ($currentIndex < $totalBrands) {
+                $brandRows[$currentRow][] = $brands[$currentIndex];
+                $currentIndex++;
+            }
+        }
+        
+        $currentRow++;
+    }
+    @endphp
+    
+    <div class="partners-container">
+        @foreach($brandRows as $row)
+            @php 
+                $rowClass = 'partners-row-' . count($row);
+                if (count($row) % 2 != 0) {
+                    $rowClass .= ' partners-row-odd';
+                }
+            @endphp
+            <div class="partners-row {{ $rowClass }}">
+                @foreach($row as $brand)
+                <a href="{{ $brand->url ?? '#' }}" class="partner-item" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset($brand->gambar) }}" alt="{{ $brand->nama }}" title="{{ $brand->nama }}">
+                </a>
+                @endforeach
+            </div>
         @endforeach
     </div>
 </div>
+
 <div class="container distributor-section collaboration-section">
     <h1>Collaboration With Our Principal</h1>
     <p>Trusted Collaboration</p>

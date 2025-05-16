@@ -4,27 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-// Uncomment if you want to create a mailable class later
-// use App\Mail\SpecialistContactMail;
+use App\Mail\SpecialistContactMail;
 
 class SpecialistController extends Controller
 {
-    /**
-     * Display the specialist contact form
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('member.profile.talk');
-    }
-
-    /**
-     * Process the specialist contact form submission
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function message(Request $request)
     {
         // Validate the form data
@@ -36,30 +19,19 @@ class SpecialistController extends Controller
             'message' => 'required|string',
         ]);
 
-        // Here you would typically:
-        // 1. Save the message to your database
-        // 2. Send an email notification
-        // 3. Perform any other business logic
-        
-        // Example: Store in database (uncomment and modify if you have a model for this)
-        /*
-        \App\Models\SpecialistMessage::create([
-            'name' => $validated['fullName'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'company' => $validated['company'] ?? null,
-            'message' => $validated['message'],
-        ]);
-        */
-        
-        // Example: Send email (uncomment and modify as needed)
-        /*
-        Mail::to('specialist@example.com')->send(
-            new SpecialistContactMail($validated)
-        );
-        */
-        
-        // Redirect back with success message
-        return redirect()->back()->with('success', 'Your message has been sent successfully! Our product specialist will contact you soon.');
+        try {
+            // Kirim email tanpa menyimpan ke database
+            Mail::to('fabertjodymanuel@gmail.com') // Ganti dengan alamat email spesialis produk
+                ->send(new SpecialistContactMail($validated));
+                
+            return redirect()->back()->with('success', 'Pesan Anda telah berhasil dikirim! Spesialis produk kami akan segera menghubungi Anda.');
+        } catch (\Exception $e) {
+            // Log error jika diperlukan
+            \Log::error('Error sending email: ' . $e->getMessage());
+            
+            return redirect()->back()
+                ->with('error', 'Maaf, terjadi kesalahan saat mengirim pesan Anda. Silakan coba lagi nanti: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 }

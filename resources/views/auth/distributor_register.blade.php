@@ -16,7 +16,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('distributors.register') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('distributors.register.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Name Field -->
