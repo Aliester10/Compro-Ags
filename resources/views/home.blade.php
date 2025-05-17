@@ -147,8 +147,90 @@
         background-color: #e5e7eb;
         margin: 0.25rem 0;
     }
+    /* Improved Circular Search Styling */
+    .circular-search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 40px;
+        transition: width 0.3s ease;
+    }
 
-    
+    .circular-search-container.active {
+        width: 250px;
+    }
+
+    .circular-search-form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        position: relative;
+    }
+
+    .circular-search-button {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: absolute;
+        right: 0;
+        z-index: 20;
+    }
+
+    .circular-search-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .circular-search-icon {
+        width: 20px;
+        height: 20px;
+        stroke: white;
+        stroke-width: 2px;
+    }
+
+    .circular-search-input {
+        background-color: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 8px 40px 8px 16px;
+        width: 100%;
+        color: white;
+        font-size: 14px;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .circular-search-container.active .circular-search-input {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .circular-search-input:focus {
+        outline: none;
+        background-color: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .circular-search-input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .circular-search-container.active {
+            width: 180px;
+        }
+    }
     
     /* Search input text color - updated to black */
     nav input::placeholder {
@@ -196,6 +278,57 @@
         const profileToggle = document.getElementById('profile-toggle');
         const profileDropdown = document.getElementById('profile-dropdown');
         
+        // Updated Circular search functionality
+        const searchToggle = document.getElementById('searchToggle');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchContainer = document.getElementById('searchContainer');
+  
+             
+        let isSearchActive = false;
+        
+        searchToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (!isSearchActive) {
+                // Activate search
+                searchContainer.classList.add('active');
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 300); // Wait for transition to complete
+                isSearchActive = true;
+            } else {
+                // If input has value, submit the search
+                if (searchInput.value.trim() !== '') {
+                    searchForm.submit();
+                } else {
+                    // Otherwise hide the search input
+                    searchContainer.classList.remove('active');
+                    isSearchActive = false;
+                }
+            }
+        });
+        
+        // Hide search when clicking outside
+        document.addEventListener('click', function(e) {
+            if (isSearchActive && !searchContainer.contains(e.target)) {
+                searchContainer.classList.remove('active');
+                isSearchActive = false;
+            }
+        });
+        
+        // Submit search on Enter key
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (this.value.trim() !== '') {
+                    searchForm.submit();
+                }
+            }
+        });
+    
+
         // Only initialize dropdown functionality if user is logged in (elements exist)
         if (profileToggle && profileDropdown) {
             let isProfileDropdownOpen = false;
@@ -545,12 +678,17 @@
                 <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/AGS-logo.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
             </div>
             <div class="flex items-center">
+                <!-- Mobile search - UPDATED -->
                 <div class="md:hidden mr-4">
-                    <form action="" class="relative mx-auto w-max">
+                    <form action="{{ route('products.search') }}" method="GET" class="mobile-search-container" id="mobileSearchForm">
                         <input type="search" 
-                            class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-white focus:pl-16 focus:pr-4" />
-                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            name="query"
+                            class="mobile-search-input peer" 
+                            id="mobileSearchInput"
+                            placeholder="Search products..."
+                        />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mobile-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </form>
                 </div>
@@ -606,7 +744,7 @@
                     </div>
                 </li>
                     
-                <!-- Profile icon with dropdown menu -->
+                 <!-- Profile icon with dropdown menu -->
                 <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
                     @auth
                         <!-- User is logged in - show profile icon with dropdown -->
@@ -644,7 +782,7 @@
                         </a>
                     @endauth
                 </li>
-                    
+                <!-- Desktop search - UPDATED -->
                 <li class="mx-2 my-6 md:my-0">
                     <div class="circular-search-container" id="searchContainer">
                         <form action="{{ route('products.search') }}" method="GET" class="circular-search-form" id="searchForm">
@@ -665,6 +803,7 @@
         </div>  
     </nav>
 
+    <!-- Rest of the code remains unchanged -->
     <!-- Slider component -->
         <div class="slider-container relative overflow-hidden rounded-b-[50px]" style="height: calc(150vh - 120px);">
         <div class="slides-wrapper" id="slidesWrapper">
