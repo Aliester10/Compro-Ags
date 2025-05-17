@@ -104,6 +104,7 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         min-width: 10rem;
         z-index: 50;
+        color: #000000 !important;
     }
     
     .profile-dropdown.active {
@@ -146,6 +147,19 @@
         height: 1px;
         background-color: #e5e7eb;
         margin: 0.25rem 0;
+    }
+    .profile-dropdown a,
+    .profile-dropdown button,
+    .profile-dropdown svg {
+        color: #000000 !important; /* Memastikan teks dan SVG tetap hitam */
+        stroke: #000000 !important; /* Untuk SVG */
+    }
+
+    /* Pastikan hover effect tetap ada tapi tidak mengubah warna teks */
+    .profile-dropdown a:hover,
+    .profile-dropdown button:hover {
+        background-color: #f3f4f6; /* Warna background hover */
+        color: #000000 !important; /* Tetap hitam saat hover */
     }
     /* Improved Circular Search Styling */
     .circular-search-container {
@@ -2069,15 +2083,13 @@
 function updateNavbarColor(index) {
     const currentSlide = slides[index];
     const h1Element = currentSlide.querySelector('h1');
-    const navbarLogo = document.querySelector('#navbarContent img'); // Get the logo element
+    const navbarLogo = document.querySelector('#navbarContent img');
     
     if (h1Element) {
-        // Try to get color from inline style first
         let titleColor;
         if (h1Element.style.color) {
             titleColor = h1Element.style.color;
         } else {
-            // Fall back to computed style
             titleColor = window.getComputedStyle(h1Element).color;
         }
         
@@ -2088,18 +2100,27 @@ function updateNavbarColor(index) {
             navbarLogo.src = "{{ asset('assets/img/ags-icon-black.png') }}";
         }
         
-        // Update navbar text colors
+        // Update navbar text colors - EXCEPT profile dropdown
         navbarLinks.forEach(link => {
-            link.style.color = titleColor;
+            // Skip profile dropdown container
+            if (link.id !== 'profile-container') {
+                link.style.color = titleColor;
+            }
         });
         
         navbarAnchors.forEach(anchor => {
-            anchor.style.color = titleColor;
+            // Skip profile dropdown links
+            if (!anchor.closest('#profile-dropdown')) {
+                anchor.style.color = titleColor;
+            }
         });
         
-        // Update SVG icons
+        // Update SVG icons - EXCEPT profile dropdown icons
         navIcons.forEach(icon => {
-            icon.style.stroke = titleColor;
+            // Skip profile dropdown SVGs
+            if (!icon.closest('#profile-dropdown')) {
+                icon.style.stroke = titleColor;
+            }
         });
     }
 }
