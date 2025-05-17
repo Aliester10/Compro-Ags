@@ -10,18 +10,30 @@
         </div>
     </div>
 
+    <!-- Search Results Section - Only visible when search is performed -->
+    @if(isset($keyword) && !empty($keyword))
+    <div class="search-results-section">
+        <div class="search-results-container">
+            <h2>Search Results for: "{{ $keyword }}"</h2>
+            <p class="results-count">Found {{ $produks->total() }} results</p>
+        </div>
+    </div>
+    @endif
+
     <!-- Product Category Section -->
     <div class="product-category-section">
         <div class="category-container">
             <h2>Product Category.</h2>
             
-            <!-- Search Bar -->
+            <!-- Search Bar - Updated for GET method and query parameter -->
             <div class="search-bar">
-                <form action="{{ route('products.search') }}" method="POST">
-                    @csrf
+                <form action="{{ route('products.search') }}" method="GET">
                     <div class="search-input-group">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" placeholder="Search For Product..." name="search">
+                        <input type="text" placeholder="Search For Product..." name="query">
+                        <button type="submit" class="search-button" aria-label="Search">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -78,49 +90,57 @@
     <!-- Best Seller Products Section -->
     <div class="bestseller-section">
         <div class="bestseller-container">
-            <h2>Best Seller Products.</h2>
+            @if(isset($keyword) && !empty($keyword))
+                <h2>Search Results</h2>
+            @else
+                <h2>Best Seller Products.</h2>
+            @endif
             
             @php
-                // For debugging - uncomment to see what products exist
-                // foreach($produks as $p) {
-                //     echo $p->nama . "<br>";
-                // }
-                
-                // Define product name keywords to search for
-                $keywords = [
-                    'air bag',
-                    'simulator',
-                    'Controller Training',
-                    'PCE Water', 
-                    'Suntex Laboratory',
-                    'basic electric',
-                    'Shielded Ground',
-                    'Automatic Kjedahl',
-                    'Automatic Multichannel',                
-                ];
-                
-                // More flexible filter that looks for keywords instead of exact matches
-                $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
-                    $productName = strtolower($product->nama);
-                    foreach ($keywords as $keyword) {
-                        if (stripos($productName, strtolower($keyword)) !== false) {
-                            return true;
-                        }
-                    }
-                    return false;
-                });
-                
-                // Check if any products match the filter
-                if ($bestSellerProducts->count() > 0) {
-                    // If products exist, chunk them
-                    $productsChunks = $bestSellerProducts->chunk(3);
+                // For search results, skip the filtering and show all returned products
+                if(isset($keyword) && !empty($keyword)) {
+                    // Directly use all products from the search
+                    $displayProducts = $produks;
+                    $productsChunks = $displayProducts->chunk(3);
                 } else {
-                    // If no products match, create an empty collection to handle in the loop
-                    $productsChunks = collect([]);
+                    // Original bestseller filtering logic
+                    $keywords = [
+                        'air bag',
+                        'simulator',
+                        'Controller Training',
+                        'PCE Water', 
+                        'Suntex Laboratory',
+                        'basic electric',
+                        'Shielded Ground',
+                        'Automatic Kjedahl',
+                        'Automatic Multichannel',                
+                    ];
+                    
+                    // More flexible filter that looks for keywords instead of exact matches
+                    $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
+                        $productName = strtolower($product->nama);
+                        foreach ($keywords as $keyword) {
+                            if (stripos($productName, strtolower($keyword)) !== false) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                    
+                    // Check if any products match the filter
+                    if ($bestSellerProducts->count() > 0) {
+                        // If products exist, chunk them
+                        $productsChunks = $bestSellerProducts->chunk(3);
+                    } else {
+                        // If no products match, create an empty collection to handle in the loop
+                        $productsChunks = collect([]);
+                    }
+                    
+                    $displayProducts = $bestSellerProducts;
                 }
             @endphp
             
-            @if($bestSellerProducts->count() > 0)
+            @if(isset($keyword) || $displayProducts->count() > 0)
                 @foreach($productsChunks as $chunk)
                     <!-- Products grid -->
                     <div class="products-grid">
@@ -145,11 +165,18 @@
                         </div>
                     </div>
                 @endforeach
+                
+                <!-- Pagination for search results -->
+                @if(isset($keyword) && $produks->hasPages())
+                <div class="pagination-container">
+                    {{ $produks->appends(['query' => $keyword])->links() }}
+                </div>
+                @endif
             @else
                 <div class="row">
                     <div class="col-12">
                         <div class="no-products text-center">
-                            <p>No bestseller products available at this time.</p>
+                            <p>No products available at this time.</p>
                         </div>
                     </div>
                 </div>
@@ -214,6 +241,32 @@
             margin: 0;
         }
         
+        /* Search Results Section */
+        .search-results-section {
+            padding: 30px 0;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-results-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        
+        .search-results-container h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .results-count {
+            font-size: 16px;
+            color: #666;
+        }
+        
         /* Product Category Section */
         .product-category-section {
             padding: 40px 0;
@@ -274,7 +327,7 @@
         .search-input-group input {
             width: 100%;
             height: 38px; /* Exact height as requested */
-            padding: 0 15px 0 45px;
+            padding: 0 45px 0 45px; /* Padding for icons on both sides */
             border: 1px solid #ddd;
             border-radius: 30px;
             font-size: 16px;
@@ -296,6 +349,61 @@
             transform: translateY(-50%);
             color: #666;
             font-size: 16px;
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        
+        .search-button:hover {
+            color: #599BEC;
+        }
+        
+        /* Pagination Container */
+        .pagination-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .pagination-container nav div {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .pagination-container nav div span,
+        .pagination-container nav div a {
+            margin: 0 5px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .pagination-container nav div span {
+            background-color: #599BEC;
+            color: white;
+        }
+        
+        .pagination-container nav div a {
+            background-color: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .pagination-container nav div a:hover {
+            background-color: #e1e1e1;
         }
         
         /* Category Grid Styles */
@@ -536,7 +644,7 @@
             text-decoration: none;
         }
 
-        /* Responsive adjustments */category-name
+        /* Responsive adjustments */
         @media (max-width: 992px) {
             .product-card {
                 width: calc(50% - 20px);

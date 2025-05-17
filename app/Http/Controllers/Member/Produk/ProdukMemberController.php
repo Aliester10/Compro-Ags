@@ -57,22 +57,41 @@ class ProdukMemberController extends Controller
         return view('Member.Product.product', compact('produks', 'kategori', 'bidangPerusahaan', 'selectedCategory', 'sort'));
     }
 
+    /**
+     * Search for products
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function search(Request $request)
     {
         $kategori = Kategori::all();
-        $keyword = $request->keyword;
-
-        // Ganti get() dengan paginate(9) dan tambahkan with('images')
+        
+        // Support both 'keyword' and 'query' parameters for better compatibility
+        $keyword = $request->input('query', $request->input('keyword', ''));
+        
+        // If no search term provided, redirect to products page
+        if (empty($keyword)) {
+            return redirect()->route('product.index');
+        }
+        
+        // Search in multiple fields with eager loading of images
+        // PERBAIKAN: Menggunakan where closure dan menghilangkan 'nama_produk'
         $produks = Produk::with('images')
-            ->where('nama', 'LIKE', '%' . $keyword . '%')
+            ->where(function($query) use ($keyword) {
+                $query->where('nama', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('deskripsi', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('spesifikasi', 'LIKE', '%' . $keyword . '%');
+            })
             ->paginate(9);
 
         $selectedCategory = null;
         
-        // Ambil semua bidang perusahaan (subkategori)
+        // Get all sub-categories
         $bidangPerusahaan = BidangPerusahaan::all();
 
-        return view('Member.Product.product', compact('produks', 'kategori', 'bidangPerusahaan', 'selectedCategory'));
+        // Return view with search results
+        return view('Member.Product.product', compact('produks', 'kategori', 'bidangPerusahaan', 'selectedCategory', 'keyword'));
     }
     
     public function show($id)

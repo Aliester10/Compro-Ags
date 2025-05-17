@@ -1,4 +1,3 @@
-
 <!-- navbar start -->
 
 <body class="overflow-x-hidden font-WorkSans">
@@ -162,17 +161,89 @@
         margin: 0.25rem 0;
     }
     
-    /* Search input text color - updated to black */
-    nav input::placeholder {
+    /* Improved Circular Search Styling with BLACK theme */
+    .circular-search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 40px;
+        transition: width 0.3s ease;
+    }
+
+    .circular-search-container.active {
+        width: 250px;
+    }
+
+    .circular-search-form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        position: relative;
+    }
+
+    .circular-search-button {
+        background-color: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 50%;
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: absolute;
+        right: 0;
+        z-index: 20;
+    }
+
+    .circular-search-button:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .circular-search-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #000000;
+        stroke-width: 2px;
+    }
+
+    .circular-search-input {
+        background-color: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+        padding: 8px 40px 8px 16px;
+        width: 100%;
+        color: #000000;
+        font-size: 14px;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .circular-search-container.active .circular-search-input {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .circular-search-input:focus {
+        outline: none;
+        background-color: rgba(0, 0, 0, 0.07);
+        border-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .circular-search-input::placeholder {
         color: rgba(0, 0, 0, 0.7);
     }
-    
-    nav input {
-        color: #000000;
-    }
-    
-    nav input:focus {
-        border-color: #000000;
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .circular-search-container.active {
+            width: 180px;
+        }
     }
 </style>
     
@@ -187,14 +258,22 @@
               <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/ags-icon-black.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
             </div>
             <div class="flex items-center">
+                <!-- Mobile-only circular search button -->
                 <div class="md:hidden mr-4">
-                    <form action="" class="relative mx-auto w-max">
-                        <input type="search" 
-                              class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-black focus:pl-16 focus:pr-4" />
-                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </form>
+                    <div class="circular-search-container" id="mobileSearchContainer">
+                        <form action="{{ route('products.search') }}" method="GET" class="circular-search-form" id="mobileSearchForm">
+                            <input type="search" 
+                                name="query"
+                                class="circular-search-input" 
+                                id="mobileSearchInput"
+                                placeholder="Search products..." />
+                            <button type="button" class="circular-search-button" id="mobileSearchToggle">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="circular-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <span class="text-3xl cursor-pointer md:hidden block z-20">
                     <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
@@ -287,14 +366,22 @@
                     @endauth
                 </li>
                     
+                <!-- Desktop circular search button -->
                 <li class="mx-2 my-6 md:my-0 hidden md:block">
-                    <form action="" class="relative mx-auto w-max">
-                        <input type="search" 
-                              class="peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-black focus:pl-16 focus:pr-4" />
-                        <svg xmlns="http://www.w3.org/2000/svg" class="absolute inset-y-0 my-auto h-8 w-12 border-r border-transparent px-3.5 peer-focus:border-black" fill="none" viewBox="0 0 24 24" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </form>
+                    <div class="circular-search-container" id="searchContainer">
+                        <form action="{{ route('products.search') }}" method="GET" class="circular-search-form" id="searchForm">
+                            <input type="search" 
+                                name="query"
+                                class="circular-search-input" 
+                                id="searchInput"
+                                placeholder="Search products..." />
+                            <button type="button" class="circular-search-button" id="searchToggle">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="circular-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
                 </li>
             </ul>
         </div>  
@@ -412,7 +499,108 @@
                 }
             });
         }
+        
+        // Desktop circular search functionality
+        const searchToggle = document.getElementById('searchToggle');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchContainer = document.getElementById('searchContainer');
+        
+        let isSearchActive = false;
+        
+        if (searchToggle && searchContainer) {
+            searchToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isSearchActive) {
+                    // Activate search
+                    searchContainer.classList.add('active');
+                    setTimeout(() => {
+                        searchInput.focus();
+                    }, 300); // Wait for transition to complete
+                    isSearchActive = true;
+                } else {
+                    // If input has value, submit the search
+                    if (searchInput.value.trim() !== '') {
+                        searchForm.submit();
+                    } else {
+                        // Otherwise hide the search input
+                        searchContainer.classList.remove('active');
+                        isSearchActive = false;
+                    }
+                }
+            });
+            
+            // Hide search when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isSearchActive && !searchContainer.contains(e.target)) {
+                    searchContainer.classList.remove('active');
+                    isSearchActive = false;
+                }
+            });
+            
+            // Submit search on Enter key
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (this.value.trim() !== '') {
+                        searchForm.submit();
+                    }
+                }
+            });
+        }
+        
+        // Mobile circular search functionality
+        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
+        const mobileSearchForm = document.getElementById('mobileSearchForm');
+        const mobileSearchInput = document.getElementById('mobileSearchInput');
+        const mobileSearchContainer = document.getElementById('mobileSearchContainer');
+        
+        let isMobileSearchActive = false;
+        
+        if (mobileSearchToggle && mobileSearchContainer) {
+            mobileSearchToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isMobileSearchActive) {
+                    // Activate search
+                    mobileSearchContainer.classList.add('active');
+                    setTimeout(() => {
+                        mobileSearchInput.focus();
+                    }, 300); // Wait for transition to complete
+                    isMobileSearchActive = true;
+                } else {
+                    // If input has value, submit the search
+                    if (mobileSearchInput.value.trim() !== '') {
+                        mobileSearchForm.submit();
+                    } else {
+                        // Otherwise hide the search input
+                        mobileSearchContainer.classList.remove('active');
+                        isMobileSearchActive = false;
+                    }
+                }
+            });
+            
+            // Hide search when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isMobileSearchActive && !mobileSearchContainer.contains(e.target)) {
+                    mobileSearchContainer.classList.remove('active');
+                    isMobileSearchActive = false;
+                }
+            });
+            
+            // Submit search on Enter key
+            mobileSearchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (this.value.trim() !== '') {
+                        mobileSearchForm.submit();
+                    }
+                }
+            });
+        }
     });
 </script>
-
 <!-- Navbar End -->
