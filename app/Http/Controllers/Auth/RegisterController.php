@@ -69,7 +69,7 @@ class RegisterController extends Controller
         // Kirim email notifikasi ke admin
         try {
             $mail_data = [
-                'recipient' => 'fabertjodymanuel@gmail.com', // Email admin
+                'recipient' => 'agsprodspe@gmail.com', // Email admin
                 'fromEmail' => config('mail.from.address'), // Gunakan email sistem bukan email user
                 'fromName'  => config('mail.from.name'), // Gunakan nama sistem bukan nama user
                 'replyTo' => $user->email,

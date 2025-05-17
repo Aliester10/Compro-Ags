@@ -6,7 +6,7 @@
     .page-title {
         text-align: center;
         font-size: clamp(24px, 6vw, 32px);
-        font-weight: 700;
+        font-weight: 900;
         margin-bottom: 20px;
     }
     
@@ -188,7 +188,7 @@
     }
 </style>
 
-<div class="container" style="margin-top: 15rem;">
+<div class="container" style="margin-top: 12rem;">
     <h1 class="page-title">Talk to our Product Specialist</h1>
     
     <div class="tab-links">
@@ -232,7 +232,7 @@
             
             <button type="submit" class="btn btn-send">Send Message</button>
             
-            <a href="https://wa.me/6282272018609" class="quick-call" target="_blank">
+            <a href="https://wa.me/6281315428487" class="quick-call" target="_blank">
                 <img src="{{ asset('assets/img/whatsapp-icon.png') }}" alt="WhatsApp">
                 <span>Quick Call</span>
             </a>

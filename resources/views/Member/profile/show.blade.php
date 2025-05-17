@@ -2,6 +2,22 @@
 
 @section('content')
 <style>
+        /* Font import */
+    @import url('/assets/css/fonts.css');
+    /* Import AOS CSS for scroll animations */
+    @import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
+    
+    /* Font weight classes */
+    .font-thin { font-weight: 100; }
+    .font-extralight { font-weight: 200; }
+    .font-light { font-weight: 300; }
+    .font-regular { font-weight: 400; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .font-extrabold { font-weight: 800; }
+    .font-black { font-weight: 900; }
+
     .custom-form-control {
         width: 100%;
         height: 73px;
@@ -59,7 +75,7 @@
     .main-heading {
         text-align: center;
         font-size: clamp(24px, 6vw, 32px);
-        font-weight: 700;
+        font-weight: 900;
         margin-bottom: 20px;
     }
     
@@ -142,7 +158,7 @@
     }
 </style>
 
-<div class="container" style="margin-top: 15rem;">
+<div class="container" style="margin-top: 12rem;">
     <h1 class="main-heading">User Account</h1>
     
     <div class="nav-tabs-container">

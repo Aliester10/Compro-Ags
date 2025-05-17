@@ -61,7 +61,7 @@
     .main-heading {
         text-align: center;
         font-size: clamp(24px, 6vw, 32px);
-        font-weight: 700;
+        font-weight: 900;
         margin-bottom: 20px;
     }
     
@@ -167,7 +167,7 @@
     }
 </style>
 
-<div class="container" style="margin-top: 15rem; margin-bottom: 10rem;">
+<div class="container" style="margin-top: 12rem; margin-bottom: 10rem;">
     <h1 class="main-heading">User Account</h1>
     
     <div class="nav-tabs-container">

@@ -21,7 +21,7 @@ class SpecialistController extends Controller
 
         try {
             // Kirim email tanpa menyimpan ke database
-            Mail::to('fabertjodymanuel@gmail.com') // Ganti dengan alamat email spesialis produk
+            Mail::to('agsprodspe@gmail.com') // Ganti dengan alamat email spesialis produk
                 ->send(new SpecialistContactMail($validated));
                 
             return redirect()->back()->with('success', 'Pesan Anda telah berhasil dikirim! Spesialis produk kami akan segera menghubungi Anda.');
