@@ -326,7 +326,12 @@
                         </div>
                     </div>
                 </li>
-                    
+                
+                                <!-- Contact Us Menu Item -->
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('contact') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Contact Us</a>
+                </li>
+
                 <!-- Profile icon with dropdown menu -->
                 <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
                     @auth

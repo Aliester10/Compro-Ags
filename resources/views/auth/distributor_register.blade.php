@@ -110,6 +110,20 @@
                             @enderror
                         </div>
 
+                        <!-- Level of Distributionship Field -->
+                        <div class="form-group mb-3">
+                            <label for="level_distributorship" class="form-label">Level of Distributionship</label>
+                            <select id="level_distributorship" name="level_distributorship" class="form-control" required>
+                                <option value="" disabled selected>Choose Level</option>
+                                <option value="tier_1">Tier I - Authorized Distributor</option>
+                                <option value="tier_2">Tier II - Partner</option>
+                                <option value="tier_3">Tier III - Reseller</option>
+                            </select>
+                            @error('level_distributorship')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
                         <!-- Akta Document Upload Field -->
                         <div class="form-group mb-3">
                             <label for="akta" class="form-label">Upload Deed of Establishment (Akta)</label>

@@ -757,6 +757,11 @@
                         </div>
                     </div>
                 </li>
+
+                                <!-- Contact Us Menu Item -->
+                 <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('contact') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Contact Us</a>
+                </li>
                     
                  <!-- Profile icon with dropdown menu -->
                 <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
@@ -1353,7 +1358,7 @@
 <div class="lets-connect-container">
     <div class="lets-connect-content">
         <h2 class="lets-connect-heading">Let's make awesome<br>work together.</h2>
-        <a href="http://127.0.0.1:8000/en/login" class="lets-connect-button">Let's Connect!</a>
+        <a href="{{ route('distributorship.requirements') }}" class="lets-connect-button">Let's Connect!</a>
     </div>
 </div>
 

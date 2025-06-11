@@ -133,4 +133,12 @@ class HomeController extends Controller
             'ecommerces'
         ));
     }
+
+    public function contact()
+    {
+        $company = CompanyParameter::first();
+        $ecommerces = BrandPartner::where('type', 'ecommerce')->get();
+        
+        return view('contact', compact('company', 'ecommerces'));
+    }
 }

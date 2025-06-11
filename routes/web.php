@@ -60,7 +60,7 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/about', [HomeController::class, 'about'])->name('about');
-    
+    Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
     // Product routes
     Route::get('/products', [ProdukMemberController::class, 'index'])->name('product.index');
     Route::get('/products/category/{id}', [ProdukMemberController::class, 'index'])->name('product.category');
@@ -165,6 +165,35 @@ Route::middleware(['auth', 'user-access:member'])->group(function () {
         // Profile User route
         Route::get('/profile-user', [ProfileMemberController::class, 'userProfile'])->name('profile.user');
     });
+});
+// Add these routes to your existing web.php file within the appropriate groups
+
+// Admin routes for managing distributorship tiers
+// Add this to your existing admin routes
+Route::middleware(['auth', 'user-access:admin'])->group(function () {
+    Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
+        // Distributorship Tiers routes
+        Route::get('/admin/distributor/tiers', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'index'])
+            ->name('admin.distributor.tiers.index');
+        Route::get('/admin/distributor/tiers/create', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'create'])
+            ->name('admin.distributor.tiers.create');
+        Route::post('/admin/distributor/tiers', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'store'])
+            ->name('admin.distributor.tiers.store');
+        Route::get('/admin/distributor/tiers/{id}', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'show'])
+            ->name('admin.distributor.tiers.show');
+        Route::get('/admin/distributor/tiers/{id}/edit', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'edit'])
+            ->name('admin.distributor.tiers.edit');
+        Route::put('/admin/distributor/tiers/{id}', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'update'])
+            ->name('admin.distributor.tiers.update');
+        Route::delete('/admin/distributor/tiers/{id}', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'destroy'])
+            ->name('admin.distributor.tiers.destroy');
+        Route::put('/admin/distributor/tiers/{id}/toggle-active', [App\Http\Controllers\Admin\Distributor\DistributorshipTierController::class, 'toggleActive'])
+            ->name('admin.distributor.tiers.toggle-active');
+    });
+});
+// Public route for viewing distributorship requirements
+Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
+    Route::get('/distributorship-requirements', [App\Http\Controllers\Member\Distributor\DistributorshipRequirementsController::class, 'index'])->name('distributorship.requirements');
 });
 // Distributor Routes (Authenticated Users with "distributor" role)
 Route::middleware(['auth', 'user-access:distributor'])->group(function () {
@@ -301,4 +330,5 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::post('/froala/upload_image', [MetaController::class, 'uploadImage'])->name('froala.upload_image');
         Route::resource('admin/location', LocationController::class)->names('admin.location');
     });
+    
 });

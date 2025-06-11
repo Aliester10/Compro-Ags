@@ -238,6 +238,11 @@
                                     <span class="sub-item">QnA Guest</span>
                                 </a>
                             </li>
+                            <li>
+                               <a href="{{ route('admin.distributor.tiers.index') }}">
+                                    <span class="sub-item">Distributor Tier</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

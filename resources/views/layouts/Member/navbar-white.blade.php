@@ -280,9 +280,7 @@
                     <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Product</a>
                 </li>
                 <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
-                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">
-                        E-Commerce
-                    </a>
+                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">E-Commerce</a>
                     <!-- Updated desktop ecommerce dropdown with fixed width and height -->
                     <div id="desktop-ecommerce-dropdown" class="hidden mt-2 z-50">
                         <div class="ecommerce-partner-container">
@@ -312,6 +310,10 @@
                             @endforeach
                         </div>
                     </div>
+                </li>
+                <!-- Contact Us Menu Item -->
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('contact') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Contact Us</a>
                 </li>
                     
                 <!-- Profile icon with dropdown menu -->
@@ -427,6 +429,7 @@
             });
         }
 
+        // E-commerce dropdown functionality
         if (ecommerceContainer && ecommerceToggle) {
             let isDropdownOpen = false;
             ecommerceToggle.addEventListener('click', function(e) {
@@ -495,46 +498,48 @@
         
         let isSearchActive = false;
         
-        searchToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (!isSearchActive) {
-                // Activate search
-                searchContainer.classList.add('active');
-                setTimeout(() => {
-                    searchInput.focus();
-                }, 300); // Wait for transition to complete
-                isSearchActive = true;
-            } else {
-                // If input has value, submit the search
-                if (searchInput.value.trim() !== '') {
-                    searchForm.submit();
+        if (searchToggle && searchForm && searchInput && searchContainer) {
+            searchToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (!isSearchActive) {
+                    // Activate search
+                    searchContainer.classList.add('active');
+                    setTimeout(() => {
+                        searchInput.focus();
+                    }, 300); // Wait for transition to complete
+                    isSearchActive = true;
                 } else {
-                    // Otherwise hide the search input
+                    // If input has value, submit the search
+                    if (searchInput.value.trim() !== '') {
+                        searchForm.submit();
+                    } else {
+                        // Otherwise hide the search input
+                        searchContainer.classList.remove('active');
+                        isSearchActive = false;
+                    }
+                }
+            });
+            
+            // Hide search when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isSearchActive && !searchContainer.contains(e.target)) {
                     searchContainer.classList.remove('active');
                     isSearchActive = false;
                 }
-            }
-        });
-        
-        // Hide search when clicking outside
-        document.addEventListener('click', function(e) {
-            if (isSearchActive && !searchContainer.contains(e.target)) {
-                searchContainer.classList.remove('active');
-                isSearchActive = false;
-            }
-        });
-        
-        // Submit search on Enter key
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                if (this.value.trim() !== '') {
-                    searchForm.submit();
+            });
+            
+            // Submit search on Enter key
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (this.value.trim() !== '') {
+                        searchForm.submit();
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 </script>
 
