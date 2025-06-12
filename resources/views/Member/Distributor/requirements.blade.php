@@ -5,13 +5,58 @@
 @php
 // Ambil data brands dari database berdasarkan data yang sebenarnya
 $brands = DB::table('brand_partner')->where('type', 'brand')->get();
-$principals = DB::table('brand_partner')->where('type', 'principal')->get();
-$distributors = DB::table('brand_partner')->where('type', 'distributor')->get();
 
-// Cari brand MICROME khusus
+// === ARKAMAYA ENGINEERING PRODUCT ===
+// House Brands untuk Engineering
+$engineeringBrandNames = ['Labverse', 'Labtek', 'Vulcan']; // Sesuaikan dengan brand engineering Anda
+$engineeringBrands = DB::table('brand_partner')
+    ->where('type', 'brand')
+    ->whereIn('nama', $engineeringBrandNames)
+    ->get();
+
+// Principal Brands untuk Engineering - sesuai urutan yang Anda minta
+$engineeringPrincipalNames = ['Trident', 'Zls', 'Besmak', 'Prolab', 'Labomed', 'Ika', 'Pce', 'Bdo', 'Ciqtek', 'Trimble', 'Wingtra', 'Yellow'];
+$engineeringPrincipals = collect(); // Buat collection kosong
+
+// Ambil data sesuai urutan yang diminta untuk Engineering
+foreach($engineeringPrincipalNames as $principalName) {
+    $principal = DB::table('brand_partner')
+        ->where('type', 'principal')
+        ->where('nama', $principalName)
+        ->first();
+    
+    if($principal) {
+        $engineeringPrincipals->push($principal);
+    }
+}
+
+// === ARKAMAYA SCIENCE AND HEALTH PRODUCT ===
+// House Brands untuk Science (MICROME)
+$scienceBrands = DB::table('brand_partner')
+    ->where('type', 'brand')
+    ->where('nama', 'microme')
+    ->get();
+
+// Principal Brands untuk Science - sesuai urutan yang Anda minta
+$sciencePrincipalNames = ['Indoray', 'Poly', 'IKA', 'Sinbe', 'Nabei', 'Hanon', 'Neo', 'Tex', 'Cryste', 'Labfreeze', 'Labspray', 'Bioreactek'];
+$sciencePrincipals = collect(); // Buat collection kosong
+
+// Ambil data sesuai urutan yang diminta untuk Science
+foreach($sciencePrincipalNames as $principalName) {
+    $principal = DB::table('brand_partner')
+        ->where('type', 'principal') // atau 'principal' sesuai dengan type di database Anda
+        ->where('nama', $principalName)
+        ->first();
+    
+    if($principal) {
+        $sciencePrincipals->push($principal);
+    }
+}
+
+// Brand MICROME khusus
 $micromeBrand = DB::table('brand_partner')
     ->where('type', 'brand')
-    ->where('nama', 'like', '%microme%')
+    ->where('nama', 'microme')
     ->first();
 
 // Ambil data tier dari database
@@ -350,13 +395,13 @@ $tiers = DB::table('distributorship_tiers')
         box-shadow: 0 6px 20px #196CA6;
     }
     
-    /* House Brands Grid */
+    /* House Brands Grid - Updated untuk tampilan tanpa border dan logo lebih besar */
     .house-brands-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
-        max-width: 800px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-bottom: 4rem;
+        max-width: 900px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -365,33 +410,34 @@ $tiers = DB::table('distributorship_tiers')
     .science-house-brands-grid {
         display: flex;
         justify-content: center;
-        margin-bottom: 3rem;
-        max-width: 400px;
+        margin-bottom: 4rem;
+        max-width: 350px;
         margin-left: auto;
         margin-right: auto;
     }
     
     .brand-item {
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        background: transparent; /* Hilangkan background */
+        padding: 2rem 1rem; /* Kurangi padding */
+        border-radius: 0; /* Hilangkan border radius */
+        box-shadow: none; /* Hilangkan shadow */
         display: flex;
         align-items: center;
         justify-content: center;
         min-height: 120px;
         transition: all 0.3s ease;
-        border: 1px solid rgba(0, 0, 0, 0.05);
+        border: none; /* Hilangkan border */
     }
     
     .brand-item:hover {
         transform: translateY(-5px);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        box-shadow: none; /* Tetap tidak ada shadow saat hover */
+        background: transparent; /* Tetap transparent */
     }
     
     .brand-logo {
         max-width: 100%;
-        max-height: 60px;
+        max-height: 120px; /* Perbesar dari 60px ke 120px */
         width: auto;
         height: auto;
         object-fit: contain;
@@ -410,47 +456,51 @@ $tiers = DB::table('distributorship_tiers')
         font-weight: 700;
         color: #2c3e50;
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 3rem;
     }
     
+    /* Engineering Principal Brands Grid - Layout sesuai gambar (4-4-3) */
     .principal-brands-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3rem 2rem;
         max-width: 1000px;
         margin: 0 auto;
+        align-items: center;
     }
     
-    /* Science Principal Brands Grid - 4 columns */
+    /* Science Principal Brands Grid - Layout sesuai gambar (4-4-4) */
     .science-principal-brands-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-        max-width: 800px;
+        gap: 3rem 2rem;
+        max-width: 1000px;
         margin: 0 auto;
+        align-items: center;
     }
     
     .principal-brand-item {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        background: transparent; /* Hilangkan background */
+        padding: 1rem 0.5rem; /* Kurangi padding */
+        border-radius: 0; /* Hilangkan border radius */
+        box-shadow: none; /* Hilangkan shadow */
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 100px;
+        min-height: 80px;
         transition: all 0.3s ease;
-        border: 1px solid rgba(0, 0, 0, 0.04);
+        border: none; /* Hilangkan border */
     }
     
     .principal-brand-item:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        box-shadow: none; /* Tetap tidak ada shadow saat hover */
+        background: transparent; /* Tetap transparent */
     }
     
     .principal-brand-logo {
         max-width: 100%;
-        max-height: 50px;
+        max-height: 80px; /* Perbesar dari 50px ke 80px */
         width: auto;
         height: auto;
         object-fit: contain;
@@ -459,7 +509,7 @@ $tiers = DB::table('distributorship_tiers')
     }
     
     .principal-brand-item:hover .principal-brand-logo {
-        transform: scale(1.03);
+        transform: scale(1.05);
     }
     
     /* Target Market Section Styles */
@@ -970,6 +1020,12 @@ $tiers = DB::table('distributorship_tiers')
         .section h3 {
             font-size: 1.5rem;
         }
+        
+        .principal-brands-grid,
+        .science-principal-brands-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem 1.5rem;
+        }
     }
     
     @media (max-width: 768px) {
@@ -1004,32 +1060,28 @@ $tiers = DB::table('distributorship_tiers')
         }
         
         .house-brands-grid {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
         }
         
-        .science-principal-brands-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
+        .science-principal-brands-grid,
         .principal-brands-grid {
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 1rem;
         }
         
         .brand-item,
         .principal-brand-item {
-            padding: 1.5rem 1rem;
-            min-height: 100px;
+            padding: 1rem 0.5rem;
+            min-height: 80px;
         }
         
         .brand-logo {
-            max-height: 50px;
+            max-height: 100px;
         }
         
         .principal-brand-logo {
-            max-height: 40px;
+            max-height: 70px;
         }
         
         .sector-row {
@@ -1125,31 +1177,27 @@ $tiers = DB::table('distributorship_tiers')
         
         .house-brands-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 1.5rem;
         }
         
-        .science-principal-brands-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-        
+        .science-principal-brands-grid,
         .principal-brands-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+            gap: 1.5rem 0.75rem;
         }
         
         .brand-item,
         .principal-brand-item {
-            padding: 1rem;
-            min-height: 80px;
+            padding: 0.5rem;
+            min-height: 70px;
         }
         
         .brand-logo {
-            max-height: 40px;
+            max-height: 80px;
         }
         
         .principal-brand-logo {
-            max-height: 35px;
+            max-height: 60px;
         }
         
         .market-item {
@@ -1220,8 +1268,6 @@ $tiers = DB::table('distributorship_tiers')
 
 <!-- Enhanced Header Start -->
 <div class="hero-header">
-
-    
     <!-- Background Image -->
     <div class="hero-background"></div>
     
@@ -1311,12 +1357,12 @@ $tiers = DB::table('distributorship_tiers')
                         <div class="engineering-section" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
                             <h3 class="division-title">Arkamaya Engineering Product</h3>
                             <div class="text-center">
-                                <span class="brand-badge">Managing {{ $brands->whereNotIn('nama', ['microme'])->count() }} House Brands</span>
+                                <span class="brand-badge">Managing {{ $engineeringBrands->count() }} House Brands</span>
                             </div>
                             
                             <!-- House Brands Grid -->
                             <div class="house-brands-grid">
-                                @foreach($brands->whereNotIn('nama', ['microme'])->take(3) as $brand)
+                                @foreach($engineeringBrands->take(3) as $brand)
                                 <div class="brand-item" data-aos="zoom-in" data-aos-delay="{{ 600 + $loop->index * 100 }}" data-aos-duration="600">
                                     <a href="{{ $brand->url ?? '#' }}" class="partner-item" target="_blank" rel="noopener noreferrer">
                                         <img src="{{ asset($brand->gambar) }}" alt="{{ $brand->nama }}" title="{{ $brand->nama }}" class="brand-logo">
@@ -1329,7 +1375,7 @@ $tiers = DB::table('distributorship_tiers')
                             <div data-aos="fade-up" data-aos-delay="900" data-aos-duration="800">
                                 <h4 class="principal-brands-title">Principal Brands</h4>
                                 <div class="principal-brands-grid">
-                                    @foreach($principals as $principal)
+                                    @foreach($engineeringPrincipals as $principal)
                                     <div class="principal-brand-item" data-aos="fade-up" data-aos-delay="{{ 1000 + $loop->index * 50 }}" data-aos-duration="500">
                                         <a href="{{ $principal->url ?? '#' }}" class="distributor-link">
                                             <img 
@@ -1349,30 +1395,25 @@ $tiers = DB::table('distributorship_tiers')
                         <div class="science-section" data-aos="fade-up" data-aos-delay="1600" data-aos-duration="800">
                             <h3 class="division-title">Arkamaya Science and Health Product</h3>
                             <div class="text-center">
-                                <span class="brand-badge science-badge">Managing 1 House Brands</span>
+                                <span class="brand-badge science-badge">Managing {{ $scienceBrands->count() }} House Brands</span>
                             </div>
                             
                             <!-- Science House Brands Grid -->
                             <div class="science-house-brands-grid">
-                                @if($micromeBrand)
+                                @foreach($scienceBrands as $brand)
                                 <div class="brand-item" data-aos="zoom-in" data-aos-delay="1700" data-aos-duration="600">
-                                    <a href="{{ $micromeBrand->url ?? '#' }}" class="partner-item" target="_blank" rel="noopener noreferrer">
-                                        <img src="{{ asset($micromeBrand->gambar) }}" alt="{{ $micromeBrand->nama }}" title="{{ $micromeBrand->nama }}" class="brand-logo">
+                                    <a href="{{ $brand->url ?? '#' }}" class="partner-item" target="_blank" rel="noopener noreferrer">
+                                        <img src="{{ asset($brand->gambar) }}" alt="{{ $brand->nama }}" title="{{ $brand->nama }}" class="brand-logo">
                                     </a>
                                 </div>
-                                @else
-                                <!-- Default MICROME jika tidak ada di database -->
-                                <div class="brand-item" data-aos="zoom-in" data-aos-delay="1700" data-aos-duration="600">
-                                    <img src="{{ asset('assets/img/brands/microme.png') }}" alt="MICROME" class="brand-logo">
-                                </div>
-                                @endif
+                                @endforeach
                             </div>
                             
                             <!-- Science Principal Brands Section -->
                             <div data-aos="fade-up" data-aos-delay="1800" data-aos-duration="800">
                                 <h4 class="principal-brands-title">Principal Brands</h4>
                                 <div class="science-principal-brands-grid">
-                                    @foreach($distributors->take(12) as $distributor)
+                                    @foreach($sciencePrincipals->take(12) as $distributor)
                                     <div class="principal-brand-item" data-aos="fade-up" data-aos-delay="{{ 1900 + $loop->index * 100 }}" data-aos-duration="500">
                                         <a href="{{ $distributor->url ?? '#' }}" class="distributor-link">
                                             <img 

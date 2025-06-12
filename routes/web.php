@@ -47,6 +47,8 @@ use App\Http\Controllers\Distribution\Profile\ProfileDistributorController;
 use App\Http\Controllers\Member\ProductController;
 use App\Http\Controllers\EndUserController; 
 use Illuminate\Http\Request;
+use App\Http\Controllers\ContactController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/about', [HomeController::class, 'about'])->name('about');
     Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact');
     // Product routes
     Route::get('/products', [ProdukMemberController::class, 'index'])->name('product.index');
     Route::get('/products/category/{id}', [ProdukMemberController::class, 'index'])->name('product.category');

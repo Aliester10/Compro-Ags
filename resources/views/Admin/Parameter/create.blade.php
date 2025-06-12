@@ -11,7 +11,7 @@
             <form action="{{ route('parameter.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                @include('admin.parameter.partials.form')
+                @include('Admin.Parameter.partials.form')
 
                 <button type="submit" class="btn btn-primary">Buat</button>
             </form>

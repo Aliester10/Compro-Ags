@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CompanyParameter extends Model
+class ComproParameter extends Model
 {
     use HasFactory;
 
@@ -34,10 +34,5 @@ class CompanyParameter extends Model
         'website',
         'nomor_induk_berusaha',
         'surat_keterangan'
-    ];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 }

@@ -88,7 +88,7 @@
                         </div>
                         
                         <div class="register-links">
-                            <p>New Here? Sign Up To Become A <a href="{{ route('distributors.register') }}" class="register-link">Distributor</a></p>
+                            <p>New Here? Sign Up To Become A <a href="{{ route('distributorship.requirements') }}" class="register-link">Distributor</a></p>
                             <p>Create one as an <a href="{{ route('enduser.register') }}?type=end-user" class="register-link">End User</a></p>
                         </div>
                     </div>

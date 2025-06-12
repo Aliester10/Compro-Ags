@@ -299,6 +299,17 @@
         font-size: 0.875rem;
     }
     
+    .info-text a {
+        color: #3b82f6;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .info-text a:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+    
     /* Social Media Styles */
     .social-section {
         margin-top: 3rem;
@@ -513,7 +524,7 @@
             We'd love to hear from you
         </p>
         <p class="hero-year" data-aos="fade-up" data-aos-delay="700" data-aos-duration="1000">
-            2025
+            {{ date('Y') }}
         </p>
     </div>
     
@@ -575,46 +586,137 @@
                 </form>
             </div>
             
-            <!-- Contact Information -->
+            <!-- Contact Information - Updated untuk menggunakan data dari database -->
             <div class="contact-info" data-aos="fade-up" data-aos-delay="400">
-                <h3 class="company-title">PT Advancya Cipta Solution</h3>
+                <h3 class="company-title">
+                    {{ $companyInfo->nama_perusahaan ?? 'PT Advancya Cipta Solution' }}
+                </h3>
                 
+                @if($companyInfo && $companyInfo->alamat)
                 <div class="info-item">
                     <i class="fas fa-map-marker-alt info-icon"></i>
                     <div class="info-content">
                         <p class="info-title">Head Office:</p>
-                        <p class="info-text">Jl. Kemang Selatan VIII No.17A, RT.3/RW.1, Bangka, Kec. Mampang Prapatan, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12560</p>
+                        <p class="info-text">{{ $companyInfo->alamat }}</p>
                     </div>
                 </div>
+                @endif
                 
+                @if($companyInfo && ($companyInfo->whatsapp_1 || $companyInfo->no_wa))
                 <div class="info-item">
                     <i class="fas fa-phone info-icon"></i>
                     <div class="info-content">
                         <p class="info-title">WhatsApp:</p>
-                        <p class="info-text">+62 821-8877-8525</p>
+                        <p class="info-text">
+                            <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $companyInfo->whatsapp_1 ?? $companyInfo->no_wa) }}" target="_blank">
+                                {{ $companyInfo->whatsapp_1 ?? $companyInfo->no_wa }}
+                            </a>
+                        </p>
                     </div>
                 </div>
+                @endif
                 
+                @if($companyInfo && $companyInfo->email)
                 <div class="info-item">
                     <i class="fas fa-envelope info-icon"></i>
                     <div class="info-content">
-                        <p class="info-title">Address:</p>
-                        <p class="info-text">PT ADVANCYA CIPTA SOLUTION, JL KEMANG SELATAN VIII NO 17A, BANGKA MAMPANG PRAPATAN, JAKARTA SELATAN, DKI JAKARTA, ID 12560</p>
+                        <p class="info-title">Email:</p>
+                        <p class="info-text">
+                            <a href="mailto:{{ $companyInfo->email }}">{{ $companyInfo->email }}</a>
+                        </p>
                     </div>
                 </div>
+                @endif
                 
+                @if($companyInfo && $companyInfo->no_telepon)
+                <div class="info-item">
+                    <i class="fas fa-phone-alt info-icon"></i>
+                    <div class="info-content">
+                        <p class="info-title">Phone:</p>
+                        <p class="info-text">
+                            <a href="tel:{{ str_replace(['+', '-', ' '], '', $companyInfo->no_telepon) }}">
+                                {{ $companyInfo->no_telepon }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                @endif
+                
+                @if($companyInfo && $companyInfo->whatsapp_2)
+                <div class="info-item">
+                    <i class="fas fa-phone info-icon"></i>
+                    <div class="info-content">
+                        <p class="info-title">WhatsApp 2:</p>
+                        <p class="info-text">
+                            <a href="https://wa.me/{{ str_replace(['+', '-', ' '], '', $companyInfo->whatsapp_2) }}" target="_blank">
+                                {{ $companyInfo->whatsapp_2 }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                @endif
+                
+                @if($companyInfo && $companyInfo->website)
+                <div class="info-item">
+                    <i class="fas fa-globe info-icon"></i>
+                    <div class="info-content">
+                        <p class="info-title">Website:</p>
+                        <p class="info-text">
+                            <a href="{{ $companyInfo->website }}" target="_blank">
+                                {{ $companyInfo->website }}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                @endif
+                
+                @if($companyInfo && $companyInfo->maps)
+                <div class="info-item">
+                    <i class="fas fa-map info-icon"></i>
+                    <div class="info-content">
+                        <p class="info-title">Location Map:</p>
+                        <p class="info-text">
+                            <a href="{{ $companyInfo->maps }}" target="_blank">View on Maps</a>
+                        </p>
+                    </div>
+                </div>
+                @endif
+                
+                @if($companyInfo && $companyInfo->nomor_induk_berusaha)
                 <div class="info-item">
                     <i class="fas fa-building info-icon"></i>
                     <div class="info-content">
-                        <p class="info-title">Komite Office:</p>
-                        <p class="info-text">RSBB Complex Area E-009</p>
+                        <p class="info-title">Business Registration Number:</p>
+                        <p class="info-text">{{ $companyInfo->nomor_induk_berusaha }}</p>
                     </div>
                 </div>
+                @endif
                 
                 <!-- Social Media -->
                 <div class="social-section">
                     <h4 class="social-title">Social Media</h4>
                     <div class="social-links">
+                        @if($companyInfo && $companyInfo->instagram)
+                        <a href="{{ $companyInfo->instagram }}" class="social-link social-instagram" target="_blank" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        @endif
+                        
+                        @if($companyInfo && $companyInfo->linkedin)
+                        <a href="{{ $companyInfo->linkedin }}" class="social-link social-linkedin" target="_blank" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        @endif
+                        
+                        @if($companyInfo && $companyInfo->ekatalog)
+                        <a href="{{ $companyInfo->ekatalog }}" class="social-link social-facebook" target="_blank" title="E-Katalog">
+                            <i class="fas fa-store"></i>
+                        </a>
+                        @endif
+                        
+                        <!-- Tambahkan social media lain jika diperlukan -->
+                        @if(!$companyInfo || (!$companyInfo->instagram && !$companyInfo->linkedin && !$companyInfo->ekatalog))
+                        <!-- Default social media jika tidak ada data -->
                         <a href="#" class="social-link social-facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
@@ -630,6 +732,7 @@
                         <a href="#" class="social-link social-instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -693,4 +796,4 @@
     }
 </script>
 
-@endsection 
+@endsection

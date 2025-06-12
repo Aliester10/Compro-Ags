@@ -42,13 +42,28 @@ class CompanyParameterController extends Controller
             'visi' => 'nullable|string',
             'misi' => 'nullable|string',
             'about_gambar' => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|max:2048',
             'instagram' => 'nullable|string',
             'linkedin' => 'nullable|string',
             'ekatalog' => 'nullable|string',
+            'whatsapp_1' => 'nullable|string',
+            'whatsapp_2' => 'nullable|string',
+            'visimisi_1' => 'nullable|string',
+            'visimisi_2' => 'nullable|string',
+            'visimisi_3' => 'nullable|string',
+            'website' => 'nullable|url',
+            'nomor_induk_berusaha' => 'nullable|string',
+            'surat_keterangan' => 'nullable|string',
         ]);
 
+        // Handle about_gambar file upload
         if ($request->hasFile('about_gambar')) {
             $validated['about_gambar'] = $request->file('about_gambar')->store('uploads/about', 'public');
+        }
+
+        // Handle logo file upload
+        if ($request->hasFile('logo')) {
+            $validated['logo'] = $request->file('logo')->store('uploads/logo', 'public');
         }
 
         CompanyParameter::create($validated);
@@ -90,18 +105,27 @@ class CompanyParameterController extends Controller
             'visi' => 'nullable|string',
             'misi' => 'nullable|string',
             'about_gambar' => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|max:2048',
             'instagram' => 'nullable|string',
             'linkedin' => 'nullable|string',
             'ekatalog' => 'nullable|string',
+            'whatsapp_1' => 'nullable|string',
+            'whatsapp_2' => 'nullable|string',
+            'visimisi_1' => 'nullable|string',
+            'visimisi_2' => 'nullable|string',
+            'visimisi_3' => 'nullable|string',
+            'website' => 'nullable|url',
+            'nomor_induk_berusaha' => 'nullable|string',
+            'surat_keterangan' => 'nullable|string',
         ]);
 
         $companyParameter = CompanyParameter::findOrFail($id);
 
         // Handle about_gambar file upload and removal
         if ($request->hasFile('about_gambar')) {
-            // Validasi file gambar (opsional)
+            // Validasi file gambar
             $request->validate([
-                'about_gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan aturan
+                'about_gambar' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
         
             // Hapus file lama jika ada
@@ -109,13 +133,25 @@ class CompanyParameterController extends Controller
                 Storage::disk('public')->delete($companyParameter->about_gambar);
             }
         
-            // Simpan file baru dengan nama unik
-            $path = $request->file('about_gambar')->store('uploads/about', 'public');
-        
-            // Simpan path ke database
-            $companyParameter->update(['about_gambar' => $path]);
+            // Simpan file baru
+            $validated['about_gambar'] = $request->file('about_gambar')->store('uploads/about', 'public');
         }
+
+        // Handle logo file upload and removal
+        if ($request->hasFile('logo')) {
+            // Validasi file logo
+            $request->validate([
+                'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
         
+            // Hapus file lama jika ada
+            if ($companyParameter->logo) {
+                Storage::disk('public')->delete($companyParameter->logo);
+            }
+        
+            // Simpan file baru
+            $validated['logo'] = $request->file('logo')->store('uploads/logo', 'public');
+        }
 
         $companyParameter->update($validated);
 
@@ -129,12 +165,14 @@ class CompanyParameterController extends Controller
     {
         $companyParameter = CompanyParameter::findOrFail($id);
 
-
-
-
         // Delete about_gambar if exists
         if ($companyParameter->about_gambar) {
-            Storage::delete('public/' . $companyParameter->about_gambar);
+            Storage::disk('public')->delete($companyParameter->about_gambar);
+        }
+
+        // Delete logo if exists
+        if ($companyParameter->logo) {
+            Storage::disk('public')->delete($companyParameter->logo);
         }
 
         $companyParameter->delete();
