@@ -6,6 +6,9 @@
         // This query is already being passed from the controller as $ecommerces
         // We're keeping this line for the navbar only as a fallback
         $ecommercePartners = $ecommerces ?? \App\Models\BrandPartner::where('type', 'ecommerce')->get();
+        
+        // Ambil semua kategori beserta subcategori-nya untuk dropdown menu Product
+        $kategoris = \App\Models\Kategori::with('subKategoris')->get();
     @endphp
         
 <!-- Font loading and default font setup -->
@@ -28,6 +31,97 @@
         stroke: #ffffff !important;
     }
 
+    /* CRITICALLY IMPORTANT: Override the white text for dropdown menu items */
+    #product-dropdown * {
+        color: #000000 !important;
+    }
+    
+    #product-dropdown a, 
+    #product-dropdown span, 
+    #product-dropdown h4, 
+    #product-dropdown .product-dropdown-category-title,
+    #product-dropdown .product-dropdown-subcategory a {
+        color: #000000 !important;
+    }
+
+    /* Dropdown menu styling */
+    #product-container {
+        position: relative;
+    }
+
+    #product-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: max-content;
+        min-width: 600px;
+        z-index: 1000;
+    }
+    
+    /* PENTING: Tampilkan dropdown saat hover pada desktop */
+    @media (min-width: 768px) {
+        #product-container:hover #product-dropdown {
+            display: block;
+        }
+    }
+
+    /* Triangle pointer styling */
+    #product-dropdown:before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid white;
+    }
+
+    /* Product dropdown styling */
+    .product-dropdown-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .product-dropdown-category {
+        min-width: 300px;
+    }
+    
+    .product-dropdown-category-title {
+        font-weight: 600;
+        color: #000000 !important;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .product-dropdown-subcategory {
+        margin-bottom: 5px;
+    }
+    
+    .product-dropdown-subcategory a {
+        color: #000000 !important; /* Mengubah warna menjadi hitam */
+        font-weight: normal;
+        font-size: 0.95rem;
+        transition: color 0.2s ease;
+        display: block;
+        padding: 3px 0;
+    }
+    
+    .product-dropdown-subcategory a:hover {
+        color: #007bff !important;
+    }
+
+    /* Existing ecommerce dropdown styling */
     .ecommerce-dropdown {
         opacity: 0;
         visibility: hidden;
@@ -244,6 +338,30 @@
         .circular-search-container.active {
             width: 180px;
         }
+        
+        #product-dropdown {
+            position: static;
+            transform: none;
+            min-width: 100%;
+            box-shadow: none;
+            border-radius: 0;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        
+        #product-dropdown:before {
+            display: none;
+        }
+        
+        .product-dropdown-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .product-dropdown-category {
+            min-width: 100%;
+        }
     }
 </style>
     
@@ -276,8 +394,48 @@
                 <li class="mx-4 my-6 md:my-0">
                     <a href="{{ route('activity') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Our Activities</a>
                 </li>
-                <li class="mx-4 my-6 md:my-0">
-                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Product</a>
+                <li class="mx-4 my-6 md:my-0 relative" id="product-container">
+                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="product-toggle">Product</a>
+                    
+                    <!-- Product Dropdown Menu -->
+                    <div id="product-dropdown">
+                        <div class="product-dropdown-container">
+                            @foreach($kategoris->chunk(ceil($kategoris->count() / 2)) as $kategoriChunk)
+                                <div class="product-dropdown-column">
+                                    @foreach($kategoriChunk as $kategori)
+                                        <div class="product-dropdown-category">
+                                            <h4 class="product-dropdown-category-title">{{ $kategori->nama }}</h4>
+                                            @foreach($kategori->subKategoris as $subKategori)
+                                                <div class="product-dropdown-subcategory">
+                                                    <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
+                                                        {{ $subKategori->name }}
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Mobile Product Dropdown -->
+                    <div id="mobile-product-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
+                        @foreach($kategoris as $kategori)
+                            <div class="mb-3">
+                                <h4 class="font-semibold text-white border-b border-gray-600 pb-1 mb-1">{{ $kategori->nama }}</h4>
+                                <div class="pl-2">
+                                    @foreach($kategori->subKategoris as $subKategori)
+                                        <div class="py-1">
+                                            <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
+                                                {{ $subKategori->name }}
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </li>
                 <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
                     <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">E-Commerce</a>
@@ -378,25 +536,63 @@
 </div>
 
 <script>
-    function Menu(e) {
-        let list = document.querySelector('ul');
-        if (e.name === 'menu') {
-            e.name = "close";
-            list.classList.add('top-[80px]');
-            list.classList.add('opacity-100');
-        } else {
-            e.name = "menu";
-            list.classList.remove('top-[80px]');
-            list.classList.remove('opacity-100');
-        }
-    }
-
+    // Menerapkan warna hitam untuk semua teks dalam dropdown menu (tambahan inline script)
     document.addEventListener('DOMContentLoaded', function() {
+        // Hapus style yang menyebabkan warna putih pada teks dropdown
+        var dropdown = document.getElementById('product-dropdown');
+        if (dropdown) {
+            var links = dropdown.getElementsByTagName('a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.color = '#000000';
+            }
+            
+            var headings = dropdown.getElementsByTagName('h4');
+            for (var i = 0; i < headings.length; i++) {
+                headings[i].style.color = '#000000';
+            }
+        }
+        
+        // Fungsi Menu asli
+        function Menu(e) {
+            let list = document.querySelector('ul');
+            if (e.name === 'menu') {
+                e.name = "close";
+                list.classList.add('top-[80px]');
+                list.classList.add('opacity-100');
+            } else {
+                e.name = "menu";
+                list.classList.remove('top-[80px]');
+                list.classList.remove('opacity-100');
+            }
+        }
+        
+        // Product dropdown functionality - UPDATED FOR MOBILE ONLY
+        const productContainer = document.getElementById('product-container');
+        const productToggle = document.getElementById('product-toggle');
+        const productDropdown = document.getElementById('product-dropdown');
+        const mobileProductDropdown = document.getElementById('mobile-product-dropdown');
+        
+        // Toggle dropdown on click for mobile only
+        if (productContainer && productToggle && mobileProductDropdown) {
+            let isProductDropdownOpen = false;
+            productToggle.addEventListener('click', function(e) {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    if (isProductDropdownOpen) {
+                        mobileProductDropdown.classList.add('hidden');
+                    } else {
+                        mobileProductDropdown.classList.remove('hidden');
+                    }
+                    isProductDropdownOpen = !isProductDropdownOpen;
+                }
+            });
+        }
+        
+        // E-commerce dropdown elements
         const ecommerceContainer = document.getElementById('ecommerce-container');
         const ecommerceToggle = document.getElementById('ecommerce-toggle');
         const desktopEcommerceDropdown = document.getElementById('desktop-ecommerce-dropdown');
         const mobileEcommerceDropdown = document.getElementById('mobile-ecommerce-dropdown');
-        const mainNav = document.getElementById('mainNav');
         
         // Profile dropdown functionality
         const profileToggle = document.getElementById('profile-toggle');
@@ -541,6 +737,19 @@
             });
         }
     });
+    
+    function Menu(e) {
+        let list = document.querySelector('ul');
+        if (e.name === 'menu') {
+            e.name = "close";
+            list.classList.add('top-[80px]');
+            list.classList.add('opacity-100');
+        } else {
+            e.name = "menu";
+            list.classList.remove('top-[80px]');
+            list.classList.remove('opacity-100');
+        }
+    }
 </script>
 
 <!-- navbar -->

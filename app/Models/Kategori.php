@@ -22,6 +22,7 @@ class Kategori extends Model
     {
         return $this->hasMany(Produk::class);
     }
+    
     /**
      * Get the sub kategoris for the kategori.
      */
@@ -29,5 +30,12 @@ class Kategori extends Model
     {
         return $this->hasMany(BidangPerusahaan::class, 'kategori_id');
     }
+    
+    /**
+     * Get all subkategori related to this kategori
+     */
+    public function subKategoris()
+    {
+        return $this->hasMany(SubKategori::class, 'kategori_id');
+    }
 }
-

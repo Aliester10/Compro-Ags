@@ -1,4 +1,4 @@
-<!-- navbar start -->
+<!-- Navbar Start-->
 
 <body class="overflow-x-hidden font-WorkSans">
     @php
@@ -6,6 +6,9 @@
         // This query is already being passed from the controller as $ecommerces
         // We're keeping this line for the navbar only as a fallback
         $ecommercePartners = $ecommerces ?? \App\Models\BrandPartner::where('type', 'ecommerce')->get();
+        
+        // Ambil semua kategori beserta subcategori-nya untuk dropdown menu Product
+        $kategoris = \App\Models\Kategori::with('subKategoris')->get();
     @endphp
         
 <!-- Font loading and default font setup -->
@@ -15,26 +18,110 @@
         font-family: 'Work Sans', sans-serif;
     }
 
-    /* Set all navbar text to BLACK instead of white */
+    /* Set all navbar text to white */
     nav .navbar-content a,
     nav .navbar-content span,
     nav ion-icon,
     nav #ecommerce-toggle,
     nav svg {
-        color: #000000 !important;
+        color: #ffffff !important;
     }
     
     nav svg {
-        stroke: #000000 !important;
+        stroke: #ffffff !important;
     }
 
-    /* E-commerce dropdown text in black */
-    #desktop-ecommerce-dropdown a,
-    #desktop-ecommerce-dropdown span,
-    #desktop-ecommerce-dropdown div {
+    /* CRITICALLY IMPORTANT: Override the white text for dropdown menu items */
+    #product-dropdown * {
+        color: #000000 !important;
+    }
+    
+    #product-dropdown a, 
+    #product-dropdown span, 
+    #product-dropdown h4, 
+    #product-dropdown .product-dropdown-category-title,
+    #product-dropdown .product-dropdown-subcategory a {
         color: #000000 !important;
     }
 
+    /* Dropdown menu styling */
+    #product-container {
+        position: relative;
+    }
+
+    #product-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: max-content;
+        min-width: 600px;
+        z-index: 1000;
+    }
+    
+    /* PENTING: Tampilkan dropdown saat hover pada desktop */
+    @media (min-width: 768px) {
+        #product-container:hover #product-dropdown {
+            display: block;
+        }
+    }
+
+    /* Triangle pointer styling */
+    #product-dropdown:before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid white;
+    }
+
+    /* Product dropdown styling */
+    .product-dropdown-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .product-dropdown-category {
+        min-width: 300px;
+    }
+    
+    .product-dropdown-category-title {
+        font-weight: 600;
+        color: #000000 !important;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .product-dropdown-subcategory {
+        margin-bottom: 5px;
+    }
+    
+    .product-dropdown-subcategory a {
+        color: #000000 !important; /* Mengubah warna menjadi hitam */
+        font-weight: normal;
+        font-size: 0.95rem;
+        transition: color 0.2s ease;
+        display: block;
+        padding: 3px 0;
+    }
+    
+    .product-dropdown-subcategory a:hover {
+        color: #007bff !important;
+    }
+
+    /* Existing ecommerce dropdown styling */
     .ecommerce-dropdown {
         opacity: 0;
         visibility: hidden;
@@ -135,6 +222,13 @@
         }
     }
     
+    /* Membuat teks dan ikon di dropdown profile menjadi hitam */
+    #profile-dropdown .profile-menu-item,
+    #profile-dropdown .profile-menu-item svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+    }
+
     .profile-menu-item {
         display: flex;
         align-items: center;
@@ -161,7 +255,7 @@
         margin: 0.25rem 0;
     }
     
-    /* Improved Circular Search Styling with BLACK theme */
+    /* Improved Circular Search Styling */
     .circular-search-container {
         position: relative;
         display: flex;
@@ -182,7 +276,7 @@
     }
 
     .circular-search-button {
-        background-color: rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.2);
         border: none;
         border-radius: 50%;
         min-width: 40px;
@@ -198,23 +292,23 @@
     }
 
     .circular-search-button:hover {
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(255, 255, 255, 0.3);
     }
 
     .circular-search-icon {
         width: 20px;
         height: 20px;
-        stroke: #000000;
+        stroke: white;
         stroke-width: 2px;
     }
 
     .circular-search-input {
-        background-color: rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.2);
+        background-color: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 20px;
         padding: 8px 40px 8px 16px;
         width: 100%;
-        color: #000000;
+        color: white;
         font-size: 14px;
         opacity: 0;
         position: absolute;
@@ -230,13 +324,13 @@
 
     .circular-search-input:focus {
         outline: none;
-        background-color: rgba(0, 0, 0, 0.07);
-        border-color: rgba(0, 0, 0, 0.3);
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     }
 
     .circular-search-input::placeholder {
-        color: rgba(0, 0, 0, 0.7);
+        color: rgba(255, 255, 255, 0.7);
     }
 
     /* Responsive adjustments */
@@ -244,37 +338,48 @@
         .circular-search-container.active {
             width: 180px;
         }
+        
+        #product-dropdown {
+            position: static;
+            transform: none;
+            min-width: 100%;
+            box-shadow: none;
+            border-radius: 0;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        
+        #product-dropdown:before {
+            display: none;
+        }
+        
+        .product-dropdown-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .product-dropdown-category {
+            min-width: 100%;
+        }
     }
 </style>
     
+<!-- top bar start -->
 <div class="absolute top-0 left-0 right-0 z-50 w-full">
     <div class="w-full bg-gray-800 bg-opacity-80 backdrop-blur-md py-2 px-4 text-center">
-        <h1 class="text-black font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
+        <h1 class="text-white font-Work Sans text-sm md:text-base">{{ $compro->nama_perusahaan }}</h1>
     </div>
-    <!-- Navbar with black text instead of white -->
+<!-- top bar end -->
+
+
+    <!-- Navbar with white text -->
 <nav class="px-4 pb-4 pt-0 bg-transparent transition-all duration-300" id="mainNav">
         <div class="flex items-center justify-between relative navbar-content" id="navbarContent">
             <div class="flex items-center">
-              <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/ags-icon-black.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
+                <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/AGS Logo-01.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
             </div>
             <div class="flex items-center">
-                <!-- Mobile-only circular search button -->
-                <div class="md:hidden mr-4">
-                    <div class="circular-search-container" id="mobileSearchContainer">
-                        <form action="{{ route('products.search') }}" method="GET" class="circular-search-form" id="mobileSearchForm">
-                            <input type="search" 
-                                name="query"
-                                class="circular-search-input" 
-                                id="mobileSearchInput"
-                                placeholder="Search products..." />
-                            <button type="button" class="circular-search-button" id="mobileSearchToggle">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="circular-search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </button>
-                        </form>
-                    </div>
-                </div>
                 <span class="text-3xl cursor-pointer md:hidden block z-20">
                     <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
                 </span>
@@ -289,19 +394,57 @@
                 <li class="mx-4 my-6 md:my-0">
                     <a href="{{ route('activity') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Our Activities</a>
                 </li>
-                <li class="mx-4 my-6 md:my-0">
-                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Product</a>
+                <li class="mx-4 my-6 md:my-0 relative" id="product-container">
+                    <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="product-toggle">Product</a>
+                    
+                    <!-- Product Dropdown Menu -->
+                    <div id="product-dropdown">
+                        <div class="product-dropdown-container">
+                            @foreach($kategoris->chunk(ceil($kategoris->count() / 2)) as $kategoriChunk)
+                                <div class="product-dropdown-column">
+                                    @foreach($kategoriChunk as $kategori)
+                                        <div class="product-dropdown-category">
+                                            <h4 class="product-dropdown-category-title">{{ $kategori->nama }}</h4>
+                                            @foreach($kategori->subKategoris as $subKategori)
+                                                <div class="product-dropdown-subcategory">
+                                                    <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
+                                                        {{ $subKategori->name }}
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Mobile Product Dropdown -->
+                    <div id="mobile-product-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
+                        @foreach($kategoris as $kategori)
+                            <div class="mb-3">
+                                <h4 class="font-semibold text-white border-b border-gray-600 pb-1 mb-1">{{ $kategori->nama }}</h4>
+                                <div class="pl-2">
+                                    @foreach($kategori->subKategoris as $subKategori)
+                                        <div class="py-1">
+                                            <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
+                                                {{ $subKategori->name }}
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </li>
                 <li class="mx-4 my-6 md:my-0 relative group" id="ecommerce-container">
-                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">
-                        E-Commerce
-                    </a>
-                    <!-- Updated desktop ecommerce dropdown with fixed width and height and BLACK text -->
+                    <a href="#" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="ecommerce-toggle">E-Commerce</a>
+                    <!-- Updated desktop ecommerce dropdown with fixed width and height -->
                     <div id="desktop-ecommerce-dropdown" class="hidden mt-2 z-50">
-                        <div class="ecommerce-partner-container text-black">
+                        <div class="ecommerce-partner-container">
                             @foreach($ecommercePartners as $partner)
                                 <div class="ecommerce-partner-item">
-                                    <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity text-black">
+                                    <a href="{{ $partner->url ?? '#' }}" class="hover:opacity-80 transition-opacity">
                                         <img src="{{ asset($partner->gambar) }}" alt="{{ $partner->nama }}" class="ecommerce-partner-img">
                                     </a>
                                 </div>
@@ -326,12 +469,11 @@
                         </div>
                     </div>
                 </li>
-                
-                                <!-- Contact Us Menu Item -->
+                <!-- Contact Us Menu Item -->
                 <li class="mx-4 my-6 md:my-0">
                     <a href="{{ route('contact') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold">Contact Us</a>
                 </li>
-
+                    
                 <!-- Profile icon with dropdown menu -->
                 <li class="mx-2 my-6 md:my-0 relative" id="profile-container">
                     @auth
@@ -371,8 +513,8 @@
                     @endauth
                 </li>
                     
-                <!-- Desktop circular search button -->
-                <li class="mx-2 my-6 md:my-0 hidden md:block">
+                <!-- New Circular Search Button with Fixed Styling -->
+                <li class="mx-2 my-6 md:my-0">
                     <div class="circular-search-container" id="searchContainer">
                         <form action="{{ route('products.search') }}" method="GET" class="circular-search-form" id="searchForm">
                             <input type="search" 
@@ -394,25 +536,63 @@
 </div>
 
 <script>
-    function Menu(e) {
-        let list = document.querySelector('ul');
-        if (e.name === 'menu') {
-            e.name = "close";
-            list.classList.add('top-[80px]');
-            list.classList.add('opacity-100');
-        } else {
-            e.name = "menu";
-            list.classList.remove('top-[80px]');
-            list.classList.remove('opacity-100');
-        }
-    }
-
+    // Menerapkan warna hitam untuk semua teks dalam dropdown menu (tambahan inline script)
     document.addEventListener('DOMContentLoaded', function() {
+        // Hapus style yang menyebabkan warna putih pada teks dropdown
+        var dropdown = document.getElementById('product-dropdown');
+        if (dropdown) {
+            var links = dropdown.getElementsByTagName('a');
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.color = '#000000';
+            }
+            
+            var headings = dropdown.getElementsByTagName('h4');
+            for (var i = 0; i < headings.length; i++) {
+                headings[i].style.color = '#000000';
+            }
+        }
+        
+        // Fungsi Menu asli
+        function Menu(e) {
+            let list = document.querySelector('ul');
+            if (e.name === 'menu') {
+                e.name = "close";
+                list.classList.add('top-[80px]');
+                list.classList.add('opacity-100');
+            } else {
+                e.name = "menu";
+                list.classList.remove('top-[80px]');
+                list.classList.remove('opacity-100');
+            }
+        }
+        
+        // Product dropdown functionality - UPDATED FOR MOBILE ONLY
+        const productContainer = document.getElementById('product-container');
+        const productToggle = document.getElementById('product-toggle');
+        const productDropdown = document.getElementById('product-dropdown');
+        const mobileProductDropdown = document.getElementById('mobile-product-dropdown');
+        
+        // Toggle dropdown on click for mobile only
+        if (productContainer && productToggle && mobileProductDropdown) {
+            let isProductDropdownOpen = false;
+            productToggle.addEventListener('click', function(e) {
+                if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    if (isProductDropdownOpen) {
+                        mobileProductDropdown.classList.add('hidden');
+                    } else {
+                        mobileProductDropdown.classList.remove('hidden');
+                    }
+                    isProductDropdownOpen = !isProductDropdownOpen;
+                }
+            });
+        }
+        
+        // E-commerce dropdown elements
         const ecommerceContainer = document.getElementById('ecommerce-container');
         const ecommerceToggle = document.getElementById('ecommerce-toggle');
         const desktopEcommerceDropdown = document.getElementById('desktop-ecommerce-dropdown');
         const mobileEcommerceDropdown = document.getElementById('mobile-ecommerce-dropdown');
-        const mainNav = document.getElementById('mainNav');
         
         // Profile dropdown functionality
         const profileToggle = document.getElementById('profile-toggle');
@@ -445,6 +625,7 @@
             });
         }
 
+        // E-commerce dropdown functionality
         if (ecommerceContainer && ecommerceToggle) {
             let isDropdownOpen = false;
             ecommerceToggle.addEventListener('click', function(e) {
@@ -505,7 +686,7 @@
             });
         }
         
-        // Desktop circular search functionality
+        // Updated Circular search functionality
         const searchToggle = document.getElementById('searchToggle');
         const searchForm = document.getElementById('searchForm');
         const searchInput = document.getElementById('searchInput');
@@ -513,7 +694,7 @@
         
         let isSearchActive = false;
         
-        if (searchToggle && searchContainer) {
+        if (searchToggle && searchForm && searchInput && searchContainer) {
             searchToggle.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -555,57 +736,24 @@
                 }
             });
         }
-        
-        // Mobile circular search functionality
-        const mobileSearchToggle = document.getElementById('mobileSearchToggle');
-        const mobileSearchForm = document.getElementById('mobileSearchForm');
-        const mobileSearchInput = document.getElementById('mobileSearchInput');
-        const mobileSearchContainer = document.getElementById('mobileSearchContainer');
-        
-        let isMobileSearchActive = false;
-        
-        if (mobileSearchToggle && mobileSearchContainer) {
-            mobileSearchToggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                if (!isMobileSearchActive) {
-                    // Activate search
-                    mobileSearchContainer.classList.add('active');
-                    setTimeout(() => {
-                        mobileSearchInput.focus();
-                    }, 300); // Wait for transition to complete
-                    isMobileSearchActive = true;
-                } else {
-                    // If input has value, submit the search
-                    if (mobileSearchInput.value.trim() !== '') {
-                        mobileSearchForm.submit();
-                    } else {
-                        // Otherwise hide the search input
-                        mobileSearchContainer.classList.remove('active');
-                        isMobileSearchActive = false;
-                    }
-                }
-            });
-            
-            // Hide search when clicking outside
-            document.addEventListener('click', function(e) {
-                if (isMobileSearchActive && !mobileSearchContainer.contains(e.target)) {
-                    mobileSearchContainer.classList.remove('active');
-                    isMobileSearchActive = false;
-                }
-            });
-            
-            // Submit search on Enter key
-            mobileSearchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (this.value.trim() !== '') {
-                        mobileSearchForm.submit();
-                    }
-                }
-            });
-        }
     });
+    
+    function Menu(e) {
+        let list = document.querySelector('ul');
+        if (e.name === 'menu') {
+            e.name = "close";
+            list.classList.add('top-[80px]');
+            list.classList.add('opacity-100');
+        } else {
+            e.name = "menu";
+            list.classList.remove('top-[80px]');
+            list.classList.remove('opacity-100');
+        }
+    }
 </script>
-<!-- Navbar End -->
+
+<!-- navbar -->
+
+</body>
+
+<!-- navbar end -->

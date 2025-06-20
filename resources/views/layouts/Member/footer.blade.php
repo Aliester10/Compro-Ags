@@ -197,7 +197,7 @@
                                 <a href="https://www.linkedin.com/company/arkamaya-for-education" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/linkedin.png') }}" alt="LinkedIn" style="width: 32px; height: 32px;"></a>
                                 <a href="https://www.facebook.com/people/Arkamaya-Guna-Saharsa/pfbid02FCpiUrJjhA61WJYtWEksdMrLnQPUFJsPJv7KGQntio6XP2hiTjAkyL49Ps2AWg8l/" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/facebook.png') }}" alt="Facebook" style="width: 32px; height: 32px;"></a>
                                 <a href="https://www.instagram.com/lifeatags" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/instagram.png') }}" alt="Instagram" style="width: 32px; height: 32px;"></a>
-                                <a href="https://www.instagram.com/lifeatags" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/tiktok.png') }}" alt="TikTok" style="width: 32px; height: 32px;"></a>
+                                <a href="https://www.tiktok.com/@lifeatags?_t=ZS-8xH6DCzSKjY&_r=1" class="me-2"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/tiktok.png') }}" alt="TikTok" style="width: 32px; height: 32px;"></a>
                                 <a href="https://www.youtube.com/@arkamayagunasaharsa"><img src="{{ asset('assets/icons/Asset Icon Social Media/real/youtube.png') }}" alt="YouTube" style="width: 32px; height: 32px;"></a>
                             </div>
                         </div>
