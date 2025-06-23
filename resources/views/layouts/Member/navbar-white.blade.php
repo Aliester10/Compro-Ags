@@ -58,7 +58,7 @@
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+        padding: 15px;
         width: max-content;
         min-width: 600px;
         z-index: 1000;
@@ -89,23 +89,30 @@
     .product-dropdown-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 12px; /* Reduced from 20px */
     }
     
     .product-dropdown-category {
         min-width: 300px;
+        margin-bottom: 3px; /* Added to reduce vertical space between categories */
     }
     
     .product-dropdown-category-title {
         font-weight: 600;
         color: #000000 !important;
-        margin-bottom: 8px;
-        padding-bottom: 4px;
+        margin-bottom: 3px; /* Reduced from 8px */
+        padding-bottom: 2px; /* Reduced from 4px */
         border-bottom: 1px solid #f0f0f0;
+        cursor: pointer; /* Added to show it's clickable */
+        transition: color 0.2s ease; /* Added for hover effect */
+    }
+    
+    .product-dropdown-category-title:hover {
+        color: #007bff !important; /* Added hover effect */
     }
     
     .product-dropdown-subcategory {
-        margin-bottom: 5px;
+        margin-bottom: 0px; /* Reduced from 5px */
     }
     
     .product-dropdown-subcategory a {
@@ -114,7 +121,8 @@
         font-size: 0.95rem;
         transition: color 0.2s ease;
         display: block;
-        padding: 3px 0;
+        padding: 1px 0; /* Reduced from 3px 0 */
+        line-height: 1.2; /* Added to make text more compact */
     }
     
     .product-dropdown-subcategory a:hover {
@@ -356,7 +364,7 @@
         
         .product-dropdown-container {
             flex-direction: column;
-            gap: 10px;
+            gap: 8px; /* Reduced from 10px for mobile */
         }
         
         .product-dropdown-category {
@@ -404,10 +412,14 @@
                                 <div class="product-dropdown-column">
                                     @foreach($kategoriChunk as $kategori)
                                         <div class="product-dropdown-category">
-                                            <h4 class="product-dropdown-category-title">{{ $kategori->nama }}</h4>
+                                            <!-- Updated to use member.product.category route -->
+                                            <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" class="product-dropdown-category-title" style="display: block; text-decoration: none;">
+                                                {{ $kategori->nama }}
+                                            </a>
                                             @foreach($kategori->subKategoris as $subKategori)
                                                 <div class="product-dropdown-subcategory">
-                                                    <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
+                                                    <!-- Updated to use member.product.bidang route -->
+                                                    <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
                                                         {{ $subKategori->name }}
                                                     </a>
                                                 </div>
@@ -422,12 +434,16 @@
                     <!-- Mobile Product Dropdown -->
                     <div id="mobile-product-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
                         @foreach($kategoris as $kategori)
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-white border-b border-gray-600 pb-1 mb-1">{{ $kategori->nama }}</h4>
+                            <div class="mb-2"> <!-- Reduced from mb-3 -->
+                                <!-- Updated to use member.product.category route -->
+                                <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" class="font-semibold text-white border-b border-gray-600 pb-1 mb-1 block">
+                                    {{ $kategori->nama }}
+                                </a>
                                 <div class="pl-2">
                                     @foreach($kategori->subKategoris as $subKategori)
-                                        <div class="py-1">
-                                            <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
+                                        <div class="py-0"> <!-- Reduced from py-1 -->
+                                            <!-- Updated to use member.product.bidang route -->
+                                            <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
                                                 {{ $subKategori->name }}
                                             </a>
                                         </div>

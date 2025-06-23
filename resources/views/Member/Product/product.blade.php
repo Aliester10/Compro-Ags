@@ -92,57 +92,9 @@
         <div class="bestseller-container">
             @if(isset($keyword) && !empty($keyword))
                 <h2>Search Results</h2>
-            @else
-                <h2>Best Seller Products.</h2>
-            @endif
-            
-            @php
-                // For search results, skip the filtering and show all returned products
-                if(isset($keyword) && !empty($keyword)) {
-                    // Directly use all products from the search
-                    $displayProducts = $produks;
-                    $productsChunks = $displayProducts->chunk(3);
-                } else {
-                    // Original bestseller filtering logic
-                    $keywords = [
-                        'air bag',
-                        'simulator',
-                        'Controller Training',
-                        'PCE Water', 
-                        'Suntex Laboratory',
-                        'basic electric',
-                        'Shielded Ground',
-                        'Automatic Kjedahl',
-                        'Automatic Multichannel',                
-                    ];
-                    
-                    // More flexible filter that looks for keywords instead of exact matches
-                    $bestSellerProducts = $produks->filter(function($product) use ($keywords) {
-                        $productName = strtolower($product->nama);
-                        foreach ($keywords as $keyword) {
-                            if (stripos($productName, strtolower($keyword)) !== false) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    });
-                    
-                    // Check if any products match the filter
-                    if ($bestSellerProducts->count() > 0) {
-                        // If products exist, chunk them
-                        $productsChunks = $bestSellerProducts->chunk(3);
-                    } else {
-                        // If no products match, create an empty collection to handle in the loop
-                        $productsChunks = collect([]);
-                    }
-                    
-                    $displayProducts = $bestSellerProducts;
-                }
-            @endphp
-            
-            @if(isset($keyword) || $displayProducts->count() > 0)
-                @foreach($productsChunks as $chunk)
-                    <!-- Products grid -->
+                
+                <!-- Display search results -->
+                @foreach($produks->chunk(3) as $chunk)
                     <div class="products-grid">
                         <div class="row">
                             @foreach($chunk as $product)
@@ -167,12 +119,115 @@
                 @endforeach
                 
                 <!-- Pagination for search results -->
-                @if(isset($keyword) && $produks->hasPages())
+                @if($produks->hasPages())
                 <div class="pagination-container">
                     {{ $produks->appends(['query' => $keyword])->links() }}
                 </div>
                 @endif
             @else
+                <h2>Best Seller Products.</h2>
+                
+                <!-- Display best seller products - no pagination -->
+                @if(isset($bestSellerProducts) && $bestSellerProducts->count() > 0)
+                    @foreach($bestSellerProducts->chunk(3) as $chunk)
+                        <div class="products-grid">
+                            <div class="row">
+                                @foreach($chunk as $product)
+                                    <div class="col-md-4 mb-4">
+                                        <div class="product-card">
+                                            <div class="product-image">
+                                            @if($product->images->count() > 0)
+                                                <img src="{{ asset($product->images->first()->gambar) }}" alt="{{ $product->nama }}">
+                                            @else
+                                                <img src="{{ asset('assets/img/default.jpg') }}" alt="{{ $product->nama }}" class="default-image">
+                                            @endif
+                                            </div>
+                                            <div class="product-details">
+                                                <h3 class="product-title">{{ $product->nama }}</h3>
+                                                <a href="{{ route('product.show', $product->id) }}" class="read-more">Read More..</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <!-- Fallback if $bestSellerProducts is not provided: use filtered products -->
+                    @php
+                    // Keywords for identifying specific products and STRICT filtering
+                    $productKeywords = [
+                        'Air Bag' => 'Air Bag Simulator And Trainer',
+                        'Logic Controller' => 'Programmable Logic Controller Training',
+                        'Penetrating Radar' => 'Shielded Ground Penetrating Radar',
+                        'pH/mV/TEMP' => 'Suntex Laboratory pH/mV/TEMP Meter 2100', 
+                        'Water Analysis' => 'PCE Water Analysis Meter',
+                        'Kjedahl' => 'Automatic Kjedahl System K1100F; SH420F; S402'
+                    ];
+                    
+                    // Create an ordered collection for the best seller products
+                    $bestSellerProducts = collect();
+                    $usedProductIds = [];
+                    
+                    // Use all products without pagination for this specific use case
+                    $allProducts = \App\Models\Produk::with('images')->get();
+                    
+                    // Find products matching our keywords - TAKE ONLY ONE MATCH PER KEYWORD
+                    foreach($productKeywords as $keyword => $displayName) {
+                        $found = false;
+                        
+                        foreach($allProducts as $product) {
+                            // Skip products we've already added (prevent duplicates)
+                            if(in_array($product->id, $usedProductIds)) {
+                                continue;
+                            }
+                            
+                            if(stripos($product->nama, $keyword) !== false) {
+                                $bestSellerProducts->push($product);
+                                $usedProductIds[] = $product->id; // Track which products we've added
+                                $found = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Limit to exactly 6 products
+                    $bestSellerProducts = $bestSellerProducts->take(6);
+                    
+                    // Chunk products for display
+                    $bestSellerChunks = $bestSellerProducts->chunk(3);
+                    @endphp
+                    
+                    @foreach($bestSellerChunks as $chunk)
+                        <div class="products-grid">
+                            <div class="row">
+                                @foreach($chunk as $product)
+                                    <div class="col-md-4 mb-4">
+                                        <div class="product-card">
+                                            <div class="product-image">
+                                            @if($product->images->count() > 0)
+                                                <img src="{{ asset($product->images->first()->gambar) }}" alt="{{ $product->nama }}">
+                                            @else
+                                                <img src="{{ asset('assets/img/default.jpg') }}" alt="{{ $product->nama }}" class="default-image">
+                                            @endif
+                                            </div>
+                                            <div class="product-details">
+                                                <h3 class="product-title">{{ $product->nama }}</h3>
+                                                <a href="{{ route('product.show', $product->id) }}" class="read-more">Read More..</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+                
+                <!-- "All Products" section has been removed as requested -->
+            @endif
+            
+            <!-- No products message -->
+            @if((!isset($keyword) && !isset($bestSellerProducts) && $produks->count() == 0) || (isset($keyword) && $produks->count() == 0))
                 <div class="row">
                     <div class="col-12">
                         <div class="no-products text-center">

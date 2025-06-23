@@ -68,6 +68,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/products', [ProdukMemberController::class, 'index'])->name('product.index');
     Route::get('/products/category/{id}', [ProdukMemberController::class, 'index'])->name('product.category');
     
+    // Add the missing route for main category
+    Route::get('/products/main-category/{id}', [ProdukMemberController::class, 'showMainCategory'])->name('product.main-category');
+    
     // Route for product specialist
     Route::get('/product-specialist', [ProdukMemberController::class, 'specialist'])->name('product.specialist');
     

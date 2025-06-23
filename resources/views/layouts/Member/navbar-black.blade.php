@@ -18,20 +18,20 @@
         font-family: 'Work Sans', sans-serif;
     }
 
-    /* Set all navbar text to white */
+    /* Set all navbar text to black - changed from white to black */
     nav .navbar-content a,
     nav .navbar-content span,
     nav ion-icon,
     nav #ecommerce-toggle,
     nav svg {
-        color: #ffffff !important;
+        color: #000000 !important; /* Changed from #ffffff to #000000 */
     }
     
     nav svg {
-        stroke: #ffffff !important;
+        stroke: #000000 !important; /* Changed from #ffffff to #000000 */
     }
 
-    /* CRITICALLY IMPORTANT: Override the white text for dropdown menu items */
+    /* CRITICALLY IMPORTANT: Override text color for dropdown menu items */
     #product-dropdown * {
         color: #000000 !important;
     }
@@ -102,6 +102,12 @@
         margin-bottom: 8px;
         padding-bottom: 4px;
         border-bottom: 1px solid #f0f0f0;
+        cursor: pointer; /* Added to show it's clickable */
+        transition: color 0.2s ease; /* Added for hover effect */
+    }
+    
+    .product-dropdown-category-title:hover {
+        color: #007bff !important; /* Added hover effect */
     }
     
     .product-dropdown-subcategory {
@@ -276,7 +282,7 @@
     }
 
     .circular-search-button {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(0, 0, 0, 0.1); /* Changed from white to dark background */
         border: none;
         border-radius: 50%;
         min-width: 40px;
@@ -292,23 +298,23 @@
     }
 
     .circular-search-button:hover {
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: rgba(0, 0, 0, 0.2); /* Changed from white to dark background */
     }
 
     .circular-search-icon {
         width: 20px;
         height: 20px;
-        stroke: white;
+        stroke: black; /* Changed from white to black */
         stroke-width: 2px;
     }
 
     .circular-search-input {
-        background-color: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        background-color: rgba(0, 0, 0, 0.05); /* Changed from white to darker background */
+        border: 1px solid rgba(0, 0, 0, 0.2); /* Changed from white to dark border */
         border-radius: 20px;
         padding: 8px 40px 8px 16px;
         width: 100%;
-        color: white;
+        color: black; /* Changed from white to black */
         font-size: 14px;
         opacity: 0;
         position: absolute;
@@ -324,13 +330,13 @@
 
     .circular-search-input:focus {
         outline: none;
-        background-color: rgba(255, 255, 255, 0.25);
-        border-color: rgba(255, 255, 255, 0.5);
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        background-color: rgba(0, 0, 0, 0.1); /* Changed from white to darker background */
+        border-color: rgba(0, 0, 0, 0.3); /* Changed from white to dark border */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Changed from white to dark shadow */
     }
 
     .circular-search-input::placeholder {
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(0, 0, 0, 0.6); /* Changed from white to dark text */
     }
 
     /* Responsive adjustments */
@@ -362,6 +368,15 @@
         .product-dropdown-category {
             min-width: 100%;
         }
+        
+        /* Update mobile navigation text color to black */
+        .md\:static.absolute.bg-gray-800 {
+            background-color: transparent !important;
+        }
+        
+        .md\:static.absolute.bg-gray-800 a {
+            color: #000000 !important;
+        }
     }
 </style>
     
@@ -373,14 +388,14 @@
 <!-- top bar end -->
 
 
-    <!-- Navbar with white text -->
+    <!-- Navbar with black text -->
 <nav class="px-4 pb-4 pt-0 bg-transparent transition-all duration-300" id="mainNav">
         <div class="flex items-center justify-between relative navbar-content" id="navbarContent">
             <div class="flex items-center">
-                <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/AGS Logo-01.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
+                <img class="w-[119px] h-[119px] cursor-pointer" src="{{ asset('assets/img/ags-icon-black.png') }}" alt="Logo" onclick="window.location.href='{{ url('/') }}'">
             </div>
             <div class="flex items-center">
-                <span class="text-3xl cursor-pointer md:hidden block z-20">
+                <span class="text-3xl cursor-pointer md:hidden block z-20 text-black"> <!-- Added text-black class -->
                     <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
                 </span>
             </div>
@@ -404,10 +419,14 @@
                                 <div class="product-dropdown-column">
                                     @foreach($kategoriChunk as $kategori)
                                         <div class="product-dropdown-category">
-                                            <h4 class="product-dropdown-category-title">{{ $kategori->nama }}</h4>
+                                            <!-- Updated to use member.product.category route -->
+                                            <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" class="product-dropdown-category-title" style="display: block; text-decoration: none;">
+                                                {{ $kategori->nama }}
+                                            </a>
                                             @foreach($kategori->subKategoris as $subKategori)
                                                 <div class="product-dropdown-subcategory">
-                                                    <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
+                                                    <!-- Updated to use member.product.bidang route -->
+                                                    <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
                                                         {{ $subKategori->name }}
                                                     </a>
                                                 </div>
@@ -423,11 +442,15 @@
                     <div id="mobile-product-dropdown" class="hidden mt-2 w-full bg-gray-700 rounded-md p-3">
                         @foreach($kategoris as $kategori)
                             <div class="mb-3">
-                                <h4 class="font-semibold text-white border-b border-gray-600 pb-1 mb-1">{{ $kategori->nama }}</h4>
+                                <!-- Updated to use member.product.category route -->
+                                <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" class="font-semibold text-white border-b border-gray-600 pb-1 mb-1 block">
+                                    {{ $kategori->nama }}
+                                </a>
                                 <div class="pl-2">
                                     @foreach($kategori->subKategoris as $subKategori)
                                         <div class="py-1">
-                                            <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
+                                            <!-- Updated to use member.product.bidang route -->
+                                            <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" class="text-gray-200 hover:text-white">
                                                 {{ $subKategori->name }}
                                             </a>
                                         </div>
@@ -549,6 +572,15 @@
             var headings = dropdown.getElementsByTagName('h4');
             for (var i = 0; i < headings.length; i++) {
                 headings[i].style.color = '#000000';
+            }
+        }
+        
+        // Apply black color to all navbar links
+        var navbarLinks = document.querySelectorAll('nav a, nav span, nav ion-icon, nav svg');
+        for (var i = 0; i < navbarLinks.length; i++) {
+            navbarLinks[i].style.color = '#000000';
+            if (navbarLinks[i].tagName.toLowerCase() === 'svg') {
+                navbarLinks[i].style.stroke = '#000000';
             }
         }
         

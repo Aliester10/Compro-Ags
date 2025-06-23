@@ -39,6 +39,36 @@ class ProdukMemberController extends Controller
         return view('Member.Product.product', compact('produks', 'kategori', 'bidangPerusahaan', 'selectedCategory', 'sort'));
     }
 
+    /**
+     * Display products from a specific main category.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showMainCategory(Request $request, $id)
+    {
+        // Debugging: Log entry to verify the method is being called
+        \Log::info('showMainCategory called with ID:', ['id' => $id]);
+        
+        $kategori = Kategori::all();
+        $sort = $request->input('sort', 'desc'); // Default ke 'desc'
+
+        // Get the selected category
+        $selectedCategory = Kategori::findOrFail($id);
+        
+        // Get products belonging to the selected main category
+        $produks = Produk::with('images')
+            ->where('kategori_id', $id)
+            ->orderBy('created_at', $sort)
+            ->paginate(9);
+            
+        // Ambil bidang perusahaan (subkategori) yang terkait dengan kategori ini
+        $bidangPerusahaan = BidangPerusahaan::where('kategori_id', $id)->get();
+
+        return view('Member.Product.product', compact('produks', 'kategori', 'bidangPerusahaan', 'selectedCategory', 'sort'));
+    }
+
     public function filterByCategory(Request $request, $id)
     {
         $kategori = Kategori::all();

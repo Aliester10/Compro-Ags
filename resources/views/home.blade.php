@@ -90,6 +90,12 @@
         margin-bottom: 8px;
         padding-bottom: 4px;
         border-bottom: 1px solid #f0f0f0;
+        cursor: pointer; /* Added to show it's clickable */
+        transition: color 0.2s ease; /* Added for hover effect */
+    }
+    
+    .product-dropdown-category-title:hover {
+        color: #007bff !important; /* Added hover effect */
     }
     
     .product-dropdown-subcategory {
@@ -1498,17 +1504,24 @@ img.hover-icon {
                 <li class="mx-4 my-6 md:my-0 relative" id="product-container">
                     <a href="{{ route('product.index') }}" class="text-x1 hover:text-cyan-500 duration-500 font-semibold" id="product-toggle">Product</a>
                     
-                    <!-- Product Dropdown Menu -->
+                    <!-- Product Dropdown Menu - UPDATED with correct routes -->
                     <div id="product-dropdown">
                         <div class="product-dropdown-container">
                             @foreach($kategoris->chunk(ceil($kategoris->count() / 2)) as $kategoriChunk)
                                 <div class="product-dropdown-column">
                                     @foreach($kategoriChunk as $kategori)
                                         <div class="product-dropdown-category">
-                                            <h4 class="product-dropdown-category-title">{{ $kategori->nama }}</h4>
+                                            <!-- Updated to use member.product.category route -->
+                                            <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" 
+                                               class="product-dropdown-category-title" 
+                                               style="display: block; text-decoration: none;">
+                                                {{ $kategori->nama }}
+                                            </a>
                                             @foreach($kategori->subKategoris as $subKategori)
                                                 <div class="product-dropdown-subcategory">
-                                                    <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" style="color: #000000 !important;">
+                                                    <!-- Updated to use member.product.bidang route -->
+                                                    <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" 
+                                                       style="color: #000000 !important;">
                                                         {{ $subKategori->name }}
                                                     </a>
                                                 </div>
@@ -1520,15 +1533,21 @@ img.hover-icon {
                         </div>
                     </div>
 
-                    <!-- Mobile Product Dropdown -->
+                    <!-- Mobile Product Dropdown - UPDATED with correct routes -->
                     <div id="mobile-product-dropdown" class="hidden mt-2 w-full bg-white rounded-md p-3">
                         @foreach($kategoris as $kategori)
                             <div class="mb-3">
-                                <h4 class="font-semibold text-black border-b border-gray-200 pb-1 mb-1">{{ $kategori->nama }}</h4>
+                                <!-- Updated to use member.product.category route -->
+                                <a href="{{ route('member.product.category', ['id' => $kategori->id]) }}" 
+                                   class="font-semibold text-black border-b border-gray-200 pb-1 mb-1 block">
+                                    {{ $kategori->nama }}
+                                </a>
                                 <div class="pl-2">
                                     @foreach($kategori->subKategoris as $subKategori)
                                         <div class="py-1">
-                                            <a href="{{ route('product.category', ['id' => $subKategori->id]) }}" class="text-black hover:text-cyan-500">
+                                            <!-- Updated to use member.product.bidang route -->
+                                            <a href="{{ route('member.product.bidang', ['id' => $subKategori->id]) }}" 
+                                               class="text-black hover:text-cyan-500">
                                                 {{ $subKategori->name }}
                                             </a>
                                         </div>
@@ -1587,12 +1606,11 @@ img.hover-icon {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </div>
-                        
                         <!-- Profile dropdown menu -->
                         <div id="profile-dropdown" class="profile-dropdown">
                             <a href="{{ route('profile.show') }}" class="profile-menu-item">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 Profile
                             </a>
@@ -1674,7 +1692,7 @@ img.hover-icon {
                                         <span class="relative z-10">{{ $slider->button_text }}</span>
                                         <span class="absolute inset-0 rounded-full" 
                                             style="background: linear-gradient(90deg, red, blue); opacity: 0.2; z-index: 0;"></span>
-                                        <span class="absolute inset-0 rounded-full border-2 border-transparent" 
+                                            <span class="absolute inset-0 rounded-full border-2 border-transparent" 
                                             style="background: linear-gradient(90deg, red, blue) border-box; 
                                                     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
                                                     -webkit-mask-composite: xor;
