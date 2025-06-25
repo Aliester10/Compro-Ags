@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Admin\AdminController;
 use App\Http\Controllers\Member\Activity\ActivityMemberController;
 use App\Http\Controllers\Admin\BrandPartner\BrandPartnerController;
 use App\Http\Controllers\Admin\Meta\MetaController;
+use App\Http\Controllers\Admin\Meta\SubMetaController;
 use App\Http\Controllers\Member\Meta\MetaMemberController;
 use App\Http\Controllers\Member\Profile\ProfileMemberController;
 use App\Http\Controllers\Admin\Location\LocationController;
@@ -98,6 +99,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function () {
     Route::get('/locations', [LocationMemberController::class, 'index']);
     Route::get('/admin/guest-messages', [GuestMessageController::class, 'index'])->name('admin.guest-messages.index');
     Route::post('/guest-messages', [GuestMessageController::class, 'store'])->name('guest-messages.store');
+    
+    // Route untuk mengambil detail artikel
+    Route::get('/get-article-detail/{id}', [MetaMemberController::class, 'getArticleDetail'])->name('article.detail');
 
 
     // Member QnA Guest
@@ -333,6 +337,15 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
         Route::resource('admin/activity', ActivityController::class)->names('admin.activity');
         Route::resource('admin/brand', BrandPartnerController::class)->names('admin.brand');
         Route::resource('admin/meta', MetaController::class)->names('admin.meta');
+        
+        // Sub Meta routes
+        Route::get('admin/meta/{meta}/submeta', [SubMetaController::class, 'index'])->name('admin.meta.submeta.index');
+        Route::get('admin/meta/{meta}/submeta/create', [SubMetaController::class, 'create'])->name('admin.meta.submeta.create');
+        Route::post('admin/meta/{meta}/submeta', [SubMetaController::class, 'store'])->name('admin.meta.submeta.store');
+        Route::get('admin/meta/{meta}/submeta/{submeta}/edit', [SubMetaController::class, 'edit'])->name('admin.meta.submeta.edit');
+        Route::put('admin/meta/{meta}/submeta/{submeta}', [SubMetaController::class, 'update'])->name('admin.meta.submeta.update');
+        Route::delete('admin/meta/{meta}/submeta/{submeta}', [SubMetaController::class, 'destroy'])->name('admin.meta.submeta.destroy');
+        
         Route::post('/froala/upload_image', [MetaController::class, 'uploadImage'])->name('froala.upload_image');
         Route::resource('admin/location', LocationController::class)->names('admin.location');
     });

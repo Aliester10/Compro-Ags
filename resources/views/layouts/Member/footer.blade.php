@@ -176,13 +176,13 @@
                             <!-- WhatsApp -->
                             <div class="d-flex align-items-center mb-2" style="margin-left: 50px;">
                                 <img src="{{ asset('assets/icons/Icon Contact Information/1.png') }}" alt="WhatsApp" style="width: 32px; height: 32px; margin-right: 10px;">
-                                <a href="https://wa.me/6285217911213" style="color: #000; text-decoration: none; font-size: 16px;">+62 852-1947-8205</a>
+                                <a href="https://wa.me/6285219478205" style="color: #000; text-decoration: none; font-size: 16px;">+62 852-1947-8205</a>
                             </div>
                             
                             <!-- Phone -->
                             <div class="d-flex align-items-center mb-2" style="margin-left: 50px;">
                                 <img src="{{ asset('assets/icons/Icon Contact Information/2.png') }}" alt="Phone" style="width: 32px; height: 32px; margin-right: 10px;">
-                                <a href="tel:02185850913" style="color: #000; text-decoration: none; font-size: 16px;">(021) 85850913</a>
+                                <a href="#" style="color: #000; text-decoration: none; font-size: 16px;">(021) 85850913</a>
                             </div>
                             
                             <!-- Email -->

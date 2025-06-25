@@ -632,6 +632,21 @@ CREATE TABLE `sub_kategori` (
   CONSTRAINT `fk_subkategori_kategori` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `sub_meta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sub_meta` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `meta_id` bigint unsigned NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sub_meta_meta_id_foreign` (`meta_id`),
+  CONSTRAINT `sub_meta_meta_id_foreign` FOREIGN KEY (`meta_id`) REFERENCES `meta` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tbl_t_after_sales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -824,3 +839,5 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (78,'2025_05_14_cre
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (79,'2025_05_14_create_email_settings_table',29);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (80,'2025_05_16_071621_add_verification_token_to_users_table',30);
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (81,'2025_05_16_165605_add_verification_token_to_users_table',30);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (83,'2025_06_24_163529_create_sub_meta_images_table',31);
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES (84,'2025_06_25_add_foreign_key_to_sub_meta_table',32);

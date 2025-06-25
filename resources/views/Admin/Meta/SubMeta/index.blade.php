@@ -6,10 +6,15 @@
         <div class="col-12">
             <div class="card shadow-lg">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Daftar Meta</h4>
-                    <a href="{{ route('admin.meta.create') }}" class="btn btn-primary shadow-sm">
-                        <i class="fas fa-plus fa-sm"></i> Tambah Meta
-                    </a>
+                    <h4 class="mb-0">Sub Meta untuk: {{ $meta->title }}</h4>
+                    <div>
+                        <a href="{{ route('admin.meta.index') }}" class="btn btn-secondary shadow-sm mr-2">
+                            <i class="fas fa-arrow-left fa-sm"></i> Kembali
+                        </a>
+                        <a href="{{ route('admin.meta.submeta.create', $meta->id) }}" class="btn btn-primary shadow-sm">
+                            <i class="fas fa-plus fa-sm"></i> Tambah Sub Meta
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -19,37 +24,27 @@
                                     <th width="5%">No</th>
                                     <th>Judul</th>
                                     <th>Gambar</th>
-                                    <th width="15%">Tanggal Mulai</th>
-                                    <th width="15%">Tanggal Berakhir</th>
-                                    <th width="20%">Aksi</th>
+                                    <th width="15%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($metas as $meta)
+                                @forelse ($subMetas as $subMeta)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $meta->title }}</td>
+                                    <td>{{ $subMeta->title }}</td>
                                     <td>
-                                        @if($meta->image)
-                                            <img src="{{ asset($meta->image) }}" alt="{{ $meta->title }}" class="img-thumbnail" style="max-height: 50px;">
+                                        @if($subMeta->image)
+                                            <img src="{{ asset($subMeta->image) }}" alt="{{ $subMeta->title }}" class="img-thumbnail" style="max-height: 50px;">
                                         @else
                                             <span class="badge badge-secondary">Tidak ada gambar</span>
                                         @endif
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($meta->start_date)->format('d M Y') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($meta->end_date)->format('d M Y') }}</td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.meta.show', $meta->slug) }}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.meta.edit', $meta->id) }}" class="btn btn-warning btn-sm">
+                                            <a href="{{ route('admin.meta.submeta.edit', [$meta->id, $subMeta->id]) }}" class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{{ route('admin.meta.submeta.index', $meta->id) }}" class="btn btn-primary btn-sm" title="Kelola Sub Meta">
-                                                <i class="fas fa-list"></i>
-                                            </a>
-                                            <form action="{{ route('admin.meta.destroy', $meta->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus meta ini?')">
+                                            <form action="{{ route('admin.meta.submeta.destroy', [$meta->id, $subMeta->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus sub meta ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
@@ -61,7 +56,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">Tidak ada data meta.</td>
+                                    <td colspan="4" class="text-center">Tidak ada data sub meta.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

@@ -98,137 +98,154 @@
         animation: fadeInDown 1.2s ease-out;
     }
     
-    /* Styling untuk visi-misi sesuai gambar */
+    /* MODIFIED: Consistent section padding and alignment */
+    .section-container {
+        padding: 60px 0;
+        margin-bottom: 50px;
+    }
+    
+    /* About Company section with strict left alignment */
+    .about-company-container {
+        text-align: left !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .about-company-content {
+        text-align: left !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+    }
+    
+    /* MODIFIED: Left-aligned section title with no padding */
+    .section-title {
+        font-weight: 700; 
+        font-size: 64px; 
+        color: #000; 
+        margin-bottom: 0; 
+        margin-left: 0 !important;
+        line-height: 1.1; 
+        font-family: 'Work Sans', sans-serif;
+        padding-left: 0 !important; 
+        text-align: left !important;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0);
+    }
+    
+    /* MODIFIED: Left-aligned section text with no padding */
+    .section-text {
+        font-weight: 600; 
+        font-size: 24px; 
+        color: #000; 
+        max-width: 100%; 
+        font-family: 'Work Sans', sans-serif;
+        padding-left: 0 !important; 
+        margin-top: 25px;
+        margin-left: 0 !important;
+        text-align: left !important;
+    }
+    
+    /* MODIFIED: Vision-mission styling with overlay */
     .vision-mission-container {
         background: url('{{ asset('assets/img/About Us.png') }}') no-repeat top center; 
-        background-size: 100% auto; /* Show image at original aspect ratio, full width */
+        background-size: cover;
+        padding: 60px 0;
+        margin-bottom: 80px;
         position: relative;
-        height: 560px; /* Increased height for more room */
-        margin-top: 50px;
-        margin-bottom: 50px;
+        height: 550px; /* Added fixed height to accommodate the gradient properly */
+    }
+    
+
+    
+    .vision-mission-row {
         display: flex;
-        align-items: flex-end; /* Align content to bottom */
-    }
-    
-    .vision-mission-content {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
         z-index: 2;
-        padding-bottom: 30px; /* Smaller padding to position text closer to bottom */
-        width: 100%;
+        padding-top: 200px; /* INCREASED: Move text down by 150px (was 90px) */
     }
     
-    .vision-title {
-        font-size: 64px;
-        font-weight: 900;
+    .vision-column, .mission-column {
+        width: 45%;
+    }
+    
+    .vision-title, .mission-title {
+        font-size: 48px;
+        font-weight: 700;
         margin-bottom: 20px;
         font-family: 'Work Sans', sans-serif;
-        line-height: 1;
-        text-align: left;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0);
-        transition: all 0.3s ease;
+        line-height: 1.1;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+        text-align: left !important;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0);
     }
     
-    .mission-title {
-        font-size: 64px;
-        font-weight: 900;
-        margin-bottom: 20px;
-        font-family: 'Work Sans', sans-serif;
-        line-height: 1;
-        text-align: right;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    /* Animated titles with gradient hover effect */
-    .vision-title:hover, .mission-title:hover {
-        background: linear-gradient(45deg, #000, #444, #000);
-        background-size: 200% 200%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textGradient 3s ease infinite;
-    }
-    
-    .vision-text {
+    .vision-text, .mission-text {
         font-size: 18px;
         line-height: 1.6;
         font-weight: 600;
         margin-bottom: 20px;
         font-family: 'Work Sans', sans-serif;
         color: #000;
-        text-align: left;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+        text-align: left !important;
     }
     
-    .mission-text {
-        font-size: 18px;
-        line-height: 1.6;
-        font-weight: 600;
-        margin-bottom: 20px;
-        font-family: 'Work Sans', sans-serif;
-        color: #000; 
-        text-align: right;
-    }
-    
-    /* Text animation on scroll */
-    .animated-text {
-        position: relative;
-        transition: all 0.5s ease;
-    }
-    
-    /* About Values Section Styling - FIXED VERSION */
+    /* MODIFIED: About Values Section Styling with overlay and adjusted positioning */
     .about-values-container {
         background: url('{{ asset('assets/img/About Us_2.png') }}') no-repeat center center;
         background-size: cover;
+        padding: 60px 0;
+        margin-bottom: 15%;
         position: relative;
-        height: 780px; /* Increased height to accommodate the lower positioning */
-        margin-bottom: 10px;
+        height: 700px; /* Added fixed height for proper gradient display */
+    }
+    
+    /* ADDED: White gradient overlay for About Values section */
+    .about-values-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255, 0, 0, 0) 25%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0) 75%, rgba(255,255,255,0) 100%);
+        z-index: 1;
     }
 
-    /* Title styling - moved 240px down from original position */
+    .about-values-content {
+        position: relative;
+        z-index: 2;
+    }
+
     .about-values-title {
-        position: absolute;
-        top: 400px; /* Original 40px + 240px = 280px */
-        left: 40px;
         font-size: 48px;
-        font-weight: 900;
+        font-weight: 700;
         color: #000;
         line-height: 1.1;
         font-family: 'Work Sans', sans-serif;
-        margin: 0;
+        margin-bottom: 40px;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+        text-align: left !important;
+        padding-top: 25%; /* INCREASED: Move text down by 180px (was 90px) */
+        text-shadow: 0px 2px 2px rgba(0, 0, 0);
     }
     
-    /* Values sections container - adjusted to maintain proper spacing from title */
     .values-sections {
-        position: absolute;
-        top: 550px; /* Original 40px + 240px = 280px */
-        bottom: 40px;
-        left: 40px;
-        right: 40px;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        padding: 0;
     }
     
-    /* Each value block */
+    /* MODIFIED: Removed hover effects */
     .value-block {
-        width: 48%; /* Just under half width to create space between */
+        width: 48%;
         margin-bottom: 30px;
-        transition: all 0.4s ease;
-        transform: translateY(0);
     }
     
-    .value-block:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-        border-radius: 10px;
-        padding: 15px;
-    }
-    
-    /* Title with icon */
     .value-title-container {
         display: flex;
         align-items: center;
@@ -239,11 +256,6 @@
         width: 30px;
         height: 30px;
         margin-right: 10px;
-        transition: transform 0.3s ease;
-    }
-    
-    .value-block:hover .value-title-container img {
-        transform: rotate(15deg) scale(1.2);
     }
     
     .value-title-container h3 {
@@ -251,14 +263,8 @@
         font-weight: 900;
         margin: 0;
         font-family: 'Work Sans', sans-serif;
-        transition: all 0.3s ease;
     }
     
-    .value-block:hover .value-title-container h3 {
-        letter-spacing: 1px;
-    }
-    
-    /* List items */
     .value-list {
         list-style-type: none;
         padding-left: 0;
@@ -272,28 +278,11 @@
         font-size: 16px;
         font-family: 'Work Sans', sans-serif;
         line-height: 1.4;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        opacity: 0.9;
+        color: #000;
+        font-weight: 700;
     }
     
-    .value-list li:before {
-        content: "•";
-        position: absolute;
-        left: 0;
-        transition: all 0.3s ease;
-    }
-    
-    .value-block:hover .value-list li {
-        transform: translateX(5px);
-        opacity: 1;
-    }
-    
-    .value-block:hover .value-list li:before {
-        color: #444;
-        transform: scale(1.2);
-    }
-    
-    /* SVG-based Level-Up Circle Styling - ENHANCED VERSION */
+    /* SVG-based Level-Up Circle Styling */
     .level-up-container {
         display: flex;
         justify-content: center;
@@ -396,12 +385,7 @@
         }
     }
     
-    /* Reverse rotation for hover effect */
-    .svg-container:hover svg {
-        animation: rotate 15s linear infinite;
-    }
-    
-    /* Our Brand Section Styling - UPDATED */
+    /* Our Brand Section Styling */
     .our-brand-container {
         padding: 60px 0;
         margin: 50px 0;
@@ -441,12 +425,6 @@
         margin-left: 15px;
     }
     
-    .our-brand-title:hover::before,
-    .our-brand-title:hover::after {
-        width: 350px;
-        height: 2px;
-    }
-    
     .brand-logos {
         display: flex;
         justify-content: space-around;
@@ -455,7 +433,6 @@
         margin-top: 30px;
     }
     
-    /* UPDATED - Removed box-shadow and border on hover */
     .brand-logo {
         padding: 1px;
         max-width: 320px;
@@ -473,7 +450,6 @@
         transition: transform 0.5s ease, filter 0.5s ease;
     }
     
-    /* UPDATED - Removed box-shadow, kept only translateY animation */
     .brand-logo:hover {
         transform: translateY(-5px);
         background-color: transparent;
@@ -484,7 +460,6 @@
         filter: brightness(1.1);
     }
     
-    /* UPDATED - Modified the after pseudo-element for a cleaner effect */
     .brand-logo::after {
         content: '';
         position: absolute;
@@ -501,139 +476,10 @@
         transform: translateX(100%);
     }
     
-    /* Feature item styles */
-    .feature-item {
-        background-color: #fff;
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transform-origin: center bottom;
-    }
-
-    .feature-item img {
-        max-width: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .feature-item:hover {
-        transform: translateY(-15px) scale(1.02);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    }
-    
-    .feature-item:hover img {
-        transform: scale(1.05);
-    }
-    
-    /* About img styles */
-    .about-img {
-        position: relative;
-        max-height: 400px;
-        overflow: hidden;
-    }
-
-    .about-img img {
-        object-fit: cover;
-    }
-
-    .about-logo {
-        position: absolute;
-        top: 88%;
-        left: 8%;
-        transform: translate(-50%, -50%);
-        z-index: 10;
-        width: 130px;
-        height: 130px;
-        border: 3px solid #fff;
-        border-radius: 50%;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        overflow: hidden;
-        transition: all 0.5s ease;
-        animation: pulse 3s infinite ease-in-out;
-    }
-    
-    .about-logo:hover {
-        border-color: #eee;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-
-    .about-logo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        transition: transform 0.5s ease;
-    }
-    
-    .about-logo:hover img {
-        transform: scale(1.1);
-    }
-    
-    /* Map styles */
-    .marker-tooltip {
-        background-color: #b3d9ff;
-        border: 1px solid #80b3ff;
-        padding: 5px;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        font-size: 12px;
-        color: #333;
-        font-family: 'Work Sans', sans-serif;
-        transition: all 0.3s ease;
-    }
-    
-    .marker-tooltip:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .info-window img.popup-image {
-        max-width: 100%;
-        height: auto;
-        border-radius: 10px;
-        margin-bottom: 5px;
-        transition: all 0.3s ease;
-        transform: scale(1);
-    }
-    
-    .info-window:hover img.popup-image {
-        transform: scale(1.03);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .popup-title {
-        font-size: 20px;
-        color: black;
-        font-weight: bold;
-        font-family: 'Work Sans', sans-serif;
-        transition: all 0.3s ease;
-    }
-    
-    .info-window:hover .popup-title {
-        color: #444;
-    }
-
-    .popup-description,
-    .popup-address {
-        font-size: 12px;
-        color: #333;
-        margin-top: 10px;
-        text-align: justify;
-        font-family: 'Work Sans', sans-serif;
-        transition: all 0.3s ease;
-    }
-    
-    .info-window:hover .popup-description,
-    .info-window:hover .popup-address {
-        color: #555;
-    }
-    
-    /* Enhanced Media queries for better responsiveness */
+    /* Media queries for better responsiveness */
     @media (max-width: 1200px) {
         .vision-title, .mission-title {
-            font-size: 56px;
+            font-size: 42px;
         }
         
         .our-brand-title::before,
@@ -644,11 +490,15 @@
     
     @media (max-width: 992px) {
         .vision-title, .mission-title {
-            font-size: 48px;
+            font-size: 38px;
         }
         
         .vision-text, .mission-text {
             font-size: 16px;
+        }
+        
+        .vision-column, .mission-column {
+            width: 48%;
         }
         
         .svg-container {
@@ -669,51 +519,57 @@
         .our-brand-title::after {
             width: 150px;
         }
-    }
-    
-    @media (max-width: 768px) {
-        .vision-mission-container {
-            height: auto;
-            padding: 40px 20px 120px;
-            background-size: cover;
-            background-position: center;
-        }
         
-        .vision-mission-content {
-            position: relative;
-            padding-bottom: 0;
-        }
-        
-        .vision-title, .mission-title {
-            font-size: 40px;
-        }
-        
-        .mission-title, .mission-text {
-            text-align: left;
-        }
-        
-        .about-values-container {
-            min-height: 980px; /* Increased to accommodate the lower positioning on mobile */
-            padding: 20px 20px 40px;
-            background-position: center top;
+        .vision-mission-row {
+            padding-top: 120px; /* Adjusted for medium screens */
         }
         
         .about-values-title {
-            position: relative;
-            top: 280px; /* Keep consistent with desktop */
-            left: 20px;
-            margin-bottom: 200px;
-            font-size: 40px;
+            padding-top: 140px; /* Adjusted for medium screens */
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .section-title {
+            font-size: 48px;
+        }
+        
+        .section-text {
+            font-size: 18px;
+        }
+        
+        .vision-mission-container {
+            padding: 40px 0;
+            height: 600px; /* Adjusted for mobile */
+        }
+        
+        .vision-mission-row {
+            flex-direction: column;
+            padding-top: 100px; /* Adjusted for smaller screens */
+        }
+        
+        .vision-column, .mission-column {
+            width: 100%;
+            padding: 0;
+            margin-bottom: 40px;
+        }
+        
+        .vision-title, .mission-title {
+            font-size: 36px;
+        }
+        
+        .about-values-container {
+            padding: 40px 0;
+            height: 850px; /* Adjusted for mobile to fit all content */
+        }
+        
+        .about-values-title {
+            font-size: 36px;
+            padding-top: 120px; /* Adjusted for smaller screens */
         }
         
         .values-sections {
-            position: relative;
-            flex-direction: column;
-            top: auto;
-            bottom: auto;
-            left: 20px;
-            right: 20px;
-            margin-top: 350px; /* Increased to maintain spacing from title */
+            padding: 0;
         }
         
         .value-block {
@@ -735,85 +591,48 @@
         }
         
         .rotating-text {
-            font-size: 18px;
-            letter-spacing: 5.3px;
+            font-size: 24px;
         }
         
         .our-brand-title {
-            font-size: 40px;
+            font-size: 36px;
         }
         
         .our-brand-title::before,
         .our-brand-title::after {
             width: 100px;
         }
-        
-        .brand-logo {
-            padding: 10px;
-            max-width: 45%;
-            margin: 10px 5px;
-        }
-        
-        .feature-item {
-            min-height: 300px;
-        }
-        
-        .about-logo {
-            width: 110px;
-            height: 110px;
-            top: 90%;
-            left: 10%;
-        }
-        
-        .info-window {
-            padding: 10px;
-        }
-
-        .popup-title {
-            font-size: 18px;
-        }
-
-        .popup-description,
-        .popup-address {
-            font-size: 10px;
-        }
-
-        .info-window img.popup-image {
-            margin-bottom: 5px
-        }
     }
     
     @media (max-width: 576px) {
-        .container-fluid.bg-breadcrumb {
-            height: 540px !important;
+        .section-title {
+            font-size: 40px;
+            padding-left: 0 !important;
         }
         
-        .container-fluid.bg-breadcrumb h1.display-2 {
-            font-size: 48px !important;
-        }
-        
-        .container-fluid.bg-breadcrumb p {
-            font-size: 20px !important;
-        }
-        
-        .container h1 {
-            font-size: 42px !important;
-        }
-        
-        .container p {
-            font-size: 18px !important;
+        .section-text {
+            font-size: 16px;
+            padding-left: 0 !important;
         }
         
         .vision-title, .mission-title {
-            font-size: 36px;
+            font-size: 32px;
+            padding-left: 0 !important;
         }
         
         .vision-text, .mission-text {
             font-size: 14px;
+            padding-left: 0 !important;
         }
         
         .about-values-title {
-            font-size: 36px;
+            font-size: 32px;
+            padding-left: 0 !important;
+            padding-top: 100px; /* Adjusted for smaller screens */
+        }
+        
+        .values-sections {
+            padding: 0;
         }
         
         .value-title-container h3 {
@@ -839,51 +658,38 @@
         }
         
         .rotating-text {
-            font-size: 14px;
-            letter-spacing: 2px;
+            font-size: 24px;
         }
         
         .our-brand-title {
-            font-size: 36px;
+            font-size: 32px;
         }
         
         .our-brand-title::before,
         .our-brand-title::after {
             width: 60px;
         }
-        
-        .about-logo {
-            width: 90px;
-            height: 90px;
-            top: 90%;
-            left: 15%;
-        }
     }
     
     @media (max-width: 480px) {
-        .container-fluid.bg-breadcrumb {
-            height: 480px !important;
+        .section-title {
+            font-size: 32px;
         }
         
-        .container-fluid.bg-breadcrumb h1.display-2 {
-            font-size: 36px !important;
-        }
-        
-        .container-fluid.bg-breadcrumb p {
-            font-size: 18px !important;
-        }
-        
-        .container h1 {
-            font-size: 32px !important;
-            margin-left: 0px !important;
-        }
-        
-        .container .text-start.mb-6 {
-            margin-left: 20px !important;
+        .section-text {
+            font-size: 14px;
         }
         
         .vision-title, .mission-title {
-            font-size: 30px;
+            font-size: 28px;
+        }
+        
+        .vision-mission-row {
+            padding-top: 80px; /* Adjusted for smaller screens */
+        }
+        
+        .about-values-title {
+            padding-top: 80px; /* Adjusted for smaller screens */
         }
         
         .svg-container {
@@ -900,54 +706,8 @@
             font-size: 20px;
         }
         
-        .rotating-text {
-            font-size: 25px;
-            letter-spacing: 5px;
-        }
-        
-        .popup-title {
-            font-size: 16px;
-        }
-
-        .popup-description,
-        .popup-address {
-            font-size: 9px;
-        }
-        
-        .brand-logo {
-            max-width: 85%;
-        }
-    }
-    
-    @media (max-width: 380px) {
-        .vision-mission-container {
-            padding: 40px 15px 100px;
-        }
-        
-        .vision-title, .mission-title {
-            font-size: 28px;
-        }
-        
-        .vision-text, .mission-text {
-            font-size: 12px;
-        }
-        
-        .svg-container {
-            width: 240px;
-            height: 240px;
-        }
-        
-        .level-up-circle {
-            width: 180px;
-            height: 180px;
-        }
-        
-        .level-up-text {
-            font-size: 18px;
-        }
-        
         .our-brand-title {
-            font-size: 30px;
+            font-size: 28px;
         }
         
         .our-brand-title::before,
@@ -967,100 +727,108 @@
 
     <!-- Konten Header yang Diposisikan di Tengah Secara Vertikal dan Horizontal -->
     <div class="d-flex flex-column justify-content-center align-items-center h-100 header-content-animated" style="position: relative; z-index: 3;">
-    <h1 class="display-2 text-center fw-bold mb-3" data-aos="fade-down" data-aos-delay="300" data-aos-duration="800" style="line-height: 120%; letter-spacing: -0.022em; font-size: 64px; font-family: 'Work Sans', sans-serif; color: black; font-weight: 900; text-shadow: 0px 4px 4px rgb(0, 0, 0);">    {{ __('messages.about_us') }}. </h1>
+    <h1 class="display-2 text-center fw-bold mb-3" data-aos="fade-down" data-aos-delay="300" data-aos-duration="800" style="line-height: 120%; letter-spacing: -0.022em; font-size: 64px; font-family: 'Work Sans', sans-serif; color: black; font-weight: 900; text-shadow: 0px 4px 4px rgb(0, 0, 0);">{{ __('messages.about_us') }}.</h1>
          <p data-aos="fade-up" data-aos-delay="600" data-aos-duration="800" style="line-height: 120%; letter-spacing: -0.022em; font-family: 'Work Sans', sans-serif; color: black; font-weight: 600; font-size: 24px; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);">{{ __('messages.company_name') }}</p>
     </div>
 </div>
 
-<!-- About Start -->
+<!-- About Company Start - Properly left-aligned -->
+<div class="section-container about-company-container">
     <div class="container">
-        <div class="text-start mb-6" style="margin-left: 10px;" data-aos="fade-up" data-aos-duration="1000">
-            <h1 style="font-weight: 900; font-size: 64px; color: #000; margin-bottom: 0; line-height: 1.1; font-family: 'Work Sans', sans-serif;" class="animated-text"> {{__('messages.about')}} </h1>
-            <h1 style="font-weight: 900; font-size: 64px; color: #000; margin-bottom: 25px; line-height: 1.1; font-family: 'Work Sans', sans-serif;" class="animated-text"> {{__('messages.company')}}. </h1>
-            <p style="font-weight: 600; font-size: 24px; color: #000; max-width: 100%; font-family: 'Work Sans', sans-serif;" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000"> {{ $company->sejarah_singkat ?? ' ' }} </p>
+        <!-- Fix: Added text-start class and custom styling to force left alignment -->
+        <div class="about-company-content text-start" data-aos="fade-up" data-aos-duration="1000" style="text-align: left !important;">
+            <h1 class="section-title" style="text-align: left !important; margin-left: 0 !important;">About</h1>
+            <h1 class="section-title" style="text-align: left !important; margin-left: 0 !important;">Company.</h1>
+            <p class="section-text" style="text-align: left !important; margin-left: 0 !important;">{{ $company->sejarah_singkat ?? 'AGS Group is born to be the technology start-up that empowered by innovation. We provide new solutions that will definitely solve your problem, understand your needs, identify your pain points, and deliver the right stage of tech ready-to-use to give the value added into your business, not just another solution.' }}</p>
         </div>
     </div>
-<!-- About End -->
+</div>
+<!-- About Company End -->
 
-<!-- Vision Mission Start -->
 <div class="vision-mission-container">
-    <div class="container vision-mission-content">
-        <div class="row">
-            <!-- Vision Section (Left) -->
-            <div class="col-md-5" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
-                <h1 class="vision-title"> Our <br> Mission. </h1>
-                <p class="vision-text animated-text" > {{ $company->misi ?? 'By providing the best service through innovation so that you get the right solution in meeting every need in detail orientation and also a reliable guarantee.' }} </p>
-            </div>
 
-            <div class="col-md-2">
-                <!-- Spacer column -->
+    <div class="container">
+        <!-- Added padding-top to move content down -->
+        <div class="vision-mission-row">
+            <!-- Vision Section (Left) - FIXED: Added proper vision text -->
+            <div class="vision-column" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
+                <h1 class="vision-title">Our<br>Vision.</h1>
+                <!-- FIXED: Ensure the vision text is properly displayed and not a URL -->
+                <p class="vision-text">The technology start-up that provide any innovative solutions for growing up and give the value added your industry.</p>
             </div>
 
             <!-- Mission Section (Right) -->
-            <div class="col-md-5" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400">
-                <h1 class="mission-title"> Our <br> Vision.</h1>
-                <p class="mission-text animated-text" >{{ $company->visi ?? 'The technology start-up that provide any innovative solutions for growing up and give the value added your industry.' }}</p>
+            <div class="mission-column" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="400">
+                <h1 class="mission-title">Our<br>Mission.</h1>
+                <p class="mission-text">{{ $company->misi ?? 'By providing the best service through innovation so that you get the right solution in meeting every need in detail orientation and also a reliable guarantee.' }}</p>
             </div>
         </div>
     </div>
 </div>
 <!-- Vision Mission End -->
 
-<!-- About Values Start -->
+<!-- About Values Start - With white gradient overlay and pushed down text -->
 <div class="about-values-container">
-    <!-- Title at top left, moved 240px down -->
-    <h1 class="about-values-title" data-aos="fade-right" data-aos-duration="800">About<br>Values.</h1>
+    <!-- Added white gradient overlay -->
+    <div class="about-values-overlay"></div>
     
-    <!-- Values placed at the bottom in a 2x2 grid -->
-    <div class="values-sections">
-        <!-- Innovation Section -->
-        <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
-            <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon About/lamp-icon.png') }}" alt="Innovation">
-                <h3>Innovation</h3>
+    <div class="container">
+        <div class="about-values-content">
+            <!-- Title with proper alignment and pushed down by padding-top -->
+            <h1 class="about-values-title" data-aos="fade-right" data-aos-duration="800" style="text-align: left !important; margin-left: 0 !important;">About<br>Values.</h1>
+            
+            <!-- Values section with hover effects removed -->
+            <div class="values-sections">
+                <!-- Innovation Section -->
+                <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <div class="value-title-container">
+                        <img src="{{ asset('assets/icons/Icon About/lamp-icon.png') }}" alt="Innovation">
+                        <h3>Innovation</h3>
+                    </div>
+                    <ul class="value-list">
+                        <li>Create value through product innovation and improvements.</li>
+                        <li>Seek innovative ways to introduce new ideas and approaches to solve existing and new challenges.</li>
+                        <li>Develop new ideas—and run with them.</li>
+                        <li>Build mutually successful relationships with customers to better understand their needs</li>
+                    </ul>
+                </div>
+                
+                <!-- Move Quickly Section -->
+                <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
+                    <div class="value-title-container">
+                        <img src="{{ asset('assets/icons/Icon About/forward-all-arrow-icon.png') }}" alt="Move Quickly">
+                        <h3>Move Quickly</h3>
+                    </div>
+                    <ul class="value-list">
+                        <li>Acting with urgency while removing obstacles that get in the way of high priority initiatives. We are not waiting until next week to do something that will help you today.</li>
+                        <li>Continuously working to increase the velocity of our highest priority initiatives by methodically removing barriers that get in the way</li>
+                    </ul>
+                </div>
+                
+                <!-- Quality Section -->
+                <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
+                    <div class="value-title-container">
+                        <img src="{{ asset('assets/icons/Icon About/thumbs-up-line-icon.png') }}" alt="Quality">
+                        <h3>Quality</h3>
+                    </div>
+                    <ul class="value-list">
+                        <li>We take pride in providing high value products and services that we stand behind.</li>
+                        <li>We ensures customer satisfaction, profitability and the future of our employees and our growth</li>
+                    </ul>
+                </div>
+                
+                <!-- Customer Satisfaction Section -->
+                <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="800">
+                    <div class="value-title-container">
+                        <img src="{{ asset('assets/icons/Icon About/employees-icon.png') }}" alt="Customer Satisfaction">
+                        <h3>Customer Satisfaction</h3>
+                    </div>
+                    <ul class="value-list">
+                        <li>We take pride in providing high value products and services that we stand behind.</li>
+                        <li>We ensures customer satisfaction, profitability and the future of our employees and our growth</li>
+                    </ul>
+                </div>
             </div>
-            <ul class="value-list">
-                <li>Create value through product innovation and improvements.</li>
-                <li>Seek innovative ways to introduce new ideas and approaches to solve existing and new challenges.</li>
-                <li>Develop new ideas—and run with them.</li>
-                <li>Build mutually successful relationships with customers to better under stand their needs</li>
-            </ul>
-        </div>
-        
-        <!-- Move Quickly Section -->
-        <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
-            <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon About/forward-all-arrow-icon.png') }}" alt="Move Quickly">
-                <h3>Move Quickly</h3>
-            </div>
-            <ul class="value-list">
-                <li>Acting with urgency while removing obstacles that get in the way of high priority initiatives. We are not waiting until next week to do something that will help you today.</li>
-                <li>Continuously working to increase the velocity of our highest priority initiatives by methodically removing barriers that get in the way</li>
-            </ul>
-        </div>
-        
-        <!-- Quality Section -->
-        <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="600">
-            <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon About/thumbs-up-line-icon.png') }}" alt="Quality">
-                <h3>Quality</h3>
-            </div>
-            <ul class="value-list">
-                <li>We take pride in providing high value products and services that we stand behind.</li>
-                <li>We ensures customer satisfaction, profitability and the future of our employees and our growth</li>
-            </ul>
-        </div>
-        
-        <!-- Customer Satisfaction Section -->
-        <div class="value-block" data-aos="fade-up" data-aos-duration="800" data-aos-delay="800">
-            <div class="value-title-container">
-                <img src="{{ asset('assets/icons/Icon About/employees-icon.png') }}" alt="Customer Satisfaction">
-                <h3>Customer Satisfaction</h3>
-            </div>
-            <ul class="value-list">
-                <li>We take pride in providing high value products and services that we stand behind.</li>
-                <li>We ensures customer satisfaction, profitability and the future of our employees and our growth</li>
-            </ul>
         </div>
     </div>
 </div>
@@ -1116,7 +884,6 @@
             <div class="brand-logo" data-aos="fade-up" data-aos-duration="800" data-aos-delay="700">
                 <img src="{{ asset('assets/img/Logo Brand AGS/Vulcan Logo.png') }}" alt="VULCAN Logo">
             </div>
-
         </div>
     </div>
 </div>

@@ -148,12 +148,20 @@
     position: absolute;
     left: 10px;
     border-radius: 40px;
-    background:rgb(255, 255, 255);
+    background: rgb(255, 255, 255);
     padding: 20px;
     margin-top: 20px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.15);
     overflow-y: auto;
     z-index: 10;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar-menu::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar-menu a {
@@ -165,22 +173,36 @@
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    height: 80;
-    top: 555px;
-    left: 48px;
+    background-color: transparent;
+    border: none;
+    height: auto;
 }
 
 .sidebar-menu a:last-child {
     margin-bottom: 0;
 }
 
-.sidebar-menu a.active, 
-.sidebar-menu a:hover {
+/* Updated active menu with compact background */
+.sidebar-menu a.active {
     background-color: #599BEC;
-    color:rgb(255, 255, 255);
-    border-color:rgb(255, 255, 255);
+    color: white;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    font-weight: 600;
+    display: inline-block;
+    padding: 12px 25px;
+    width: 100%;
+}
+
+.sidebar-menu a:not(.active):hover {
+    background-color: #f0f0f0;
+}
+
+/* Add a divider after each non-active menu item */
+.sidebar-menu a:not(.active):not(:last-child) {
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding-bottom: 15px;
 }
 
 /* Adjust content layout for fixed sidebar position */

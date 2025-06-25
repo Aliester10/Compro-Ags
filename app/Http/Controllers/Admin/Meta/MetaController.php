@@ -7,6 +7,7 @@ use App\Models\Meta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class MetaController extends Controller
 {
@@ -24,7 +25,11 @@ class MetaController extends Controller
     public function show($slug)
     {
         $meta = Meta::where('slug', $slug)->firstOrFail();
-        return view('Admin.Meta.show', compact('meta'));
+        
+        // Safely get sub metas without relying on the relationship
+        $subMetas = DB::table('sub_meta')->where('meta_id', $meta->id)->get();
+        
+        return view('Admin.Meta.show', compact('meta', 'subMetas'));
     }
 
     public function edit($id)
@@ -37,10 +42,22 @@ class MetaController extends Controller
     {
         $meta = Meta::findOrFail($id);
         
+        // Delete all associated sub metas first
+        $subMetas = DB::table('sub_meta')->where('meta_id', $meta->id)->get();
+        
+        foreach ($subMetas as $subMeta) {
+            // Delete image if it exists
+            if ($subMeta->image && File::exists($subMeta->image)) {
+                File::delete($subMeta->image);
+            }
+        }
+        
+        // Delete all sub meta records for this meta
+        DB::table('sub_meta')->where('meta_id', $meta->id)->delete();
+        
         // Delete the associated image if it exists
-        // Changed this part to handle the full path
-        if ($meta->image && File::exists(public_path($meta->image))) {
-            File::delete(public_path($meta->image));
+        if ($meta->image && File::exists($meta->image)) {
+            File::delete($meta->image);
         }
         
         $meta->delete();
@@ -75,7 +92,7 @@ class MetaController extends Controller
                 $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
                 
                 // Create directory if it doesn't exist
-                $targetDir = public_path('assets/img/konten');
+                $targetDir = ('assets/img/konten');
                 if (!File::isDirectory($targetDir)) {
                     File::makeDirectory($targetDir, 0755, true);
                 }
@@ -135,9 +152,8 @@ class MetaController extends Controller
         if ($request->hasFile('image')) {
             try {
                 // Delete old image if it exists
-                // Changed to handle full paths
-                if ($meta->image && File::exists(public_path($meta->image))) {
-                    File::delete(public_path($meta->image));
+                if ($meta->image && File::exists($meta->image)) {
+                    File::delete($meta->image);
                 }
                 
                 // Upload new image
@@ -145,7 +161,7 @@ class MetaController extends Controller
                 $imageName = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
                 
                 // Create directory if it doesn't exist
-                $targetDir = public_path('assets/img/konten');
+                $targetDir = ('assets/img/konten');
                 if (!File::isDirectory($targetDir)) {
                     File::makeDirectory($targetDir, 0755, true);
                 }
@@ -190,7 +206,7 @@ class MetaController extends Controller
                 $filename = time() . '_' . Str::random(5) . '_' . $image->getClientOriginalName();
                 
                 // Specify the target directory path (using absolute path from your configuration)
-                $targetDir = public_path('assets/img/konten');
+                $targetDir = ('assets/img/konten');
                 
                 // Create directory if it doesn't exist
                 if (!File::isDirectory($targetDir)) {
