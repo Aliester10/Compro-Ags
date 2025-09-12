@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJM Solusi Logistik - Cek Ongkir</title>
+    <link rel="stylesheet" href="/assets/css/styles-variables.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <h1>AJM Solusi Logistik</h1>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#home">Home</a>
+                    <a href="#services">Layanan</a>
+                    <a href="#pricing">Cek Ongkir</a>
+                    <a href="#contact">Kontak</a>
+                </nav>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Solusi Logistik Terpercaya</h1>
+                <p class="hero-description">Kirim paket Anda dengan aman, cepat, dan terpercaya ke seluruh Indonesia</p>
+                <a href="#pricing" class="cta-button">Cek Ongkir Sekarang</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Layanan Kami</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📦</div>
+                    <h3>Pengiriman Regular</h3>
+                    <p>Pengiriman ekonomis dengan waktu tempuh 3-5 hari kerja</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3>Pengiriman Express</h3>
+                    <p>Pengiriman cepat dengan waktu tempuh 1-2 hari kerja</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚛</div>
+                    <h3>Cargo</h3>
+                    <p>Pengiriman barang berat dan ukuran besar</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Cek Ongkir</h2>
+            <div class="pricing-container">
+                <!-- Form Section -->
+                <div class="pricing-form">
+                    <div class="form-card">
+                        <h3>Hitung Ongkos Kirim</h3>
+                        <form id="shippingCalculator">
+                            <!-- Origin and Destination -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="origin">Kota Asal</label>
+                                    <select id="origin" name="origin" required>
+                                        <option value="">Pilih Kota Asal</option>
+                                        <option value="jakarta">Jakarta</option>
+                                        <option value="surabaya">Surabaya</option>
+                                        <option value="bandung">Bandung</option>
+                                        <option value="medan">Medan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="destination">Kota Tujuan</label>
+                                    <select id="destination" name="destination" required>
+                                        <option value="">Pilih Kota Tujuan</option>
+                                        <option value="jakarta">Jakarta</option>
+                                        <option value="surabaya">Surabaya</option>
+                                        <option value="bandung">Bandung</option>
+                                        <option value="medan">Medan</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Weight and Service Type -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="weight">Berat (kg)</label>
+                                    <input type="number" id="weight" name="weight" min="1" max="100" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="service">Jenis Layanan</label>
+                                    <div class="service-options">
+                                        <label class="radio-option">
+                                            <input type="radio" name="service" value="regular" required>
+                                            <span class="radio-custom"></span>
+                                            Regular
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="service" value="express" required>
+                                            <span class="radio-custom"></span>
+                                            Express
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Package Type -->
+                            <div class="form-group">
+                                <label for="package-type">Jenis Paket</label>
+                                <div class="package-options">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="insurance" value="1">
+                                        <span class="checkbox-custom"></span>
+                                        Asuransi (+Rp 5.000)
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="packing" value="1">
+                                        <span class="checkbox-custom"></span>
+                                        Packing Kayu (+Rp 15.000)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="calculate-btn">Hitung Ongkir</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="pricing-results">
+                    <div class="results-card">
+                        <h3>Ringkasan Perhitungan</h3>
+                        <div id="results-container" class="results-empty">
+                            <div class="empty-state">
+                                <div class="empty-icon">📋</div>
+                                <p>Silakan isi form untuk melihat perhitungan ongkir</p>
+                            </div>
+                        </div>
+                        
+                        <div id="results-content" class="results-content" style="display: none;">
+                            <div class="result-item">
+                                <span class="result-label">Rute:</span>
+                                <span class="result-value" id="route-result">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Berat:</span>
+                                <span class="result-value" id="weight-result">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Layanan:</span>
+                                <span class="result-value" id="service-result">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Biaya Dasar:</span>
+                                <span class="result-value" id="base-cost">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Biaya Tambahan:</span>
+                                <span class="result-value" id="additional-cost">-</span>
+                            </div>
+                            <div class="result-total">
+                                <span class="total-label">Total Ongkir:</span>
+                                <span class="total-value" id="total-cost">Rp 0</span>
+                            </div>
+                            
+                            <div class="compare-cards">
+                                <div class="compare-card">
+                                    <h4>Regular</h4>
+                                    <div class="compare-price" id="regular-price">Rp 0</div>
+                                    <div class="compare-time">3-5 hari</div>
+                                </div>
+                                <div class="compare-card express">
+                                    <h4>Express</h4>
+                                    <div class="compare-price" id="express-price">Rp 0</div>
+                                    <div class="compare-time">1-2 hari</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Hubungi Kami</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <h3>Alamat</h3>
+                        <p>Jl. Logistik No. 123<br>Jakarta Pusat 10240</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Telepon</h3>
+                        <p>+62 21 1234 5678</p>
+                    </div>
+                    <div class="contact-item">
+                        <h3>Email</h3>
+                        <p>info@ajmlogistik.com</p>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nama</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Pesan</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AJM Solusi Logistik</h3>
+                    <p>Solusi pengiriman terpercaya untuk kebutuhan logistik Anda</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Layanan</h4>
+                    <ul>
+                        <li><a href="#services">Pengiriman Regular</a></li>
+                        <li><a href="#services">Pengiriman Express</a></li>
+                        <li><a href="#services">Cargo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Bantuan</h4>
+                    <ul>
+                        <li><a href="#contact">Hubungi Kami</a></li>
+                        <li><a href="#pricing">Cek Ongkir</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJM Solusi Logistik. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/data-utilities.js"></script>
+</body>
+</html>
